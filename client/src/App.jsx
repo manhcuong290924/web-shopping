@@ -1,18 +1,16 @@
-import { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+// client/src/App.jsx
+import './styles/index.scss';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-
-        <h1 class="text-3xl font-bold underline">Hello world!</h1>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<div>Trang danh sách sản phẩm đầy đủ</div>} />
+      </Routes>
+    </Router>
   );
 }
 

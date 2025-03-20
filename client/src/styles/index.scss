@@ -1,0 +1,51 @@
+// client/src/styles/index.scss
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.product-frame {
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  &:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.product-card {
+  .discount-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: #22c55e;
+    color: white;
+    border-radius: 9999px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .price {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    .original {
+      text-decoration: line-through;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    .discounted {
+      color: #ef4444;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+}
+
+/* Ẩn thanh cuộn nhưng vẫn cho phép cuộn */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
