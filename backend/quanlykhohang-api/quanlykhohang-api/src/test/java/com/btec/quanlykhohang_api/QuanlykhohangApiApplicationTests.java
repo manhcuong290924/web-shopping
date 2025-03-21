@@ -1,10 +1,10 @@
-package com.btecfpt.webadmin;
+package com.btec.quanlykhohang_api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class WebadminApplicationTests {
+class QuanlykhohangApiApplicationTests {
 
 	@Test
 	void contextLoads() {

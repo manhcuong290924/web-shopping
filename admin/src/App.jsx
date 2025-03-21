@@ -1,11 +1,14 @@
+import DashboardPage from "./pages/DashboardPage";
 
-import './styles/index.scss'; 
 
 function App() {
   return (
-    <div>
-      
-    </div>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<DashboardPage />}/>
+       
+    </Routes>
+  </BrowserRouter>
   );
 }
 
