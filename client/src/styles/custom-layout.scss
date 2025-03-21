@@ -1,0 +1,354 @@
+// client/src/styles/custom-layout.scss
+
+// Content wrapper (bao quanh Sidebar và main, căn giữa)
+
+@import "sidebar";
+
+.content-wrapper {
+  width: 1456px; // Tổng chiều rộng: 200px (Sidebar) + 8px (gap) + 1200px (Slide) + 16px (padding) + 16px (padding) + 16px (margin)
+  max-width: 100%;
+  margin: 0 auto; // Căn giữa trên trang
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+// Slide styles
+.slide-wrapper {
+  width: 100%;
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.slide-container {
+  width: 1000px;
+  max-width: 100%;
+
+  // Main Banner
+  .main-banner {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+
+    .banner-slides {
+      width: 100%;
+      height: 100%;
+      position: relative;
+
+      .banner-slide {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+
+        &.active {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .banner-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+      }
+    }
+
+    .banner-text {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .discount-circle {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: #f97316;
+      color: white;
+      padding: 8px;
+      border-radius: 9999px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+
+  // Quảng cáo phía dưới
+  .ad-banners {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .ad-banner {
+      position: relative;
+      width: 100%;
+      height: 92px;
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+
+      .ad-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 1;
+      }
+
+      &.fashion-sale {
+        background-color: #bfdbfe;
+
+        .ad-content {
+          text-align: center;
+          flex: 1;
+          z-index: 2;
+
+          .discount-circle {
+            background-color: #f97316;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 14px;
+            font-weight: 700;
+          }
+
+          .ad-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-top: 4px;
+          }
+        }
+      }
+
+      &.electronics-sale {
+        background: linear-gradient(to right, #fce7f3, white);
+
+        .ad-content {
+          text-align: left;
+          z-index: 2;
+
+          .discount-circle {
+            background-color: #f97316;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+          }
+
+          .ad-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 4px;
+          }
+
+          .ad-subtitle {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Fashion Section styles
+.fashion-section {
+  .fashion-frame {
+    // Banner quảng cáo bên trái
+    .fashion-banner {
+      position: relative;
+      overflow: hidden;
+
+      .banner-content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        .banner-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .banner-overlay {
+          background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: 1rem;
+
+          .banner-text {
+            color: white;
+
+            .text-title {
+              font-size: 1.25rem;
+              font-weight: 700;
+            }
+
+            .text-subtitle {
+              font-size: 0.875rem;
+            }
+          }
+        }
+      }
+    }
+
+    // Danh sách sản phẩm bên phải
+    .fashion-products {
+      .grid {
+        display: grid;
+        gap: 1rem;
+        position: relative;
+      }
+    }
+  }
+}
+
+// Baby Section styles
+.baby-section {
+  .baby-frame {
+    .grid {
+      display: grid;
+      gap: 1rem;
+      position: relative;
+    }
+  }
+}
+
+// Product List styles (Điện tử)
+.product-list {
+  .product-frame {
+    .grid {
+      display: grid;
+      gap: 1rem;
+      position: relative;
+    }
+  }
+}
+
+// Combined Section styles (Gộp Gia dụng và Nội thất, Văn phòng phẩm, Giày dép)
+.combined-section {
+  .combined-frame {
+    .flex {
+      display: flex;
+      gap: 1rem;
+      position: relative;
+
+      // Ép các cột có chiều cao bằng nhau
+      > div {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      // Trên mobile (xếp dọc)
+      @media (max-width: 767px) {
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+// Product Card styles (điều chỉnh bố cục chữ và thêm hiệu ứng phóng to)
+.product-card {
+  padding: 1rem;
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  .relative {
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 12rem;
+      object-fit: contain;
+    }
+
+    .discount-badge {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: #22c55e;
+      color: white;
+      border-radius: 9999px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+  }
+
+  .mt-2 {
+    margin-top: 0.5rem;
+    text-align: center;
+
+    h3 {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #1f2937;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .price {
+      margin-top: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+
+      .original {
+        font-size: 0.75rem;
+        color: #6b7280;
+        text-decoration: line-through;
+      }
+
+      .discounted {
+        font-size: 0.875rem;
+        color: #ef4444;
+        font-weight: 700;
+      }
+    }
+  }
+}

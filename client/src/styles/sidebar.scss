@@ -1,0 +1,21 @@
+// client/src/styles/sidebar.scss
+
+// Sidebar styles
+.sidebar-container {
+    width: 300px; // w-64 = 256px, cố định chiều rộng
+    height: 450px; // Đặt chiều cao cố định 450px
+    margin-right: 1px; // Khoảng cách giữa Sidebar và Slide
+    margin-top: 16px;
+    overflow-y: auto;
+    z-index: 40;
+  
+    .toggle-button {
+      left: 16px;
+      right: auto;
+    }
+  
+    // Trên mobile (xếp dọc)
+    @media (max-width: 767px) {
+      margin-right: 0; // Bỏ khoảng cách trên mobile
+    }
+  }

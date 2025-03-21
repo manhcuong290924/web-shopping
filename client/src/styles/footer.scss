@@ -1,0 +1,51 @@
+// client/src/styles/footer.scss
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    font-family: Arial, sans-serif;
+  
+    .footer-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+  
+      .footer-column {
+        flex: 1;
+        min-width: 200px;
+        margin: 10px;
+  
+        h3 {
+          font-size: 18px;
+          margin-bottom: 10px;
+        }
+  
+        p, ul, a {
+          font-size: 14px;
+          color: #ccc;
+          text-decoration: none;
+        }
+  
+        ul {
+          list-style: none;
+          padding: 0;
+  
+          li {
+            margin-bottom: 5px;
+          }
+        }
+  
+        a:hover {
+          color: #fff;
+        }
+      }
+    }
+  
+    .footer-bottom {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+    }
+  }

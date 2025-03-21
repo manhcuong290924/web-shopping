@@ -5,14 +5,14 @@ import ProductCard from './ProductCard';
 
 const ProductList = ({ category, products = [] }) => {
   return (
-    <div className="product-list max-w-7xl mx-auto py-8">
+    <div className="product-list max-w-[80rem] mx-auto py-2">
       <div className="product-frame bg-white border border-gray-200 rounded-lg shadow-md">
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+        <div className="flex justify-between items-center p-1.5 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-orange-500">{category.toUpperCase()}</h2>
-          <Link to="/products" className="text-orange-500 hover:underline flex items-center gap-1">
+          <Link to="/products" className="text-orange-500 hover:underline flex items-center gap-0.25">
             Xem tất cả
             <svg
-              className="w-4 h-4"
+              className="w-1 h-1"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -33,11 +33,11 @@ const ProductList = ({ category, products = [] }) => {
               <ProductCard
                 key={product.id}
                 product={product}
-                showRightBorder={index < products.length - 1}
+                showRightBorder={(index + 1) % 4 !== 0}
               />
             ))
           ) : (
-            <div className="p-6 text-gray-500">Không có sản phẩm</div>
+            <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
           )}
         </div>
       </div>
