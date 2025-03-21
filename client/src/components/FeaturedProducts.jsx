@@ -1,11 +1,10 @@
 // client/src/components/FeaturedProducts.jsx
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import ProductCard from './ProductCard';
-import mockProducts from '../data/mockProducts';
 
-const FeaturedProducts = () => {
-  const products = mockProducts['Sản phẩm nổi bật'] || [];
+const FeaturedProducts = ({ products = [] }) => {
   const scrollRef = useRef(null);
+  const isProgrammaticScroll = useRef(false);
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -21,12 +20,54 @@ const FeaturedProducts = () => {
 
   const scrollToProduct = (index) => {
     if (scrollRef.current) {
-      const productWidth = scrollRef.current.children[0].offsetWidth; // Chiều rộng của 1 sản phẩm
-      const containerWidth = scrollRef.current.offsetWidth; // Chiều rộng của khung chứa
-      const scrollPosition = index * productWidth - (containerWidth - productWidth) / 2; // Tính vị trí cuộn để sản phẩm vào giữa
+      const productWidth = scrollRef.current.children[0].offsetWidth;
+      const containerWidth = scrollRef.current.offsetWidth;
+      const scrollPosition = index * productWidth - (containerWidth - productWidth) / 2;
       scrollRef.current.scrollTo({ left: scrollPosition, behavior: 'smooth' });
     }
   };
+
+  const scrollToStart = () => {
+    if (scrollRef.current) {
+      isProgrammaticScroll.current = true;
+      scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  };
+
+  const scrollToEnd = () => {
+    if (scrollRef.current) {
+      isProgrammaticScroll.current = true;
+      const productWidth = scrollRef.current.children[0].offsetWidth;
+      const scrollPosition = (products.length - 1) * productWidth;
+      scrollRef.current.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollRef.current && !isProgrammaticScroll.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+
+        if (scrollLeft + clientWidth >= scrollWidth - 1) {
+          scrollToStart();
+        } else if (scrollLeft <= 0) {
+          scrollToEnd();
+        }
+      }
+      isProgrammaticScroll.current = false;
+    };
+
+    const scrollContainer = scrollRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [products]);
 
   return (
     <div className="featured-products max-w-7xl mx-auto py-8">
