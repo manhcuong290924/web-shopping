@@ -1,7 +1,7 @@
 // client/src/pages/Home.jsx
 import React from 'react';
-import FeaturedProducts from '../components/FeaturedProducts';
-import ProductList from '../components/ProductList';
+import FeaturedProducts from './FeaturedProducts';
+import ProductList from './ProductList';
 import mockProducts from '../data/mockProducts';
 
 const Home = () => {
