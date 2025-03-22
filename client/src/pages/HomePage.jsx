@@ -1,7 +1,7 @@
 // client/src/pages/HomePage.jsx
 import { useState } from "react";
 import FeaturedProducts from "../components/FeaturedProducts";
-import ProductList from "../components/ProductList";
+import ElectronicSection from "../components/ElectronicSection"; // Thay LimitedProductList bằng ElectronicSection
 import FashionSection from "../components/FashionSection";
 import BabySection from "../components/BabySection";
 import CombinedSection from "../components/CombinedSection";
@@ -10,7 +10,7 @@ import Header from "../components/Header";
 import Slide from "../components/Slide";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
-import ChatBotIcon from "../components/ChatBotIcon"; // Đảm bảo đã import
+import ChatBotIcon from "../components/ChatBotIcon";
 import "../styles/custom-layout.scss";
 
 const HomePage = () => {
@@ -42,7 +42,7 @@ const HomePage = () => {
             <FashionSection />
 
             {/* Product List cho Điện tử */}
-            <ProductList category="Điện tử" products={electronicsProducts} />
+            <ElectronicSection category="Điện tử" products={electronicsProducts} /> {/* Sử dụng ElectronicSection */}
 
             {/* Baby Section */}
             <BabySection />

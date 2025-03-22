@@ -1,9 +1,11 @@
-// client/src/components/ProductList.jsx
+// client/src/components/ElectronicSection.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
 
-const ProductList = ({ category, products = [] }) => {
+const ElectronicSection = ({ category, products = [] }) => {
+  const displayedProducts = products.slice(0, 4); // Giới hạn tối đa 4 sản phẩm
+
   return (
     <div className="product-list max-w-[80rem] mx-auto py-2">
       <div className="product-frame bg-white border border-gray-200 rounded-lg shadow-md">
@@ -28,8 +30,8 @@ const ProductList = ({ category, products = [] }) => {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
-          {products.length > 0 ? (
-            products.map((product, index) => (
+          {displayedProducts.length > 0 ? (
+            displayedProducts.map((product, index) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -45,4 +47,4 @@ const ProductList = ({ category, products = [] }) => {
   );
 };
 
-export default ProductList;
+export default ElectronicSection;

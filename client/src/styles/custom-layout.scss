@@ -1,7 +1,6 @@
 // client/src/styles/custom-layout.scss
 
 // Content wrapper (bao quanh Sidebar và main, căn giữa)
-
 @import "sidebar";
 
 .content-wrapper {
@@ -276,9 +275,22 @@
         flex: 1;
       }
 
+      // Định vị nút "Xem tất cả >" ở góc trên bên phải của danh mục "Giày dép"
+      .view-all-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0.5rem;
+      }
+
       // Trên mobile (xếp dọc)
       @media (max-width: 767px) {
         flex-direction: column;
+
+        .view-all-container {
+          top: 0;
+          right: 0;
+        }
       }
     }
   }

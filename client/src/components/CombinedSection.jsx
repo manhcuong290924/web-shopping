@@ -1,5 +1,6 @@
 // client/src/components/CombinedSection.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import mockProducts from "../data/mockProducts";
 import "../styles/custom-layout.scss";
@@ -8,6 +9,11 @@ const CombinedSection = () => {
   const householdProducts = mockProducts["Gia dụng và Nội thất"] || [];
   const stationeryProducts = mockProducts["Văn phòng phẩm"] || [];
   const footwearProducts = mockProducts["Giày dép"] || [];
+
+  // Giới hạn tối đa 3 sản phẩm cho mỗi danh mục
+  const displayedHouseholdProducts = householdProducts.slice(0, 3);
+  const displayedStationeryProducts = stationeryProducts.slice(0, 3);
+  const displayedFootwearProducts = footwearProducts.slice(0, 3);
 
   return (
     <div className="combined-section max-w-[80rem] mx-auto py-2">
@@ -20,8 +26,8 @@ const CombinedSection = () => {
               GIA DỤNG VÀ NỘI THẤT
             </h3>
             <div className="flex flex-col gap-1 flex-1">
-              {householdProducts.length > 0 ? (
-                householdProducts.map((product, index) => (
+              {displayedHouseholdProducts.length > 0 ? (
+                displayedHouseholdProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}
                     product={product}
@@ -40,8 +46,8 @@ const CombinedSection = () => {
               VĂN PHÒNG PHẨM
             </h3>
             <div className="flex flex-col gap-1 flex-1">
-              {stationeryProducts.length > 0 ? (
-                stationeryProducts.map((product, index) => (
+              {displayedStationeryProducts.length > 0 ? (
+                displayedStationeryProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}
                     product={product}
@@ -55,13 +61,21 @@ const CombinedSection = () => {
           </div>
 
           {/* Giày dép */}
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col relative">
             <h3 className="text-xl font-bold text-orange-500 mb-2 text-center">
               GIÀY DÉP
             </h3>
+            <div className="view-all-container">
+              <Link
+                to="/products"
+                className="text-orange-500 hover:underline text-sm"
+              >
+                Xem tất cả >
+              </Link>
+            </div>
             <div className="flex flex-col gap-1 flex-1">
-              {footwearProducts.length > 0 ? (
-                footwearProducts.map((product, index) => (
+              {displayedFootwearProducts.length > 0 ? (
+                displayedFootwearProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}
                     product={product}

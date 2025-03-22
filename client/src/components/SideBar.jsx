@@ -1,7 +1,9 @@
 // client/src/components/Sidebar.jsx
-import { useState } from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
 import sidebarData from "../data/sidebarData";
+import "../styles/Sidebar.scss";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -52,26 +54,26 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   {activeMenu === index && (
                     <div className="pl-8 space-y-1 bg-gray-50">
                       {item.subMenu.map((subItem, subIndex) => (
-                        <a
+                        <Link
                           key={subIndex}
-                          href="#"
+                          to={subItem.link}
                           className="block px-4 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-800 rounded-md transition-colors duration-200"
                         >
-                          {subItem}
-                        </a>
+                          {subItem.name}
+                        </Link>
                       ))}
                     </div>
                   )}
                 </>
               ) : (
-                <a
-                  href={item.link}
+                <Link
+                  to={item.link}
                   className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors duration-200"
                 >
                   {item.icon && <item.icon className="w-5 h-5 mr-3" />}
                   <span className="font-medium text-base">{item.name}</span>
                   <ChevronRight className="w-5 h-5 ml-auto text-gray-400" />
-                </a>
+                </Link>
               )}
             </div>
           ))}

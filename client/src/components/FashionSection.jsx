@@ -7,6 +7,7 @@ import "../styles/custom-layout.scss";
 
 const FashionSection = () => {
   const fashionProducts = mockProducts["Thời Trang"] || [];
+  const displayedFashionProducts = fashionProducts.slice(0, 6); // Giới hạn tối đa 6 sản phẩm
 
   return (
     <div className="fashion-section max-w-[80rem] mx-auto py-2">
@@ -14,7 +15,7 @@ const FashionSection = () => {
         <div className="flex justify-between items-center p-1.5 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-orange-500">THỜI TRANG</h2>
           <Link to="/products" className="text-orange-500 hover:underline flex items-center gap-0.25">
-            Xem tất cả
+            Xem tất cả >
             <svg
               className="w-1 h-1"
               fill="none"
@@ -51,8 +52,8 @@ const FashionSection = () => {
 
           <div className="fashion-products w-full md:w-3/4 p-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
-              {fashionProducts.length > 0 ? (
-                fashionProducts.map((product, index) => (
+              {displayedFashionProducts.length > 0 ? (
+                displayedFashionProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}
                     product={product}

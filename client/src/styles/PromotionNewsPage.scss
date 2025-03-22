@@ -1,60 +1,73 @@
 // client/src/styles/PromotionNewsPage.scss
 .promotion-news-content {
-    h2 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #333;
-      margin-bottom: 10px;
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+
+  .news-item {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+    text-decoration: none; // Bỏ gạch chân mặc định của Link
+    color: inherit; // Giữ màu chữ mặc định
+
+    .news-image {
+      width: 200px;
+      height: auto;
+      border-radius: 8px;
     }
-  
-    hr {
-      border: 0;
-      border-top: 1px solid #ccc;
-      margin-bottom: 20px;
-    }
-  
-    .news-item {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-  
-      .news-image {
-        width: 200px;
-        height: auto;
-        border-radius: 8px;
+
+    .news-details {
+      flex: 1;
+
+      h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
       }
-  
-      .news-details {
-        flex: 1;
-  
-        h3 {
-          font-size: 18px;
-          font-weight: 600;
-          color: #333;
-          margin-bottom: 10px;
-        }
-  
-        .view-details {
-          color: #ff6200;
-          text-decoration: none;
-          font-size: 14px;
-          font-weight: 500;
-  
-          &:hover {
-            text-decoration: underline;
-          }
-        }
+
+      .view-details {
+        color: #ff6200;
+        font-size: 14px;
+        font-weight: 500;
       }
     }
-  
-    @media (max-width: 768px) {
-      .news-item {
-        flex-direction: column;
-        align-items: flex-start;
-  
-        .news-image {
-          width: 100%;
-        }
+
+    &:hover {
+      .news-details h3 {
+        color: #ff6200; // Đổi màu tiêu đề khi hover
+      }
+      .view-details {
+        text-decoration: underline; // Gạch chân "Xem chi tiết" khi hover
       }
     }
   }
+
+  .news-divider {
+    border: 0;
+    border-top: 1px solid #e0e0e0; // Thanh ngang mờ
+    margin: 20px 0;
+  }
+
+  @media (max-width: 768px) {
+    .news-item {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .news-image {
+        width: 100%;
+      }
+    }
+  }
+}

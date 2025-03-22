@@ -6,6 +6,9 @@ const FeaturedProducts = ({ products = [] }) => {
   const scrollRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0); // Theo dõi sản phẩm đầu tiên trong khung nhìn
 
+  // Giới hạn tối đa 6 sản phẩm
+  const displayedProducts = products.slice(0, 6);
+
   const scrollToIndex = (index) => {
     if (scrollRef.current) {
       const productWidth = scrollRef.current.children[0].offsetWidth;
@@ -16,20 +19,20 @@ const FeaturedProducts = ({ products = [] }) => {
   };
 
   const scrollLeft = () => {
-    if (products.length === 0) return;
-    const newIndex = currentIndex === 0 ? products.length - 4 : currentIndex - 1; // Cuộn 1 sản phẩm sang trái
+    if (displayedProducts.length === 0) return;
+    const newIndex = currentIndex === 0 ? displayedProducts.length - 4 : currentIndex - 1; // Cuộn 1 sản phẩm sang trái
     scrollToIndex(Math.max(0, newIndex)); // Đảm bảo không cuộn quá giới hạn
   };
 
   const scrollRight = () => {
-    if (products.length === 0) return;
-    const newIndex = currentIndex === products.length - 4 ? 0 : currentIndex + 1; // Cuộn 1 sản phẩm sang phải
-    scrollToIndex(Math.min(products.length - 4, newIndex)); // Đảm bảo không cuộn quá giới hạn
+    if (displayedProducts.length === 0) return;
+    const newIndex = currentIndex === displayedProducts.length - 4 ? 0 : currentIndex + 1; // Cuộn 1 sản phẩm sang phải
+    scrollToIndex(Math.min(displayedProducts.length - 4, newIndex)); // Đảm bảo không cuộn quá giới hạn
   };
 
   const scrollToProduct = (index) => {
     // Cuộn để sản phẩm được nhấn nằm trong khung nhìn
-    const newIndex = Math.max(0, Math.min(index, products.length - 4));
+    const newIndex = Math.max(0, Math.min(index, displayedProducts.length - 4));
     scrollToIndex(newIndex);
   };
 
@@ -85,12 +88,12 @@ const FeaturedProducts = ({ products = [] }) => {
             className="flex overflow-x-hidden scroll-smooth"
             style={{ width: '100%' }}
           >
-            {products.length > 0 ? (
-              products.map((product, index) => (
+            {displayedProducts.length > 0 ? (
+              displayedProducts.map((product, index) => (
                 <div
                   key={product.id}
                   className={`flex-shrink-0 w-1/4 border-t border-gray-200 ${
-                    index < products.length - 1 ? 'border-r border-gray-200' : ''
+                    index < displayedProducts.length - 1 ? 'border-r border-gray-200' : ''
                   } cursor-pointer`}
                   onClick={() => scrollToProduct(index)}
                 >

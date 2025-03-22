@@ -6,7 +6,7 @@ import IntroPage from './pages/IntroPage';
 import ProductPage from './pages/ProductPage';
 import ContactPage from './pages/ContactPage';
 import PromotionNewsPage from './pages/PromotionNewsPage';
-import PromotionNewsDetailPage from './pages/PromotionNewsDetailPage'; // Import PromotionNewsDetailPage
+import PromotionNewsDetailPage from './pages/PromotionNewsDetailPage';
 import ProductDetail from './pages/ProductDetail';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
         <Route path="/tat-ca-san-pham" element={<ProductPage />} />
         <Route path="/lien-he" element={<ContactPage />} />
         <Route path="/tin-tuc-khuyen-mai" element={<PromotionNewsPage />} />
-        <Route path="/tin-tuc-khuyen-mai/chi-tiet" element={<PromotionNewsDetailPage />} /> {/* Thêm route */}
+        <Route path="/tin-tuc-khuyen-mai/:id" element={<PromotionNewsDetailPage />} />
         <Route path="/products/:id" element={<ProductDetail />} />
       </Routes>
     </Router>
