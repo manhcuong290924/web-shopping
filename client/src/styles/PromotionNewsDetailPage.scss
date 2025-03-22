@@ -1,0 +1,46 @@
+// client/src/styles/PromotionNewsDetailPage.scss
+.promotion-news-detail {
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 10px;
+    }
+  
+    hr {
+      border: 0;
+      border-top: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+  
+    .detail-image {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+  
+    p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+  
+      li {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 10px;
+  
+        strong {
+          color: #333;
+        }
+      }
+    }
+  }

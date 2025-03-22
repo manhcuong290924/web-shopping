@@ -1,20 +1,21 @@
-// client/src/pages/IntroPage.jsx
+// client/src/pages/ContactPage.jsx
 import { useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import IntroContent from "../components/IntroContent";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
+import ChatBotIcon from "../components/ChatBotIcon";
+import ContactForm from "../components/ContactForm";
+import ContactMap from "../components/ContactMap"; // Import ContactMap
 import "../styles/custom-layout.scss";
 
-const IntroPage = () => {
+const ContactPage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Dữ liệu đường dẫn cho Breadcrumb
   const breadcrumbItems = [
     { title: "Trang chủ", path: "/", icon: "🏠" },
-    { title: "Giới thiệu", path: "/gioi-thieu" },
+    { title: "Liên hệ", path: "/lien-he" },
   ];
 
   return (
@@ -33,8 +34,11 @@ const IntroPage = () => {
             {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} />
 
-            {/* Nội dung chính */}
-            <IntroContent />
+            {/* Form liên hệ */}
+            <ContactForm />
+
+            {/* Bản đồ */}
+            <ContactMap />
           </main>
         </div>
       </div>
@@ -42,9 +46,10 @@ const IntroPage = () => {
       {/* ChatBotIcon */}
       <ChatBotIcon />
 
+      {/* Footer */}
       <Footer />
     </div>
   );
 };
 
-export default IntroPage;
+export default ContactPage;

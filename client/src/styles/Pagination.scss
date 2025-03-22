@@ -1,0 +1,29 @@
+// client/src/styles/Pagination.scss
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  
+    .pagination-item {
+      width: 40px;
+      height: 40px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 4px;
+      background-color: #f5a7a7; // Màu hồng nhạt cho các trang không active
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      &.active {
+        background-color: #ff0000; // Màu đỏ cho trang hiện tại
+      }
+  
+      &:hover {
+        background-color: #e09090; // Màu hồng đậm hơn khi hover
+      }
+    }
+  }

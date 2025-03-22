@@ -9,7 +9,8 @@ import mockProducts from "../data/mockProducts";
 import Header from "../components/Header";
 import Slide from "../components/Slide";
 import Sidebar from "../components/Sidebar";
-import Footer from "../components/Footer"; // Import Footer
+import Footer from "../components/Footer";
+import ChatBotIcon from "../components/ChatBotIcon"; // Đảm bảo đã import
 import "../styles/custom-layout.scss";
 
 const HomePage = () => {
@@ -51,6 +52,9 @@ const HomePage = () => {
           </main>
         </div>
       </div>
+
+      {/* ChatBotIcon */}
+      <ChatBotIcon />
 
       {/* Footer */}
       <Footer />

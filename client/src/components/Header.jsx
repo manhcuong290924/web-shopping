@@ -8,7 +8,10 @@ const menuData = [
   { name: "SẢN PHẨM", link: "/tat-ca-san-pham" },
   {
     name: "TIN TỨC",
-    subMenu: ["Tin Tức Khuyến Mãi"],
+    link: "/tin-tuc-khuyen-mai", // Thêm link cho mục "Tin Tức"
+    subMenu: [
+      { name: "Tin Tức Khuyến Mãi", link: "/tin-tuc-khuyen-mai" }, // Thêm link cho mục con
+    ],
   },
   { name: "LIÊN HỆ", link: "/lien-he" },
 ];
@@ -75,18 +78,18 @@ const Header = () => {
       <div className="bg-orange-500 text-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-6" style={{ marginLeft: '180px' }}> {/* Dịch sang phải 10px */}
+          <nav className="hidden md:flex space-x-6" style={{ marginLeft: '180px' }}>
             {menuData.map((item, index) => (
               <div
                 key={index}
-                className="relative group" // Sử dụng Tailwind group để kiểm soát hover
+                className="relative group"
               >
                 {item.subMenu ? (
                   <div
                     className="flex items-center cursor-pointer hover:text-gray-200"
                     onMouseEnter={() => setDropdownOpen(index)}
                   >
-                    {item.name}
+                    <a href={item.link}>{item.name}</a>
                     <ChevronDown className="w-4 h-4 ml-1" />
                   </div>
                 ) : (
@@ -99,16 +102,16 @@ const Header = () => {
                 {item.subMenu && dropdownOpen === index && (
                   <div
                     className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10"
-                    onMouseEnter={() => setDropdownOpen(index)} // Giữ dropdown mở khi chuột vào phần con
-                    onMouseLeave={() => setDropdownOpen(null)} // Đóng dropdown khi chuột rời khỏi cả phần cha và con
+                    onMouseEnter={() => setDropdownOpen(index)}
+                    onMouseLeave={() => setDropdownOpen(null)}
                   >
                     {item.subMenu.map((subItem, subIndex) => (
                       <a
                         key={subIndex}
-                        href="#"
+                        href={subItem.link}
                         className="block px-4 py-2 text-gray-600 hover:bg-gray-100"
                       >
-                        {subItem}
+                        {subItem.name}
                       </a>
                     ))}
                   </div>
@@ -130,21 +133,21 @@ const Header = () => {
               <div key={index} className="border-b border-orange-400">
                 {item.subMenu ? (
                   <div
-                  className="flex justify-between px-4 py-2 hover:bg-orange-600 cursor-pointer"
-                  style={{ paddingRight: '180px' }} // Dịch sang phải 100px
-                  onClick={() =>
-                    setDropdownOpen(dropdownOpen === index ? null : index)
-                  }
-                >
-                    {item.name}
+                    className="flex justify-between px-4 py-2 hover:bg-orange-600 cursor-pointer"
+                    style={{ paddingRight: '180px' }}
+                    onClick={() =>
+                      setDropdownOpen(dropdownOpen === index ? null : index)
+                    }
+                  >
+                    <a href={item.link}>{item.name}</a>
                     <ChevronDown className="w-4 h-4" />
                   </div>
                 ) : (
                   <a
-  href={item.link}
-  className="block px-4 py-2 hover:bg-orange-600"
-  style={{ paddingRight: '180px' }} // Dịch sang phải 100px
-> {/* Dịch sang phải 10px với pr-6 */}
+                    href={item.link}
+                    className="block px-4 py-2 hover:bg-orange-600"
+                    style={{ paddingRight: '180px' }}
+                  >
                     {item.name}
                   </a>
                 )}
@@ -154,12 +157,12 @@ const Header = () => {
                   <div className="bg-orange-400">
                     {item.subMenu.map((subItem, subIndex) => (
                       <a
-                      key={subIndex}
-                      href="#"
-                      className="block px-6 py-2 text-white hover:bg-orange-500"
-                      style={{ paddingRight: '100px' }} // Dịch sang phải 100px
-                    >
-                        {subItem}
+                        key={subIndex}
+                        href={subItem.link}
+                        className="block px-6 py-2 text-white hover:bg-orange-500"
+                        style={{ paddingRight: '100px' }}
+                      >
+                        {subItem.name}
                       </a>
                     ))}
                   </div>

@@ -1,20 +1,20 @@
-// client/src/pages/IntroPage.jsx
+// client/src/pages/PromotionNewsPage.jsx
 import { useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import IntroContent from "../components/IntroContent";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
+import ChatBotIcon from "../components/ChatBotIcon";
+import PromotionNewsContent from "../components/PromotionNewsContent";
 import "../styles/custom-layout.scss";
 
-const IntroPage = () => {
+const PromotionNewsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Dữ liệu đường dẫn cho Breadcrumb
   const breadcrumbItems = [
     { title: "Trang chủ", path: "/", icon: "🏠" },
-    { title: "Giới thiệu", path: "/gioi-thieu" },
+    { title: "Tin tức Khuyến Mãi", path: "/tin-tuc-khuyen-mai" },
   ];
 
   return (
@@ -33,8 +33,8 @@ const IntroPage = () => {
             {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} />
 
-            {/* Nội dung chính */}
-            <IntroContent />
+            {/* Nội dung tin tức khuyến mãi */}
+            <PromotionNewsContent />
           </main>
         </div>
       </div>
@@ -42,9 +42,10 @@ const IntroPage = () => {
       {/* ChatBotIcon */}
       <ChatBotIcon />
 
+      {/* Footer */}
       <Footer />
     </div>
   );
 };
 
-export default IntroPage;
+export default PromotionNewsPage;

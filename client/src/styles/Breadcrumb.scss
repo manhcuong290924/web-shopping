@@ -1,0 +1,33 @@
+// client/src/styles/Breadcrumb.scss
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+  
+    .breadcrumb-item {
+      color: #666;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+  
+      &:hover {
+        color: #007bff;
+      }
+  
+      &.active {
+        color: #333;
+        font-weight: 500;
+      }
+  
+      .breadcrumb-icon {
+        margin-right: 5px;
+        font-size: 16px;
+      }
+    }
+  
+    .breadcrumb-separator {
+      margin: 0 5px;
+    }
+  }
