@@ -1,28 +1,31 @@
-// client/src/pages/BabyPage.jsx
+// client/src/pages/WomensClothingPage.jsx
 import { useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
-import BabySection from "../components/BabySection"; // Sử dụng BabySection
+import WomensClothingSection from "../components/WomensClothingSection"; // Sử dụng WomensClothingSection
 import Pagination from "../components/Pagination";
 import mockProducts from "../data/mockProducts";
 import "../styles/custom-layout.scss";
 
-const BabyPage = () => {
+const WomensClothingPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12; // 12 sản phẩm mỗi trang
 
-  // Lấy sản phẩm thuộc danh mục "Mẹ & bé"
-  const babyProducts = mockProducts["Mẹ và Bé"] || [];
+  // Lấy sản phẩm thuộc danh mục "Thời Trang"
+  const fashionProducts = mockProducts["Thời Trang"] || [];
+
+  // Lọc sản phẩm chỉ thuộc danh mục con "Quần áo nữ"
+  const womensClothingProducts = fashionProducts.filter(product => product.subCategory === "Quần áo nữ");
 
   // Tính toán số trang và sản phẩm hiển thị trên trang hiện tại
-  const totalPages = Math.ceil(babyProducts.length / productsPerPage);
+  const totalPages = Math.ceil(womensClothingProducts.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const currentProducts = babyProducts.slice(startIndex, endIndex);
+  const currentProducts = womensClothingProducts.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -32,7 +35,8 @@ const BabyPage = () => {
   // Dữ liệu đường dẫn cho Breadcrumb
   const breadcrumbItems = [
     { title: "Trang chủ", path: "/", icon: "🏠" },
-    { title: "Mẹ & bé", path: "/me-va-be" },
+    { title: "Thời trang", path: "/thoi-trang" },
+    { title: "Quần áo nữ", path: "/thoi-trang/quan-ao-nu" },
   ];
 
   return (
@@ -52,7 +56,7 @@ const BabyPage = () => {
             <Breadcrumb items={breadcrumbItems} />
 
             {/* Danh sách sản phẩm */}
-            <BabySection products={currentProducts} />
+            <WomensClothingSection products={currentProducts} />
 
             {/* Phân trang */}
             {totalPages > 1 && (
@@ -75,4 +79,4 @@ const BabyPage = () => {
   );
 };
 
-export default BabyPage;
+export default WomensClothingPage;

@@ -1,28 +1,28 @@
-// client/src/pages/BabyPage.jsx
+// client/src/pages/FashionPage.jsx
 import { useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
-import BabySection from "../components/BabySection"; // Sử dụng BabySection
+import FashionPageSection from "../components/FashionPageSection"; // Sử dụng FashionPageSection
 import Pagination from "../components/Pagination";
 import mockProducts from "../data/mockProducts";
 import "../styles/custom-layout.scss";
 
-const BabyPage = () => {
+const FashionPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12; // 12 sản phẩm mỗi trang
 
-  // Lấy sản phẩm thuộc danh mục "Mẹ & bé"
-  const babyProducts = mockProducts["Mẹ và Bé"] || [];
+  // Lấy sản phẩm thuộc danh mục "Thời Trang"
+  const fashionProducts = mockProducts["Thời Trang"] || [];
 
   // Tính toán số trang và sản phẩm hiển thị trên trang hiện tại
-  const totalPages = Math.ceil(babyProducts.length / productsPerPage);
+  const totalPages = Math.ceil(fashionProducts.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const currentProducts = babyProducts.slice(startIndex, endIndex);
+  const currentProducts = fashionProducts.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -32,7 +32,7 @@ const BabyPage = () => {
   // Dữ liệu đường dẫn cho Breadcrumb
   const breadcrumbItems = [
     { title: "Trang chủ", path: "/", icon: "🏠" },
-    { title: "Mẹ & bé", path: "/me-va-be" },
+    { title: "Thời trang", path: "/thoi-trang" },
   ];
 
   return (
@@ -52,7 +52,7 @@ const BabyPage = () => {
             <Breadcrumb items={breadcrumbItems} />
 
             {/* Danh sách sản phẩm */}
-            <BabySection products={currentProducts} />
+            <FashionPageSection products={currentProducts} />
 
             {/* Phân trang */}
             {totalPages > 1 && (
@@ -75,4 +75,4 @@ const BabyPage = () => {
   );
 };
 
-export default BabyPage;
+export default FashionPage;

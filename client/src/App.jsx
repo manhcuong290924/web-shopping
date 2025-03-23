@@ -12,9 +12,14 @@ import ElectronicsPage from './pages/ElectronicsPage';
 import PhonePage from './pages/PhonePage';
 import LapTopPage from './pages/LapTopPage';
 import TabletPage from './pages/TabletPage';
-import HouseholdPage from './pages/HouseholdPage'; // Import HouseholdPage
-import AppliancesPage from './pages/AppliancesPage'; // Import AppliancesPage
-import FurniturePage from './pages/FurniturePage'; // Import FurniturePage
+import HouseholdPage from './pages/HouseholdPage';
+import AppliancesPage from './pages/AppliancesPage';
+import FurniturePage from './pages/FurniturePage';
+import FootwearPage from './pages/FootwearPage';
+import BabyPage from './pages/BabyPage';
+import FashionPage from './pages/FashionPage'; // Import FashionPage
+import MensClothingPage from './pages/MensClothingPage'; // Import MensClothingPage
+import WomensClothingPage from './pages/WomensClothingPage'; // Import WomensClothingPage
 
 function App() {
   return (
@@ -51,6 +56,21 @@ function App() {
 
         {/* Route cho danh mục con "Nội thất" */}
         <Route path="/gia-dung-va-noi-that/noi-that" element={<FurniturePage />} />
+
+        {/* Route cho danh mục "Giày dép" */}
+        <Route path="/giay-dep" element={<FootwearPage />} />
+
+        {/* Route cho danh mục "Mẹ & bé" */}
+        <Route path="/me-va-be" element={<BabyPage />} />
+
+        {/* Route cho danh mục "Thời trang" */}
+        <Route path="/thoi-trang" element={<FashionPage />} />
+
+        {/* Route cho danh mục con "Quần áo nam" */}
+        <Route path="/thoi-trang/quan-ao-nam" element={<MensClothingPage />} />
+
+        {/* Route cho danh mục con "Quần áo nữ" */}
+        <Route path="/thoi-trang/quan-ao-nu" element={<WomensClothingPage />} />
 
         {/* Route mặc định cho các đường link không tồn tại */}
         <Route path="*" element={<div>404 - Trang không tồn tại</div>} />
