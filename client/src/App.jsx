@@ -11,7 +11,10 @@ import ProductDetail from './pages/ProductDetail';
 import ElectronicsPage from './pages/ElectronicsPage';
 import PhonePage from './pages/PhonePage';
 import LapTopPage from './pages/LapTopPage';
-import TabletPage from './pages/TabletPage'; // Import TabletPage
+import TabletPage from './pages/TabletPage';
+import HouseholdPage from './pages/HouseholdPage'; // Import HouseholdPage
+import AppliancesPage from './pages/AppliancesPage'; // Import AppliancesPage
+import FurniturePage from './pages/FurniturePage'; // Import FurniturePage
 
 function App() {
   return (
@@ -39,6 +42,15 @@ function App() {
 
         {/* Route cho danh mục con "Máy tính bảng" */}
         <Route path="/dien-tu/may-tinh-bang" element={<TabletPage />} />
+
+        {/* Route cho danh mục "Gia dụng và Nội thất" */}
+        <Route path="/gia-dung-va-noi-that" element={<HouseholdPage />} />
+
+        {/* Route cho danh mục con "Đồ gia dụng" */}
+        <Route path="/gia-dung-va-noi-that/do-gia-dung" element={<AppliancesPage />} />
+
+        {/* Route cho danh mục con "Nội thất" */}
+        <Route path="/gia-dung-va-noi-that/noi-that" element={<FurniturePage />} />
 
         {/* Route mặc định cho các đường link không tồn tại */}
         <Route path="*" element={<div>404 - Trang không tồn tại</div>} />
