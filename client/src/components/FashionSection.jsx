@@ -14,7 +14,7 @@ const FashionSection = () => {
       <div className="fashion-frame bg-white border border-gray-200 rounded-lg shadow-md">
         <div className="flex justify-between items-center p-1.5 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-orange-500">THỜI TRANG</h2>
-          <Link to="/products" className="text-orange-500 hover:underline flex items-center gap-0.25">
+          <Link to="/thoi-trang" className="text-orange-500 hover:underline flex items-center gap-0.25">
             Xem tất cả >
             <svg
               className="w-1 h-1"

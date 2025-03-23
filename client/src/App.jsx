@@ -17,9 +17,11 @@ import AppliancesPage from './pages/AppliancesPage';
 import FurniturePage from './pages/FurniturePage';
 import FootwearPage from './pages/FootwearPage';
 import BabyPage from './pages/BabyPage';
-import FashionPage from './pages/FashionPage'; // Import FashionPage
-import MensClothingPage from './pages/MensClothingPage'; // Import MensClothingPage
-import WomensClothingPage from './pages/WomensClothingPage'; // Import WomensClothingPage
+import FashionPage from './pages/FashionPage';
+import MensClothingPage from './pages/MensClothingPage';
+import WomensClothingPage from './pages/WomensClothingPage';
+import StationeryPage from './pages/StationeryPage'; // Import StationeryPage
+import CosmeticsPage from './pages/CosmeticsPage'; // Import CosmeticsPage
 
 function App() {
   return (
@@ -71,6 +73,12 @@ function App() {
 
         {/* Route cho danh mục con "Quần áo nữ" */}
         <Route path="/thoi-trang/quan-ao-nu" element={<WomensClothingPage />} />
+
+        {/* Route cho danh mục "Văn phòng phẩm" */}
+        <Route path="/van-phong-pham" element={<StationeryPage />} />
+
+        {/* Route cho danh mục "Mỹ Phẩm" */}
+        <Route path="/my-pham" element={<CosmeticsPage />} />
 
         {/* Route mặc định cho các đường link không tồn tại */}
         <Route path="*" element={<div>404 - Trang không tồn tại</div>} />
