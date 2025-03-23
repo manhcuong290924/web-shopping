@@ -11,22 +11,8 @@ const ElectronicSection = ({ category, products = [] }) => {
       <div className="product-frame bg-white border border-gray-200 rounded-lg shadow-md">
         <div className="flex justify-between items-center p-1.5 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-orange-500">{category.toUpperCase()}</h2>
-          <Link to="/products" className="text-orange-500 hover:underline flex items-center gap-0.25">
-            Xem tất cả >
-            <svg
-              className="w-1 h-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+          <Link to="/dien-tu" className="text-orange-500 hover:underline text-sm">
+            Xem tất cả > {/* Giữ lại text "Xem tất cả >", xóa thẻ svg */}
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
