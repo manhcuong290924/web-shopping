@@ -1,7 +1,6 @@
 // client/src/data/mockProducts.js
 const mockProducts = {
   "Điện tử": [
-    // Điện thoại
     {
       id: 1,
       name: "Samsung Galaxy S21 Plus 5G 128GB Violet",
@@ -11,6 +10,7 @@ const mockProducts = {
       discount_percentage: 16,
       category: "Điện tử",
       subCategory: "Điện thoại",
+      description: "Samsung Galaxy S21 Plus 5G 128GB Violet là một chiếc điện thoại cao cấp với màn hình Dynamic AMOLED 2X 6.7 inch, hỗ trợ 5G, camera chính 64MP, pin 4800mAh và sạc nhanh 25W. Thiết kế sang trọng với màu tím violet thời thượng."
     },
     {
       id: 2,
@@ -21,6 +21,7 @@ const mockProducts = {
       discount_percentage: 21,
       category: "Điện tử",
       subCategory: "Điện thoại",
+      description: "Samsung Galaxy S21 Ultra 5G 256GB sở hữu màn hình Dynamic AMOLED 2X 6.8 inch, camera 108MP, hỗ trợ bút S Pen, pin 5000mAh và sạc nhanh 25W. Đây là lựa chọn hoàn hảo cho người dùng yêu thích công nghệ cao cấp."
     },
     {
       id: 3,
@@ -31,6 +32,7 @@ const mockProducts = {
       discount_percentage: 13,
       category: "Điện tử",
       subCategory: "Điện thoại",
+      description: "iPhone 12 Pro Max với màn hình Super Retina XDR 6.7 inch, chip A14 Bionic, hệ thống camera Pro 12MP, hỗ trợ 5G và quay video HDR Dolby Vision. Thiết kế thép không gỉ cao cấp, phù hợp với người dùng chuyên nghiệp."
     },
     // Laptop
     {
@@ -42,6 +44,7 @@ const mockProducts = {
       discount_percentage: 6,
       category: "Điện tử",
       subCategory: "Laptop",
+      description: "MacBook Pro 14-inch M1 Pro 2021 với chip M1 Pro mạnh mẽ, màn hình Liquid Retina XDR 14 inch, RAM 16GB, SSD 512GB, pin lên đến 17 giờ. Phù hợp cho công việc sáng tạo và chuyên nghiệp."
     },
     {
       id: 5,
@@ -52,6 +55,7 @@ const mockProducts = {
       discount_percentage: 5,
       category: "Điện tử",
       subCategory: "Laptop",
+      description: "Dell XPS 13 9310 với màn hình 13.4 inch 4K UHD+, chip Intel Core i7 thế hệ 11, RAM 16GB, SSD 512GB. Thiết kế mỏng nhẹ, hiệu năng mạnh mẽ, lý tưởng cho công việc văn phòng."
     },
     {
       id: 6,
@@ -62,6 +66,7 @@ const mockProducts = {
       discount_percentage: 5,
       category: "Điện tử",
       subCategory: "Laptop",
+      description: "HP Spectre x360 14 với màn hình OLED 13.5 inch, chip Intel Core i7 thế hệ 11, RAM 16GB, SSD 1TB. Thiết kế gập 360 độ, bút cảm ứng đi kèm, phù hợp cho công việc sáng tạo."
     },
     {
       id: 7,
@@ -72,6 +77,7 @@ const mockProducts = {
       discount_percentage: 4,
       category: "Điện tử",
       subCategory: "Laptop",
+      description: "Lenovo ThinkPad X1 Carbon Gen 9 với màn hình 14 inch 4K, chip Intel Core i7 thế hệ 11, RAM 16GB, SSD 1TB. Thiết kế bền bỉ, bảo mật cao, lý tưởng cho doanh nhân."
     },
     {
       id: 8,
@@ -82,6 +88,7 @@ const mockProducts = {
       discount_percentage: 6,
       category: "Điện tử",
       subCategory: "Laptop",
+      description: "Asus ROG Zephyrus G14 với màn hình 14 inch QHD 120Hz, chip AMD Ryzen 9, GPU RTX 3060, RAM 16GB, SSD 1TB. Thiết kế nhỏ gọn, hiệu năng mạnh mẽ, phù hợp cho gaming và công việc."
     },
     // Máy tính bảng
     {
@@ -93,6 +100,7 @@ const mockProducts = {
       discount_percentage: 9,
       category: "Điện tử",
       subCategory: "Máy tính bảng",
+      description: "iPad Pro 11-inch 2021 với chip M1, màn hình Liquid Retina 11 inch, hỗ trợ Apple Pencil 2, RAM 8GB, bộ nhớ 128GB. Hiệu năng vượt trội, lý tưởng cho công việc và giải trí."
     },
     {
       id: 10,
@@ -103,6 +111,7 @@ const mockProducts = {
       discount_percentage: 11,
       category: "Điện tử",
       subCategory: "Máy tính bảng",
+      description: "Samsung Galaxy Tab S7 với màn hình 11 inch 120Hz, chip Snapdragon 865+, RAM 6GB, bộ nhớ 128GB, hỗ trợ S Pen. Phù hợp cho học tập, làm việc và giải trí."
     },
   ],
   "Sản phẩm nổi bật": [
@@ -114,6 +123,7 @@ const mockProducts = {
       discounted_price: 5500000,
       discount_percentage: 14,
       category: "Sản phẩm nổi bật",
+      description: "Máy giặt Aqua Inverter 8.5kg với công nghệ Inverter tiết kiệm điện, giặt sạch hiệu quả, nhiều chế độ giặt, phù hợp cho gia đình nhỏ."
     },
     {
       id: 12,
@@ -123,6 +133,7 @@ const mockProducts = {
       discounted_price: 6490000,
       discount_percentage: 0,
       category: "Sản phẩm nổi bật",
+      description: "Tủ lạnh Samsung Inverter 236 Lit với công nghệ Inverter tiết kiệm điện, làm lạnh nhanh, giữ thực phẩm tươi lâu, thiết kế hiện đại."
     },
     {
       id: 13,
@@ -132,6 +143,7 @@ const mockProducts = {
       discounted_price: 290000,
       discount_percentage: 0,
       category: "Sản phẩm nổi bật",
+      description: "Dép da lười vạch chữ gót vuông 5p với chất liệu da cao cấp, thiết kế thời trang, gót vuông 5cm, phù hợp cho nhiều dịp."
     },
     {
       id: 14,
@@ -141,6 +153,7 @@ const mockProducts = {
       discounted_price: 999000,
       discount_percentage: 0,
       category: "Sản phẩm nổi bật",
+      description: "Nồi áp suất điện đa năng Sanaky SNK55DT 5 lít với nhiều chế độ nấu, an toàn, tiết kiệm thời gian, phù hợp cho gia đình."
     },
     {
       id: 15,
@@ -150,6 +163,7 @@ const mockProducts = {
       discounted_price: 2790000,
       discount_percentage: 7,
       category: "Sản phẩm nổi bật",
+      description: "Máy lọc không khí Xiaomi 4 Lite với công nghệ lọc HEPA, loại bỏ 99.97% bụi mịn, thiết kế nhỏ gọn, phù hợp cho không gian nhỏ."
     },
     {
       id: 16,
@@ -159,6 +173,7 @@ const mockProducts = {
       discounted_price: 1290000,
       discount_percentage: 0,
       category: "Sản phẩm nổi bật",
+      description: "Bàn ủi hơi nước Philips GC4532 với công suất 2400W, phun hơi mạnh, mặt đế chống dính, giúp ủi quần áo nhanh chóng và hiệu quả."
     },
     {
       id: 17,
@@ -168,6 +183,7 @@ const mockProducts = {
       discounted_price: 3590000,
       discount_percentage: 10,
       category: "Sản phẩm nổi bật",
+      description: "Quạt điều hòa Sunhouse SHD7727 với công suất 200W, làm mát hiệu quả, tiết kiệm điện, phù hợp cho không gian 30-40m²."
     },
     {
       id: 18,
@@ -177,6 +193,7 @@ const mockProducts = {
       discounted_price: 890000,
       discount_percentage: 0,
       category: "Sản phẩm nổi bật",
+      description: "Máy xay sinh tố Panasonic MX-V310KRA với công suất 600W, lưỡi dao thép không gỉ, cối xay 1.5 lít, dễ dàng vệ sinh."
     },
   ],
   "Thời Trang": [
@@ -189,6 +206,7 @@ const mockProducts = {
       discount_percentage: 24,
       category: "Thời Trang",
       subCategory: "Quần áo nữ",
+      description: "Chân váy xếp ly chính vị ly với chất liệu vải kaki cao cấp, thiết kế thanh lịch, dễ phối đồ, phù hợp cho công sở và dạo phố."
     },
     {
       id: 20,
@@ -199,6 +217,7 @@ const mockProducts = {
       discount_percentage: 0,
       category: "Thời Trang",
       subCategory: "Quần áo nữ",
+      description: "Đầm hóa vải thanh lịch với chất liệu vải mềm mại, form dáng ôm nhẹ, phù hợp cho các buổi tiệc hoặc sự kiện quan trọng."
     },
     {
       id: 21,
@@ -209,6 +228,7 @@ const mockProducts = {
       discount_percentage: 15,
       category: "Thời Trang",
       subCategory: "Quần áo nữ",
+      description: "Quần jean lưng lửng nữ thon tron với chất liệu denim co giãn, thiết kế trẻ trung, tôn dáng, dễ dàng phối với áo thun hoặc sơ mi."
     },
     {
       id: 22,
@@ -219,6 +239,7 @@ const mockProducts = {
       discount_percentage: 0,
       category: "Thời Trang",
       subCategory: "Quần áo nữ",
+      description: "Áo phông nữ trơn màu cổ tròn với chất liệu cotton thoáng mát, thiết kế đơn giản, phù hợp cho phong cách năng động hàng ngày."
     },
     {
       id: 23,
@@ -229,6 +250,7 @@ const mockProducts = {
       discount_percentage: 0,
       category: "Thời Trang",
       subCategory: "Quần áo nữ",
+      description: "Áo sơ mi nữ cổ tay lở với chất liệu lụa mềm mại, thiết kế thanh lịch, cổ tay lở thời trang, phù hợp cho công sở."
     },
     {
       id: 24,
@@ -239,6 +261,7 @@ const mockProducts = {
       discount_percentage: 0,
       category: "Thời Trang",
       subCategory: "Quần áo nam",
+      description: "Short đẹp thời TOPMAN với chất liệu kaki cao cấp, thiết kế trẻ trung, dễ phối đồ, phù hợp cho phong cách dạo phố."
     },
   ],
   "Mẹ và Bé": [
@@ -250,6 +273,7 @@ const mockProducts = {
       discounted_price: 2880000,
       discount_percentage: 0,
       category: "Mẹ và Bé",
+      description: "Sữa Ensure Gold 850g với công thức dinh dưỡng cân đối, hỗ trợ sức khỏe cho mẹ bầu và bé, bổ sung canxi và vitamin D."
     },
     {
       id: 26,
@@ -259,6 +283,7 @@ const mockProducts = {
       discounted_price: 2880000,
       discount_percentage: 0,
       category: "Mẹ và Bé",
+      description: "Máy hút sữa điện đôi Spectra 9 Plus với chế độ massage và hút sữa êm ái, thiết kế nhỏ gọn, dễ sử dụng, hỗ trợ mẹ nuôi con hiệu quả."
     },
     {
       id: 27,
@@ -268,6 +293,7 @@ const mockProducts = {
       discounted_price: 365000,
       discount_percentage: 0,
       category: "Mẹ và Bé",
+      description: "Bỉm - Tã quần Merries size M (58 miếng) dành cho bé 6-11kg, chất liệu mềm mại, thấm hút tốt, không gây kích ứng da bé."
     },
     {
       id: 28,
@@ -277,6 +303,7 @@ const mockProducts = {
       discounted_price: 346000,
       discount_percentage: 0,
       category: "Mẹ và Bé",
+      description: "Địu ngồi em bé BABY LAB với thiết kế ergonomic, hỗ trợ tư thế ngồi tự nhiên cho bé, chất liệu thoáng khí, phù hợp cho bé từ 4 tháng tuổi."
     },
   ],
   "Gia dụng và Nội thất": [
@@ -289,6 +316,7 @@ const mockProducts = {
       discount_percentage: 0,
       category: "Gia dụng và Nội thất",
       subCategory: "Đồ gia dụng",
+      description: "Máy xay sinh tố Sunhouse với công suất 400W, lưỡi dao thép không gỉ, cối xay 1 lít, dễ dàng vệ sinh, phù hợp cho gia đình nhỏ."
     },
     {
       id: 30,
@@ -299,6 +327,7 @@ const mockProducts = {
       discount_percentage: 0,
       category: "Gia dụng và Nội thất",
       subCategory: "Đồ gia dụng",
+      description: "Nồi áp suất điện đa năng Sanaky SNK55DT 5 lít với nhiều chế độ nấu, an toàn, tiết kiệm thời gian, phù hợp cho gia đình."
     },
     {
       id: 31,
@@ -309,6 +338,7 @@ const mockProducts = {
       discount_percentage: 0,
       category: "Gia dụng và Nội thất",
       subCategory: "Đồ gia dụng",
+      description: "Tủ lạnh Samsung Inverter 236 Lit với công nghệ Inverter tiết kiệm điện, làm lạnh nhanh, giữ thực phẩm tươi lâu, thiết kế hiện đại."
     },
     {
       id: 32,
@@ -319,8 +349,8 @@ const mockProducts = {
       discount_percentage: 0,
       category: "Gia dụng và Nội thất",
       subCategory: "Đồ gia dụng",
+      description: "Bàn ủi hơi nước Philips GC4532 với công suất 2400W, phun hơi mạnh, mặt đế chống dính, giúp ủi quần áo nhanh chóng và hiệu quả."
     },
-    // Thêm 3 sản phẩm "Đồ gia dụng" mới
     {
       id: 33,
       name: "Máy ép chậm Hurom H200",
@@ -330,6 +360,7 @@ const mockProducts = {
       discount_percentage: 4,
       category: "Gia dụng và Nội thất",
       subCategory: "Đồ gia dụng",
+      description: "Máy ép chậm Hurom H200 với công nghệ ép chậm giữ nguyên dưỡng chất, công suất 150W, dễ vệ sinh, phù hợp cho gia đình yêu thích nước ép."
     },
     {
       id: 34,
@@ -340,6 +371,7 @@ const mockProducts = {
       discount_percentage: 8,
       category: "Gia dụng và Nội thất",
       subCategory: "Đồ gia dụng",
+      description: "Lò vi sóng Panasonic NN-ST34HM với công suất 800W, dung tích 25 lít, nhiều chế độ nấu, dễ sử dụng, phù hợp cho gia đình nhỏ."
     },
     {
       id: 35,
@@ -350,8 +382,8 @@ const mockProducts = {
       discount_percentage: 7,
       category: "Gia dụng và Nội thất",
       subCategory: "Đồ gia dụng",
+      description: "Máy hút bụi Xiaomi Deerma DX700 với công suất 600W, lực hút mạnh, thiết kế nhỏ gọn, dễ dàng vệ sinh nhà cửa."
     },
-    // Nội thất
     {
       id: 36,
       name: "Ghế sofa da cao cấp",
@@ -361,6 +393,7 @@ const mockProducts = {
       discount_percentage: 20,
       category: "Gia dụng và Nội thất",
       subCategory: "Nội thất",
+      description: "Ghế sofa da cao cấp với chất liệu da thật, khung gỗ tự nhiên, thiết kế hiện đại, phù hợp cho phòng khách sang trọng."
     },
     {
       id: 37,
@@ -371,8 +404,8 @@ const mockProducts = {
       discount_percentage: 10,
       category: "Gia dụng và Nội thất",
       subCategory: "Nội thất",
+      description: "Bàn ăn gỗ tự nhiên 6 ghế với chất liệu gỗ sồi, thiết kế tối giản, bền bỉ, phù hợp cho gia đình đông người."
     },
-    // Thêm 3 sản phẩm "Nội thất" mới
     {
       id: 38,
       name: "Kệ sách gỗ 5 tầng",
@@ -382,6 +415,7 @@ const mockProducts = {
       discount_percentage: 8,
       category: "Gia dụng và Nội thất",
       subCategory: "Nội thất",
+      description: "Kệ sách gỗ 5 tầng với chất liệu gỗ công nghiệp, thiết kế hiện đại, tiết kiệm không gian, phù hợp cho phòng học hoặc phòng khách."
     },
     {
       id: 39,
@@ -392,6 +426,7 @@ const mockProducts = {
       discount_percentage: 6,
       category: "Gia dụng và Nội thất",
       subCategory: "Nội thất",
+      description: "Tủ quần áo 3 cánh với chất liệu gỗ MDF, thiết kế hiện đại, nhiều ngăn chứa đồ, phù hợp cho phòng ngủ nhỏ."
     },
     {
       id: 40,
@@ -402,6 +437,7 @@ const mockProducts = {
       discount_percentage: 5,
       category: "Gia dụng và Nội thất",
       subCategory: "Nội thất",
+      description: "Giường ngủ gỗ công nghiệp 1.8m với thiết kế tối giản, khung gỗ chắc chắn, phù hợp cho phòng ngủ hiện đại."
     },
   ],
   "Văn phòng phẩm": [
@@ -413,6 +449,7 @@ const mockProducts = {
       discounted_price: 57000,
       discount_percentage: 0,
       category: "Văn phòng phẩm",
+      description: "Mực nước WINQ WA-12 (12 màu) với màu sắc tươi sáng, không phai, phù hợp cho học sinh và văn phòng."
     },
     {
       id: 42,
@@ -422,6 +459,7 @@ const mockProducts = {
       discounted_price: 21000,
       discount_percentage: 0,
       category: "Văn phòng phẩm",
+      description: "Giấy nháp Double A AN32325-EN với 3 kích thước, giấy trắng sáng, mịn, phù hợp cho ghi chú và học tập."
     },
     {
       id: 43,
@@ -431,6 +469,7 @@ const mockProducts = {
       discounted_price: 44000,
       discount_percentage: 0,
       category: "Văn phòng phẩm",
+      description: "Sổ lò xo Oxford A5 Sidebinding D128A5 với giấy dày, lò xo chắc chắn, thiết kế tiện lợi cho ghi chép."
     },
     {
       id: 44,
@@ -440,6 +479,7 @@ const mockProducts = {
       discounted_price: 4000,
       discount_percentage: 20,
       category: "Văn phòng phẩm",
+      description: "Bút bi Thiên Long TL-027 với mực viết mượt, thiết kế đơn giản, giá cả phải chăng, phù hợp cho học sinh."
     },
   ],
   "Giày dép": [
@@ -451,6 +491,7 @@ const mockProducts = {
       discounted_price: 0,
       discount_percentage: 0,
       category: "Giày dép",
+      description: "Giày thể thao lền tem loang với thiết kế trẻ trung, đế cao su chống trượt, phù hợp cho phong cách năng động."
     },
     {
       id: 46,
@@ -460,6 +501,7 @@ const mockProducts = {
       discounted_price: 249000,
       discount_percentage: 0,
       category: "Giày dép",
+      description: "Dép bệt da lì quai X với chất liệu da mềm, thiết kế quai X thời trang, phù hợp cho dạo phố và đi làm."
     },
     {
       id: 47,
@@ -469,6 +511,7 @@ const mockProducts = {
       discounted_price: 290000,
       discount_percentage: 0,
       category: "Giày dép",
+      description: "Dép lười da vạch gót vuông 5p với gót vuông 5cm, chất liệu da cao cấp, thiết kế thanh lịch, phù hợp cho nhiều dịp."
     },
     {
       id: 48,
@@ -478,6 +521,7 @@ const mockProducts = {
       discounted_price: 1600000,
       discount_percentage: 20,
       category: "Giày dép",
+      description: "Giày thể thao Nike Air Max với công nghệ đế Air Max êm ái, thiết kế thời trang, phù hợp cho chạy bộ và phong cách hàng ngày."
     },
   ],
   "Mỹ Phẩm": [
@@ -489,6 +533,7 @@ const mockProducts = {
       discounted_price: 120000,
       discount_percentage: 20,
       category: "Mỹ Phẩm",
+      description: "Son môi Maybelline Color Sensational với chất son mịn, màu sắc rực rỡ, lâu trôi, phù hợp cho mọi loại da."
     },
     {
       id: 50,
@@ -498,6 +543,7 @@ const mockProducts = {
       discounted_price: 90000,
       discount_percentage: 10,
       category: "Mỹ Phẩm",
+      description: "Kem dưỡng da Nivea Soft với công thức dưỡng ẩm sâu, chứa vitamin E, giúp da mềm mịn, phù hợp cho mọi loại da."
     },
     {
       id: 51,
@@ -507,6 +553,7 @@ const mockProducts = {
       discounted_price: 250000,
       discount_percentage: 0,
       category: "Mỹ Phẩm",
+      description: "Phấn nền Innisfree No Sebum với khả năng kiềm dầu, che phủ tự nhiên, phù hợp cho da dầu và da hỗn hợp."
     },
     {
       id: 52,
@@ -516,6 +563,7 @@ const mockProducts = {
       discounted_price: 25000,
       discount_percentage: 17,
       category: "Mỹ Phẩm",
+      description: "Mặt nạ giấy Mediheal Tea Tree với chiết xuất trà xanh, làm dịu da, giảm mụn, phù hợp cho da nhạy cảm."
     },
   ],
 };

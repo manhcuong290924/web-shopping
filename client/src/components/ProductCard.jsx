@@ -5,8 +5,13 @@ import { Link } from 'react-router-dom';
 const ProductCard = ({ product, showRightBorder }) => {
   const { id, image_url, name, original_price, discounted_price, discount_percentage } = product;
 
+  // Hàm cuộn lên trên cùng khi nhấn vào sản phẩm
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <Link to={`/products/${id}`} className="block">
+    <Link to={`/products/${id}`} className="block" onClick={handleClick}>
       <div
         className={`product-card p-6 border-t border-gray-200 ${
           showRightBorder ? 'border-r border-gray-200' : ''
