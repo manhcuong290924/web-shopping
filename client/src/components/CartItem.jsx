@@ -1,21 +1,20 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Thêm useNavigate để chuyển hướng
+import { useNavigate } from 'react-router-dom';
 
 const CartItem = ({ cartItems, onRemove, onUpdateQuantity, notification }) => {
-  const navigate = useNavigate(); // Dùng để chuyển hướng khi nhấn "Tiếp tục xem sản phẩm"
+  const navigate = useNavigate();
 
   // Tính tổng tiền
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   // Xử lý khi nhấn "Tiếp tục xem sản phẩm"
   const handleContinueShopping = () => {
-    navigate('/tat-ca-san-pham'); // Chuyển hướng về trang sản phẩm
+    navigate('/tat-ca-san-pham');
   };
 
-  // Xử lý khi nhấn "Mua hàng" (có thể thêm logic sau)
+  // Xử lý khi nhấn "Mua hàng"
   const handleCheckout = () => {
-    // Bạn có thể thêm logic để chuyển hướng đến trang thanh toán hoặc gọi API
-    console.log('Proceed to checkout');
+    navigate('/thanh-toan'); // Chuyển hướng đến trang thanh toán
   };
 
   // Xử lý khi nhấn "Cập nhật giỏ hàng" (có thể thêm logic nếu cần)

@@ -21,7 +21,9 @@ import MensClothingPage from './pages/MensClothingPage';
 import WomensClothingPage from './pages/WomensClothingPage';
 import StationeryPage from './pages/StationeryPage';
 import CosmeticsPage from './pages/CosmeticsPage';
-import CartPage from './pages/CartPage'; // Import CartPage
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrderConfirmationPage from './pages/OrderConfirmationPage'; // Import OrderConfirmationPage
 
 function App() {
   return (
@@ -82,6 +84,12 @@ function App() {
 
         {/* Route cho trang giỏ hàng */}
         <Route path="/gio-hang" element={<CartPage />} />
+
+        {/* Route cho trang thanh toán */}
+        <Route path="/thanh-toan" element={<CheckoutPage />} />
+
+        {/* Route cho trang xác nhận đơn hàng */}
+        <Route path="/xac-nhan-don-hang" element={<OrderConfirmationPage />} />
 
         {/* Route mặc định cho các đường link không tồn tại */}
         <Route path="*" element={<div>404 - Trang không tồn tại</div>} />
