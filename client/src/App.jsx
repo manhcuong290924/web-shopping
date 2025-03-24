@@ -1,4 +1,3 @@
-// client/src/App.jsx
 import './styles/index.scss';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
@@ -20,8 +19,9 @@ import BabyPage from './pages/BabyPage';
 import FashionPage from './pages/FashionPage';
 import MensClothingPage from './pages/MensClothingPage';
 import WomensClothingPage from './pages/WomensClothingPage';
-import StationeryPage from './pages/StationeryPage'; // Import StationeryPage
-import CosmeticsPage from './pages/CosmeticsPage'; // Import CosmeticsPage
+import StationeryPage from './pages/StationeryPage';
+import CosmeticsPage from './pages/CosmeticsPage';
+import CartPage from './pages/CartPage'; // Import CartPage
 
 function App() {
   return (
@@ -79,6 +79,9 @@ function App() {
 
         {/* Route cho danh mục "Mỹ Phẩm" */}
         <Route path="/my-pham" element={<CosmeticsPage />} />
+
+        {/* Route cho trang giỏ hàng */}
+        <Route path="/gio-hang" element={<CartPage />} />
 
         {/* Route mặc định cho các đường link không tồn tại */}
         <Route path="*" element={<div>404 - Trang không tồn tại</div>} />

@@ -1,17 +1,17 @@
-// client/src/pages/ProductDetail.jsx
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
-import ProductDescriptionAndRelated from "../components/ProductDescriptionAndRelated"; // Import ProductDescriptionAndRelated
+import ProductDescriptionAndRelated from "../components/ProductDescriptionAndRelated";
 import mockProducts from "../data/mockProducts";
 import "../styles/custom-layout.scss";
 
 const ProductDetail = () => {
   const { id } = useParams(); // Lấy id từ URL
+  const navigate = useNavigate(); // Dùng để chuyển hướng
   const [isOpen, setIsOpen] = useState(false);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -19,7 +19,7 @@ const ProductDetail = () => {
   // Tìm sản phẩm dựa trên id
   useEffect(() => {
     const allProducts = Object.values(mockProducts).flat(); // Gộp tất cả sản phẩm từ mockProducts
-    const foundProduct = allProducts.find(p => p.id === parseInt(id));
+    const foundProduct = allProducts.find((p) => p.id === parseInt(id));
     setProduct(foundProduct);
   }, [id]);
 
@@ -29,10 +29,53 @@ const ProductDetail = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
 
+  // Hàm xử lý thêm sản phẩm vào giỏ hàng và chuyển hướng
+  const addToCartAndRedirect = () => {
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.discounted_price || product.original_price,
+      quantity: quantity,
+      image: product.image_url,
+    };
+
+    // Lấy giỏ hàng hiện tại từ localStorage
+    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    const existingItem = existingCart.find((item) => item.id === cartItem.id);
+    if (existingItem) {
+      existingItem.quantity += quantity; // Tăng số lượng nếu đã có
+    } else {
+      existingCart.push(cartItem); // Thêm mới nếu chưa có
+    }
+
+    // Lưu lại vào localStorage
+    localStorage.setItem('cart', JSON.stringify(existingCart));
+
+    // Chuyển hướng đến trang giỏ hàng và truyền thông báo
+    navigate('/gio-hang', {
+      state: { notification: `"${product.name}" đã được thêm vào giỏ hàng.` },
+    });
+  };
+
+  // Xử lý khi nhấn "Thêm vào giỏ hàng"
+  const handleAddToCart = () => {
+    addToCartAndRedirect();
+  };
+
+  // Xử lý khi nhấn "Mua ngay"
+  const handleBuyNow = () => {
+    addToCartAndRedirect();
+  };
+
   // Dữ liệu đường dẫn cho Breadcrumb
   const breadcrumbItems = [
     { title: "Trang chủ", path: "/", icon: "🏠" },
-    { title: product?.category || "Sản phẩm", path: `/${product?.category?.toLowerCase().replace(/\s+/g, '-')}` },
+    {
+      title: product?.category || "Sản phẩm",
+      path: `/${product?.category?.toLowerCase().replace(/\s+/g, '-')}`,
+    },
     { title: product?.name || "Chi tiết sản phẩm", path: `/products/${id}` },
   ];
 
@@ -85,7 +128,9 @@ const ProductDetail = () => {
                     </>
                   ) : (
                     <p className="text-xl font-bold text-orange-500">
-                      {product.original_price === 0 ? "Liên hệ" : `${product.original_price.toLocaleString('vi-VN')}đ`}
+                      {product.original_price === 0
+                        ? "Liên hệ"
+                        : `${product.original_price.toLocaleString('vi-VN')}đ`}
                     </p>
                   )}
                 </div>
@@ -113,10 +158,16 @@ const ProductDetail = () => {
 
                 {/* Nút hành động */}
                 <div className="mt-6 flex gap-4">
-                  <button className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">
+                  <button
+                    onClick={handleBuyNow}
+                    className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600"
+                  >
                     Mua ngay
                   </button>
-                  <button className="border border-orange-500 text-orange-500 px-6 py-2 rounded-lg hover:bg-orange-100">
+                  <button
+                    onClick={handleAddToCart}
+                    className="border border-orange-500 text-orange-500 px-6 py-2 rounded-lg hover:bg-orange-100"
+                  >
                     Thêm vào giỏ hàng
                   </button>
                 </div>
