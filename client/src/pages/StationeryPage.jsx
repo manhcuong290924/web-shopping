@@ -1,11 +1,10 @@
-// client/src/pages/StationeryPage.jsx
 import { useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
-import StationerySection from "../components/StationerySection"; // Sử dụng StationerySection
+import StationerySection from "../components/StationerySection";
 import Pagination from "../components/Pagination";
 import mockProducts from "../data/mockProducts";
 import "../styles/custom-layout.scss";
@@ -40,7 +39,7 @@ const StationeryPage = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}

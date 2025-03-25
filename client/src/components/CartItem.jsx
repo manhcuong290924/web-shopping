@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CartItem = ({ cartItems, onRemove, onUpdateQuantity, notification }) => {
+const CartItem = ({ cartItems, onRemove, onUpdateQuantity, onRefreshCart, notification }) => {
   const navigate = useNavigate();
 
   // Tính tổng tiền
@@ -17,9 +17,9 @@ const CartItem = ({ cartItems, onRemove, onUpdateQuantity, notification }) => {
     navigate('/thanh-toan'); // Chuyển hướng đến trang thanh toán
   };
 
-  // Xử lý khi nhấn "Cập nhật giỏ hàng" (có thể thêm logic nếu cần)
+  // Xử lý khi nhấn "Cập nhật giỏ hàng"
   const handleUpdateCart = () => {
-    console.log('Cart updated');
+    onRefreshCart(); // Gọi hàm làm mới giỏ hàng
   };
 
   return (

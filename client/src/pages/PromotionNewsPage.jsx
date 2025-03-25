@@ -1,4 +1,3 @@
-// client/src/pages/PromotionNewsPage.jsx
 import { useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
@@ -22,7 +21,7 @@ const PromotionNewsPage = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}

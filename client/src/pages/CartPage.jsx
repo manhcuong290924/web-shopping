@@ -27,6 +27,23 @@ const CartPage = () => {
     }
   }, [notification]);
 
+  // Lắng nghe sự kiện storage để đồng bộ giỏ hàng
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'cart') {
+        const updatedCart = e.newValue ? JSON.parse(e.newValue) : [];
+        setCartItems(updatedCart);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    // Dọn dẹp listener khi component unmount
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   // Cập nhật localStorage khi giỏ hàng thay đổi
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
@@ -53,12 +70,18 @@ const CartPage = () => {
     );
   };
 
+  // Hàm để làm mới giỏ hàng từ localStorage
+  const refreshCart = () => {
+    const savedCart = localStorage.getItem('cart');
+    setCartItems(savedCart ? JSON.parse(savedCart) : []);
+  };
+
   return (
     <div className="flex flex-col min-h-screen font-sans">
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}
@@ -79,6 +102,7 @@ const CartPage = () => {
               cartItems={cartItems}
               onRemove={handleRemove}
               onUpdateQuantity={handleUpdateQuantity}
+              onRefreshCart={refreshCart}
               notification={notification}
             />
           </main>

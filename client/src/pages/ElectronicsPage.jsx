@@ -1,4 +1,3 @@
-// client/src/pages/ElectronicsPage.jsx
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
@@ -50,7 +49,7 @@ const ElectronicsPage = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}

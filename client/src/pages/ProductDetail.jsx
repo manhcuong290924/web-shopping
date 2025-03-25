@@ -88,7 +88,7 @@ const ProductDetail = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}

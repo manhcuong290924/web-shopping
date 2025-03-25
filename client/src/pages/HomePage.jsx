@@ -1,7 +1,6 @@
-// client/src/pages/HomePage.jsx
 import { useState } from "react";
 import FeaturedProducts from "../components/FeaturedProducts";
-import ElectronicSection from "../components/ElectronicSection"; // Thay LimitedProductList bằng ElectronicSection
+import ElectronicSection from "../components/ElectronicSection";
 import FashionSection from "../components/FashionSection";
 import BabySection from "../components/BabySection";
 import CombinedSection from "../components/CombinedSection";
@@ -24,7 +23,7 @@ const HomePage = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}
@@ -42,7 +41,7 @@ const HomePage = () => {
             <FashionSection />
 
             {/* Product List cho Điện tử */}
-            <ElectronicSection category="Điện tử" products={electronicsProducts} /> {/* Sử dụng ElectronicSection */}
+            <ElectronicSection category="Điện tử" products={electronicsProducts} />
 
             {/* Baby Section */}
             <BabySection />

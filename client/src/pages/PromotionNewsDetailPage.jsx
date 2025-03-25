@@ -1,4 +1,3 @@
-// client/src/pages/PromotionNewsDetailPage.jsx
 import React from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -8,7 +7,7 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
 import PromotionNewsDetailContent from "../components/PromotionNewsDetailContent";
-import newsDetails from "../data/promotionNewsData"; // Import newsDetails
+import newsDetails from "../data/promotionNewsData";
 import "../styles/custom-layout.scss";
 
 const PromotionNewsDetailPage = () => {
@@ -34,7 +33,7 @@ const PromotionNewsDetailPage = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}
