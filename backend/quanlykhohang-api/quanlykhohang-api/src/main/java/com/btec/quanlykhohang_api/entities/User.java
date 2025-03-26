@@ -14,7 +14,7 @@ public class User {
     private String lastName;
     private String birthDay;
     private boolean active;
-    private String address;
+    private String phoneNumber; // Trường số điện thoại đã có
 
     // Getters and Setters
     public String getId() {
@@ -73,11 +73,11 @@ public class User {
         this.active = active;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

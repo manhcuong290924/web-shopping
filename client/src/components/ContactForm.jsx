@@ -1,8 +1,42 @@
-// client/src/components/ContactForm.jsx
-import React from 'react';
+import React, { useState } from 'react';
+import { sendContact } from '../services/contactService'; // Import API từ service
 import '../styles/ContactPage.scss';
 
 const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    title: '',
+    message: '',
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setError('');
+    setSuccess('');
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Kiểm tra các trường bắt buộc
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setError('Vui lòng nhập đầy đủ họ tên, email và nội dung.');
+      return;
+    }
+
+    try {
+      await sendContact(formData); // Gọi API từ service
+      setSuccess('Gửi thông tin liên hệ thành công!');
+      setFormData({ name: '', email: '', title: '', message: '' }); // Reset form
+    } catch (err) {
+      setError(err);
+    }
+  };
+
   return (
     <div className="contact-page">
       <div className="contact-info">
@@ -26,22 +60,51 @@ const ContactForm = () => {
         </ul>
       </div>
       <div className="contact-form">
-        <form>
+        {error && <p className="error">{error}</p>}
+        {success && <p className="success">{success}</p>}
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Họ và tên</label>
-            <input type="text" placeholder="Nhập họ và tên" />
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Nhập họ và tên"
+              required
+            />
           </div>
           <div className="form-group">
             <label>Địa chỉ email</label>
-            <input type="email" placeholder="Nhập địa chỉ email" />
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Nhập địa chỉ email"
+              required
+            />
           </div>
           <div className="form-group">
             <label>Tiêu đề</label>
-            <input type="text" placeholder="Nhập tiêu đề" />
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              placeholder="Nhập tiêu đề"
+            />
           </div>
           <div className="form-group">
             <label>Nội dung</label>
-            <textarea placeholder="Nhập nội dung" rows="5"></textarea>
+            <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleInputChange}
+              placeholder="Nhập nội dung"
+              rows="5"
+              required
+            ></textarea>
           </div>
           <button type="submit" className="submit-button">
             GỬI ĐI

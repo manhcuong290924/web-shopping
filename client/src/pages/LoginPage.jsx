@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { signIn } from '../services/authService';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
@@ -12,34 +13,40 @@ const LoginPage = () => {
     email: '',
     password: '',
   });
-
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  // Xử lý thay đổi input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setError('');
   };
 
-  // Xử lý đăng nhập
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Kiểm tra các trường bắt buộc
     if (!formData.email.trim() || !formData.password.trim()) {
       setError('Vui lòng nhập đầy đủ email và mật khẩu.');
       return;
     }
 
-    // Gửi dữ liệu đăng nhập (giả lập, bạn có thể gọi API)
-    console.log('Đăng nhập:', formData);
-
-    // Sau khi đăng nhập thành công, bạn có thể chuyển hướng hoặc lưu token
-    // Ví dụ: navigate('/'); hoặc lưu token vào localStorage
+    try {
+      const response = await signIn(formData);
+      // Lưu token vào localStorage
+      localStorage.setItem('token', response.token);
+      // Lưu thông tin user (firstName, lastName) vào localStorage
+      const user = {
+        firstName: response.firstName,
+        lastName: response.lastName,
+      };
+      localStorage.setItem('user', JSON.stringify(user));
+      console.log('Đăng nhập thành công:', response.token);
+      navigate('/');
+    } catch (err) {
+      setError(err || 'Đăng nhập thất bại. Vui lòng kiểm tra lại email hoặc mật khẩu.');
+    }
   };
 
-  // Dữ liệu đường dẫn cho Breadcrumb
   const breadcrumbItems = [
     { title: 'Trang chủ', path: '/', icon: '🏠' },
     { title: 'Đăng nhập', path: '/dang-nhap' },
@@ -47,27 +54,16 @@ const LoginPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen font-sans">
-      {/* Header */}
       <Header />
-
       <div className="flex flex-1" style={{ paddingTop: '120px' }}>
-        {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
-          {/* Sidebar */}
           <Sidebar />
-
-          {/* Nội dung chính */}
           <main className="flex-1 p-4 md:p-6">
-            {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} />
-
-            {/* Form đăng nhập */}
             <div className="max-w-md mx-auto">
               <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
                 ĐĂNG NHẬP
               </h1>
-
-              {/* Thông báo lỗi (nếu có) */}
               {error && (
                 <div
                   style={{
@@ -86,7 +82,6 @@ const LoginPage = () => {
                   <span>{error}</span>
                 </div>
               )}
-
               <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '15px' }}>
                   <label style={{ display: 'block', fontSize: '14px', color: '#333', marginBottom: '5px' }}>
@@ -108,7 +103,6 @@ const LoginPage = () => {
                     required
                   />
                 </div>
-
                 <div style={{ marginBottom: '15px' }}>
                   <label style={{ display: 'block', fontSize: '14px', color: '#333', marginBottom: '5px' }}>
                     Mật khẩu <span style={{ color: 'red' }}>*</span>
@@ -129,7 +123,6 @@ const LoginPage = () => {
                     required
                   />
                 </div>
-
                 <button
                   type="submit"
                   style={{
@@ -147,7 +140,6 @@ const LoginPage = () => {
                   ĐĂNG NHẬP
                 </button>
               </form>
-
               <p style={{ marginTop: '15px', textAlign: 'center', fontSize: '14px', color: '#666' }}>
                 Bạn chưa có tài khoản?{' '}
                 <Link to="/dang-ky" className="text-orange-500 hover:underline">
@@ -158,11 +150,7 @@ const LoginPage = () => {
           </main>
         </div>
       </div>
-
-      {/* ChatBotIcon */}
       <ChatBotIcon />
-
-      {/* Footer */}
       <Footer />
     </div>
   );

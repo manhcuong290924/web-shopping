@@ -23,6 +23,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
+
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
@@ -36,20 +37,15 @@ public class UserService {
     }
 
     public User updateUser(String id, User updatedUser) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setFirstName(updatedUser.getFirstName());
-            user.setLastName(updatedUser.getLastName());
-            user.setBirthDay(updatedUser.getBirthDay());
-            user.setActive(updatedUser.isActive());
-            user.setAddress(updatedUser.getAddress());
-            return userRepository.save(user);
-        }
-        return null;
+    Optional<User> userOptional = userRepository.findById(id);
+    if (userOptional.isPresent()) {
+        User user = userOptional.get();
+        user.setFirstName(updatedUser.getFirstName());
+        user.setLastName(updatedUser.getLastName());
+        user.setBirthDay(updatedUser.getBirthDay());
+        user.setActive(updatedUser.isActive());
+        // Xóa user.setAddress(updatedUser.getAddress()) vì address không còn
+        return userRepository.save(user);
     }
-
-    public void deleteUser(String id) {
-        userRepository.deleteById(id);
-    }
+    return null;
 }

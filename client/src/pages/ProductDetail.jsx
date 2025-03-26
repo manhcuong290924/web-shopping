@@ -10,20 +10,25 @@ import mockProducts from "../data/mockProducts";
 import "../styles/custom-layout.scss";
 
 const ProductDetail = () => {
-  const { id } = useParams(); // Lấy id từ URL
-  const navigate = useNavigate(); // Dùng để chuyển hướng
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [user, setUser] = useState(null); // Thêm state để kiểm tra user
 
-  // Tìm sản phẩm dựa trên id
+  // Kiểm tra trạng thái đăng nhập và lấy sản phẩm
   useEffect(() => {
-    const allProducts = Object.values(mockProducts).flat(); // Gộp tất cả sản phẩm từ mockProducts
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+
+    const allProducts = Object.values(mockProducts).flat();
     const foundProduct = allProducts.find((p) => p.id === parseInt(id));
     setProduct(foundProduct);
   }, [id]);
 
-  // Tăng/giảm số lượng
   const handleIncrease = () => setQuantity(quantity + 1);
   const handleDecrease = () => {
     if (quantity > 1) setQuantity(quantity - 1);
@@ -39,37 +44,40 @@ const ProductDetail = () => {
       image: product.image_url,
     };
 
-    // Lấy giỏ hàng hiện tại từ localStorage
     const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     const existingItem = existingCart.find((item) => item.id === cartItem.id);
     if (existingItem) {
-      existingItem.quantity += quantity; // Tăng số lượng nếu đã có
+      existingItem.quantity += quantity;
     } else {
-      existingCart.push(cartItem); // Thêm mới nếu chưa có
+      existingCart.push(cartItem);
     }
 
-    // Lưu lại vào localStorage
     localStorage.setItem('cart', JSON.stringify(existingCart));
-
-    // Chuyển hướng đến trang giỏ hàng và truyền thông báo
     navigate('/gio-hang', {
       state: { notification: `"${product.name}" đã được thêm vào giỏ hàng.` },
     });
   };
 
+  // Kiểm tra đăng nhập trước khi thực hiện hành động
+  const checkLoginAndExecute = (action) => {
+    if (!user) {
+      alert('Vui lòng đăng nhập để thực hiện hành động này!');
+      navigate('/dang-nhap');
+    } else {
+      action();
+    }
+  };
+
   // Xử lý khi nhấn "Thêm vào giỏ hàng"
   const handleAddToCart = () => {
-    addToCartAndRedirect();
+    checkLoginAndExecute(addToCartAndRedirect);
   };
 
   // Xử lý khi nhấn "Mua ngay"
   const handleBuyNow = () => {
-    addToCartAndRedirect();
+    checkLoginAndExecute(addToCartAndRedirect);
   };
 
-  // Dữ liệu đường dẫn cho Breadcrumb
   const breadcrumbItems = [
     { title: "Trang chủ", path: "/", icon: "🏠" },
     {
@@ -85,23 +93,13 @@ const ProductDetail = () => {
 
   return (
     <div className="flex flex-col min-h-screen font-sans">
-      {/* Header */}
       <Header />
-
       <div className="flex flex-1" style={{ paddingTop: '120px' }}>
-        {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
-          {/* Sidebar */}
           <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
-
-          {/* Nội dung chính */}
           <main className="flex-1 p-4 md:p-6">
-            {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} />
-
-            {/* Chi tiết sản phẩm */}
             <div className="flex flex-col md:flex-row gap-6 mt-4">
-              {/* Hình ảnh sản phẩm */}
               <div className="md:w-1/2">
                 <img
                   src={product.image_url}
@@ -109,8 +107,6 @@ const ProductDetail = () => {
                   className="w-full h-auto object-cover rounded-lg"
                 />
               </div>
-
-              {/* Thông tin sản phẩm */}
               <div className="md:w-1/2">
                 <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
                 <div className="flex items-center gap-2 mt-2">
@@ -134,8 +130,6 @@ const ProductDetail = () => {
                     </p>
                   )}
                 </div>
-
-                {/* Số lượng */}
                 <div className="mt-4">
                   <p className="text-sm text-gray-600">Số lượng</p>
                   <div className="flex items-center gap-2 mt-1">
@@ -155,8 +149,6 @@ const ProductDetail = () => {
                     </button>
                   </div>
                 </div>
-
-                {/* Nút hành động */}
                 <div className="mt-6 flex gap-4">
                   <button
                     onClick={handleBuyNow}
@@ -173,17 +165,11 @@ const ProductDetail = () => {
                 </div>
               </div>
             </div>
-
-            {/* Phần mô tả và sản phẩm tương tự */}
             <ProductDescriptionAndRelated product={product} />
           </main>
         </div>
       </div>
-
-      {/* ChatBotIcon */}
       <ChatBotIcon />
-
-      {/* Footer */}
       <Footer />
     </div>
   );
