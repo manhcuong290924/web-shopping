@@ -5,8 +5,6 @@ import Dashboard from "../components/Dashboard";
 const DashboardPage = () => {
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
-      <SideBar />
       {/* Main Content */}
       <div className="flex-1">
         <Header />
