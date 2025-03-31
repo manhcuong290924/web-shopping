@@ -1,4 +1,5 @@
-import { useState } from "react";
+// client/src/pages/TabletPage.jsx
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
@@ -6,19 +7,34 @@ import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
 import TabletSection from "../components/TabletSection";
 import Pagination from "../components/Pagination";
-import mockProducts from "../data/mockProducts";
+import { fetchTabletProducts } from "../services/tabletService"; // Import fetchTabletProducts
 import "../styles/custom-layout.scss";
 
 const TabletPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [tabletProducts, setTabletProducts] = useState([]); // Lưu danh sách sản phẩm máy tính bảng
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
   const productsPerPage = 12; // 12 sản phẩm mỗi trang
 
-  // Lấy sản phẩm thuộc danh mục "Điện tử"
-  const electronicsProducts = mockProducts["Điện tử"] || [];
+  // Lấy danh sách sản phẩm máy tính bảng từ backend
+  useEffect(() => {
+    const loadTabletProducts = async () => {
+      try {
+        setLoading(true);
+        const products = await fetchTabletProducts(); // Gọi API từ tabletService
+        setTabletProducts(products);
+      } catch (error) {
+        console.error("Error loading tablet products:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Lọc sản phẩm chỉ thuộc danh mục con "Máy tính bảng"
-  const tabletProducts = electronicsProducts.filter(product => product.subCategory === "Máy tính bảng");
+    loadTabletProducts();
+  }, []);
 
   // Tính toán số trang và sản phẩm hiển thị trên trang hiện tại
   const totalPages = Math.ceil(tabletProducts.length / productsPerPage);
@@ -43,7 +59,7 @@ const TabletPage = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
+      <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}
@@ -54,16 +70,25 @@ const TabletPage = () => {
             {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} />
 
-            {/* Danh sách sản phẩm */}
-            <TabletSection products={currentProducts} />
+            {/* Hiển thị trạng thái loading hoặc lỗi */}
+            {loading ? (
+              <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
+            ) : error ? (
+              <div className="p-1.5 text-red-500">{error}</div>
+            ) : (
+              <>
+                {/* Danh sách sản phẩm */}
+                <TabletSection products={currentProducts} />
 
-            {/* Phân trang */}
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
+                {/* Phân trang */}
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
             )}
           </main>
         </div>

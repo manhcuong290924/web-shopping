@@ -1,4 +1,4 @@
-// src/components/UserEditForm.js
+// src/components/User/UserEditForm.js
 import React, { useState } from "react";
 
 const UserEditForm = ({ user, onSave, onCancel }) => {

@@ -1,28 +1,56 @@
 // client/src/components/ProductDescriptionAndRelated.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
-import mockProducts from "../data/mockProducts";
+import { fetchProducts } from "../services/productService"; // Import fetchProducts
 
 const ProductDescriptionAndRelated = ({ product }) => {
-  // Lấy danh sách sản phẩm tương tự (cùng danh mục, trừ sản phẩm hiện tại)
-  const relatedProducts = Object.values(mockProducts)
-    .flat()
-    .filter(p => p.category === product.category && p.id !== product.id)
-    .slice(0, 3); // Giới hạn tối đa 3 sản phẩm
+  const [relatedProducts, setRelatedProducts] = useState([]); // Lưu danh sách sản phẩm tương tự
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
+
+  // Hàm lấy ngẫu nhiên 3 sản phẩm từ danh sách
+  const getRandomProducts = (products, count) => {
+    const shuffled = [...products].sort(() => 0.5 - Math.random()); // Xáo trộn mảng
+    return shuffled.slice(0, count); // Lấy count sản phẩm đầu tiên
+  };
+
+  // Lấy danh sách sản phẩm từ backend
+  useEffect(() => {
+    const loadRelatedProducts = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchProducts(0, 1000); // Lấy tất cả sản phẩm (có thể điều chỉnh size)
+        const products = data.content || [];
+        const randomProducts = getRandomProducts(products, 3); // Lấy ngẫu nhiên 3 sản phẩm
+        setRelatedProducts(randomProducts);
+      } catch (error) {
+        console.error("Error loading related products:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm tương tự.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRelatedProducts();
+  }, []); // Chỉ gọi API một lần khi component được mount
 
   return (
     <div className="mt-8">
       {/* Phần mô tả sản phẩm */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-orange-500 mb-4">MÔ TẢ</h2>
-        <p className="text-gray-600">{product.description || "Không có mô tả cho sản phẩm này."}</p>
+        <p className="text-gray-600">{product?.desc || "Không có mô tả cho sản phẩm này."}</p>
       </div>
 
       {/* Phần sản phẩm tương tự */}
       <div>
         <h2 className="text-2xl font-bold text-orange-500 mb-4">SẢN PHẨM TƯƠNG TỰ</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {relatedProducts.length > 0 ? (
+          {loading ? (
+            <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
+          ) : error ? (
+            <div className="p-1.5 text-red-500">{error}</div>
+          ) : relatedProducts.length > 0 ? (
             relatedProducts.map((relatedProduct, index) => (
               <ProductCard
                 key={relatedProduct.id}

@@ -1,4 +1,4 @@
-// src/components/MessageModal.js
+// src/components/Contact/MessageModal.js
 import React from "react";
 
 const MessageModal = ({ message, onClose }) => {

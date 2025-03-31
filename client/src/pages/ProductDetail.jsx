@@ -1,3 +1,4 @@
+// client/src/pages/ProductDetail.jsx
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
@@ -6,7 +7,7 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
 import ProductDescriptionAndRelated from "../components/ProductDescriptionAndRelated";
-import mockProducts from "../data/mockProducts";
+import { fetchProductById } from "../services/productService"; // Import fetchProductById
 import "../styles/custom-layout.scss";
 
 const ProductDetail = () => {
@@ -16,17 +17,30 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [user, setUser] = useState(null); // Thêm state để kiểm tra user
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
 
   // Kiểm tra trạng thái đăng nhập và lấy sản phẩm
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
+    const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
 
-    const allProducts = Object.values(mockProducts).flat();
-    const foundProduct = allProducts.find((p) => p.id === parseInt(id));
-    setProduct(foundProduct);
+    const loadProduct = async () => {
+      try {
+        setLoading(true);
+        const foundProduct = await fetchProductById(id); // Gọi API để lấy sản phẩm theo id
+        setProduct(foundProduct);
+      } catch (error) {
+        console.error("Error loading product:", error);
+        setError(error.message || "Không thể tải thông tin sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
   }, [id]);
 
   const handleIncrease = () => setQuantity(quantity + 1);
@@ -39,12 +53,12 @@ const ProductDetail = () => {
     const cartItem = {
       id: product.id,
       name: product.name,
-      price: product.discounted_price || product.original_price,
+      price: product.discountedPrice || product.originalPrice,
       quantity: quantity,
-      image: product.image_url,
+      image: product.imageUrl,
     };
 
-    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingItem = existingCart.find((item) => item.id === cartItem.id);
     if (existingItem) {
       existingItem.quantity += quantity;
@@ -52,8 +66,8 @@ const ProductDetail = () => {
       existingCart.push(cartItem);
     }
 
-    localStorage.setItem('cart', JSON.stringify(existingCart));
-    navigate('/gio-hang', {
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+    navigate("/gio-hang", {
       state: { notification: `"${product.name}" đã được thêm vào giỏ hàng.` },
     });
   };
@@ -61,8 +75,8 @@ const ProductDetail = () => {
   // Kiểm tra đăng nhập trước khi thực hiện hành động
   const checkLoginAndExecute = (action) => {
     if (!user) {
-      alert('Vui lòng đăng nhập để thực hiện hành động này!');
-      navigate('/dang-nhap');
+      alert("Vui lòng đăng nhập để thực hiện hành động này!");
+      navigate("/dang-nhap");
     } else {
       action();
     }
@@ -82,10 +96,18 @@ const ProductDetail = () => {
     { title: "Trang chủ", path: "/", icon: "🏠" },
     {
       title: product?.category || "Sản phẩm",
-      path: `/${product?.category?.toLowerCase().replace(/\s+/g, '-')}`,
+      path: `/${product?.category?.toLowerCase().replace(/\s+/g, "-")}`,
     },
     { title: product?.name || "Chi tiết sản phẩm", path: `/products/${id}` },
   ];
+
+  if (loading) {
+    return <div className="text-center p-4">Đang tải sản phẩm...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center p-4 text-red-500">{error}</div>;
+  }
 
   if (!product) {
     return <div className="text-center p-4">Không tìm thấy sản phẩm</div>;
@@ -94,7 +116,7 @@ const ProductDetail = () => {
   return (
     <div className="flex flex-col min-h-screen font-sans">
       <Header />
-      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
+      <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
           <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
           <main className="flex-1 p-4 md:p-6">
@@ -102,7 +124,7 @@ const ProductDetail = () => {
             <div className="flex flex-col md:flex-row gap-6 mt-4">
               <div className="md:w-1/2">
                 <img
-                  src={product.image_url}
+                  src={product.imageUrl}
                   alt={product.name}
                   className="w-full h-auto object-cover rounded-lg"
                 />
@@ -110,23 +132,23 @@ const ProductDetail = () => {
               <div className="md:w-1/2">
                 <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
                 <div className="flex items-center gap-2 mt-2">
-                  {product.discount_percentage > 0 ? (
+                  {product.discountPercentage > 0 ? (
                     <>
                       <p className="text-xl font-bold text-orange-500">
-                        {product.discounted_price.toLocaleString('vi-VN')}đ
+                        {product.discountedPrice.toLocaleString("vi-VN")}đ
                       </p>
                       <p className="text-sm text-gray-500 line-through">
-                        {product.original_price.toLocaleString('vi-VN')}đ
+                        {product.originalPrice.toLocaleString("vi-VN")}đ
                       </p>
                       <p className="text-sm text-orange-500">
-                        -{product.discount_percentage}%
+                        -{product.discountPercentage}%
                       </p>
                     </>
                   ) : (
                     <p className="text-xl font-bold text-orange-500">
-                      {product.original_price === 0
+                      {product.originalPrice === 0
                         ? "Liên hệ"
-                        : `${product.original_price.toLocaleString('vi-VN')}đ`}
+                        : `${product.originalPrice.toLocaleString("vi-VN")}đ`}
                     </p>
                   )}
                 </div>

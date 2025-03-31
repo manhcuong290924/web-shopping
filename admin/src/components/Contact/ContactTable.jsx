@@ -1,5 +1,5 @@
-// src/components/ContactTable.js
-import React, { useState } from "react";
+// src/components/Contact/ContactTable.js
+import React from "react";
 
 const ContactTable = ({ contacts, onDelete, onViewMessage }) => {
   return (

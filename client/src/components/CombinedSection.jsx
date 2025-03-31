@@ -1,19 +1,52 @@
 // client/src/components/CombinedSection.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
-import mockProducts from "../data/mockProducts";
+import { fetchHouseholdProducts } from "../services/householdService";
+import { fetchStationeryProducts } from "../services/stationeryService";
+import { fetchFootwearProducts } from "../services/footwearService";
 import "../styles/custom-layout.scss";
 
 const CombinedSection = () => {
-  const householdProducts = mockProducts["Gia dụng và Nội thất"] || [];
-  const stationeryProducts = mockProducts["Văn phòng phẩm"] || [];
-  const footwearProducts = mockProducts["Giày dép"] || [];
+  const [householdProducts, setHouseholdProducts] = useState([]); // Sản phẩm Gia dụng và Nội thất
+  const [stationeryProducts, setStationeryProducts] = useState([]); // Sản phẩm Văn phòng phẩm
+  const [footwearProducts, setFootwearProducts] = useState([]); // Sản phẩm Giày dép
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
 
-  // Giới hạn tối đa 3 sản phẩm cho mỗi danh mục
-  const displayedHouseholdProducts = householdProducts.slice(0, 3);
-  const displayedStationeryProducts = stationeryProducts.slice(0, 3);
-  const displayedFootwearProducts = footwearProducts.slice(0, 3);
+  // Hàm lấy ngẫu nhiên 3 sản phẩm từ danh sách
+  const getRandomProducts = (products, count) => {
+    const shuffled = [...products].sort(() => 0.5 - Math.random()); // Xáo trộn mảng
+    return shuffled.slice(0, count); // Lấy count sản phẩm đầu tiên
+  };
+
+  // Lấy danh sách sản phẩm từ backend
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+
+        // Lấy sản phẩm Gia dụng và Nội thất
+        const householdData = await fetchHouseholdProducts();
+        setHouseholdProducts(getRandomProducts(householdData, 3));
+
+        // Lấy sản phẩm Văn phòng phẩm
+        const stationeryData = await fetchStationeryProducts();
+        setStationeryProducts(getRandomProducts(stationeryData, 3));
+
+        // Lấy sản phẩm Giày dép
+        const footwearData = await fetchFootwearProducts();
+        setFootwearProducts(getRandomProducts(footwearData, 3));
+      } catch (error) {
+        console.error("Error loading combined products:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []); // Chỉ gọi API một lần khi component được mount
 
   return (
     <div className="combined-section max-w-[80rem] mx-auto py-2">
@@ -26,8 +59,12 @@ const CombinedSection = () => {
               GIA DỤNG VÀ NỘI THẤT
             </h3>
             <div className="flex flex-col gap-1 flex-1">
-              {displayedHouseholdProducts.length > 0 ? (
-                displayedHouseholdProducts.map((product, index) => (
+              {loading ? (
+                <div className="p-1.5 text-gray-500">Đang tải...</div>
+              ) : error ? (
+                <div className="p-1.5 text-red-500">{error}</div>
+              ) : householdProducts.length > 0 ? (
+                householdProducts.map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}
@@ -46,8 +83,12 @@ const CombinedSection = () => {
               VĂN PHÒNG PHẨM
             </h3>
             <div className="flex flex-col gap-1 flex-1">
-              {displayedStationeryProducts.length > 0 ? (
-                displayedStationeryProducts.map((product, index) => (
+              {loading ? (
+                <div className="p-1.5 text-gray-500">Đang tải...</div>
+              ) : error ? (
+                <div className="p-1.5 text-red-500">{error}</div>
+              ) : stationeryProducts.length > 0 ? (
+                stationeryProducts.map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}
@@ -74,8 +115,12 @@ const CombinedSection = () => {
               </Link>
             </div>
             <div className="flex flex-col gap-1 flex-1">
-              {displayedFootwearProducts.length > 0 ? (
-                displayedFootwearProducts.map((product, index) => (
+              {loading ? (
+                <div className="p-1.5 text-gray-500">Đang tải...</div>
+              ) : error ? (
+                <div className="p-1.5 text-red-500">{error}</div>
+              ) : footwearProducts.length > 0 ? (
+                footwearProducts.map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}

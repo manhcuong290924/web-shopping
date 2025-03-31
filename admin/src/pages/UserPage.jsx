@@ -1,16 +1,16 @@
 // src/pages/UserPage.js
 import React, { useState, useEffect } from "react";
 import { fetchUsers, deleteUser, updateUser } from "../services/userService";
-import UserTable from "../components/UserTable";
-import UserSearch from "../components/UserSearch";
-import UserEditForm from "../components/UserEditForm"; // Import form chỉnh sửa
+import UserTable from "../components/User/UserTable"; 
+import UserSearch from "../components/User/UserSearch"; 
+import UserEditForm from "../components/User/UserEditForm"; 
 
 const UserPage = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editingUser, setEditingUser] = useState(null); // State để lưu user đang chỉnh sửa
+  const [editingUser, setEditingUser] = useState(null);
 
   // Gọi API khi component được mount
   useEffect(() => {
@@ -68,13 +68,12 @@ const UserPage = () => {
   const handleSaveEdit = async (updatedData) => {
     try {
       const updatedUser = await updateUser(editingUser.id, updatedData);
-      // Cập nhật danh sách user
       const updatedUsers = users.map((user) =>
         user.id === editingUser.id ? updatedUser : user
       );
       setUsers(updatedUsers);
       setFilteredUsers(updatedUsers);
-      setEditingUser(null); // Đóng form
+      setEditingUser(null);
     } catch (err) {
       setError(err.message);
     }

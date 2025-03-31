@@ -1,9 +1,9 @@
-// client/src/pages/NewsPage.js
+// src/pages/NewsPage.js
 import React, { useState, useEffect } from "react";
 import { fetchNews, deleteNews, updateNews, createNews, searchNews, uploadImage } from "../services/newsService";
-import NewsTable from "../components/NewsTable";
-import NewsSearch from "../components/NewsSearch";
-import NewsForm from "../components/NewsForm";
+import NewsTable from "../components/News/NewsTable"; 
+import NewsSearch from "../components/News/NewsSearch"; 
+import NewsForm from "../components/News/NewsForm"; 
 
 const NewsPage = () => {
   const [newsItems, setNewsItems] = useState([]);

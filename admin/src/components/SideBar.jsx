@@ -1,6 +1,6 @@
-// client/src/components/SideBar.js
+// src/components/SideBar.js
 import { Link } from "react-router-dom";
-import { FaUsers, FaSignOutAlt, FaThLarge, FaEnvelope, FaNewspaper } from "react-icons/fa";
+import { FaUsers, FaSignOutAlt, FaThLarge, FaEnvelope, FaNewspaper, FaBox } from "react-icons/fa";
 
 const SideBar = () => {
   return (
@@ -36,6 +36,12 @@ const SideBar = () => {
             <Link to="/news" className="flex items-center space-x-2 p-2 hover:bg-gray-200 rounded-md">
               <FaNewspaper />
               <span>News</span>
+            </Link>
+          </li>
+          <li>
+            <Link to="/products" className="flex items-center space-x-2 p-2 hover:bg-gray-200 rounded-md">
+              <FaBox />
+              <span>Products</span>
             </Link>
           </li>
           <li>

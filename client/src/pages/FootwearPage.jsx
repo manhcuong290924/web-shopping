@@ -1,4 +1,5 @@
-import { useState } from "react";
+// client/src/pages/FootwearPage.jsx
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
@@ -6,16 +7,34 @@ import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
 import FootwearSection from "../components/FootwearSection";
 import Pagination from "../components/Pagination";
-import mockProducts from "../data/mockProducts";
+import { fetchFootwearProducts } from "../services/footwearService"; // Import fetchFootwearProducts
 import "../styles/custom-layout.scss";
 
 const FootwearPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [footwearProducts, setFootwearProducts] = useState([]); // Lưu danh sách sản phẩm giày dép
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
   const productsPerPage = 12; // 12 sản phẩm mỗi trang
 
-  // Lấy sản phẩm thuộc danh mục "Giày dép"
-  const footwearProducts = mockProducts["Giày dép"] || [];
+  // Lấy danh sách sản phẩm giày dép từ backend
+  useEffect(() => {
+    const loadFootwearProducts = async () => {
+      try {
+        setLoading(true);
+        const products = await fetchFootwearProducts(); // Gọi API từ footwearService
+        setFootwearProducts(products);
+      } catch (error) {
+        console.error("Error loading footwear products:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFootwearProducts();
+  }, []);
 
   // Tính toán số trang và sản phẩm hiển thị trên trang hiện tại
   const totalPages = Math.ceil(footwearProducts.length / productsPerPage);
@@ -39,7 +58,7 @@ const FootwearPage = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
+      <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}
@@ -50,16 +69,25 @@ const FootwearPage = () => {
             {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} />
 
-            {/* Danh sách sản phẩm */}
-            <FootwearSection products={currentProducts} />
+            {/* Hiển thị trạng thái loading hoặc lỗi */}
+            {loading ? (
+              <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
+            ) : error ? (
+              <div className="p-1.5 text-red-500">{error}</div>
+            ) : (
+              <>
+                {/* Danh sách sản phẩm */}
+                <FootwearSection products={currentProducts} />
 
-            {/* Phân trang */}
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
+                {/* Phân trang */}
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
             )}
           </main>
         </div>

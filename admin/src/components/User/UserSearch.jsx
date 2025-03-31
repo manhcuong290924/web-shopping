@@ -1,4 +1,4 @@
-// src/components/UserSearch.js
+// src/components/User/UserSearch.js
 import React, { useState } from "react";
 
 const UserSearch = ({ onSearch }) => {
@@ -7,12 +7,12 @@ const UserSearch = ({ onSearch }) => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    onSearch(value); // Gọi hàm onSearch để truyền giá trị tìm kiếm lên parent component
+    onSearch(value);
   };
 
   const handleClearSearch = () => {
     setSearchTerm("");
-    onSearch(""); // Reset tìm kiếm
+    onSearch("");
   };
 
   return (
@@ -22,7 +22,7 @@ const UserSearch = ({ onSearch }) => {
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
-          placeholder="Tìm kiếm theo email, họ, hoặc tên..."
+          placeholder="Tìm kiếm theo tên, email, hoặc tiêu đề..."
           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
         {searchTerm && (

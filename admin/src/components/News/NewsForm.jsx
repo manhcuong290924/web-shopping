@@ -1,4 +1,4 @@
-// client/src/components/NewsForm.js
+// src/components/News/NewsForm.js
 import React, { useState, useEffect } from "react";
 
 const NewsForm = ({ news, onSave, onCancel, isEdit = false }) => {

@@ -1,4 +1,4 @@
-// client/src/components/NewsTable.js
+// src/components/News/NewsTable.js
 import React from "react";
 
 const NewsTable = ({ newsItems, onDelete, onEdit }) => {
@@ -30,6 +30,7 @@ const NewsTable = ({ newsItems, onDelete, onEdit }) => {
                         src={news.image}
                         alt={news.title}
                         className="w-20 h-20 object-cover rounded"
+                        onError={(e) => (e.target.src = "https://via.placeholder.com/80?text=No+Image")}
                       />
                     ) : (
                       "N/A"

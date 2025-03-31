@@ -1,4 +1,4 @@
-// src/components/UserTable.js
+// src/components/User/UserTable.js
 import React from "react";
 
 const UserTable = ({ users, onDelete, onEdit }) => {
@@ -43,7 +43,7 @@ const UserTable = ({ users, onDelete, onEdit }) => {
                   <td className="p-3 text-sm text-gray-700 space-x-2">
                     <button
                       className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                      onClick={() => onEdit(user)} // Gọi hàm onEdit khi nhấn nút Edit
+                      onClick={() => onEdit(user)}
                     >
                       Edit
                     </button>

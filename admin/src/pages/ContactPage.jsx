@@ -1,9 +1,9 @@
 // src/pages/ContactPage.js
 import React, { useState, useEffect } from "react";
 import { fetchContacts, deleteContact } from "../services/contactService";
-import ContactTable from "../components/ContactTable";
-import ContactSearch from "../components/ContactSearch";
-import MessageModal from "../components/MessageModal";
+import ContactTable from "../components/Contact/ContactTable"; 
+import ContactSearch from "../components/Contact/ContactSearch"; 
+import MessageModal from "../components/Contact/MessageModal"; 
 
 const ContactPage = () => {
   const [contacts, setContacts] = useState([]);

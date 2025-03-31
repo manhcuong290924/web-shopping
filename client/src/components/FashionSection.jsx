@@ -1,13 +1,39 @@
 // client/src/components/FashionSection.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
-import mockProducts from "../data/mockProducts";
+import { fetchFashionProducts } from "../services/fashionService"; // Import fetchFashionProducts
 import "../styles/custom-layout.scss";
 
 const FashionSection = () => {
-  const fashionProducts = mockProducts["Thời Trang"] || [];
-  const displayedFashionProducts = fashionProducts.slice(0, 6); // Giới hạn tối đa 6 sản phẩm
+  const [displayedFashionProducts, setDisplayedFashionProducts] = useState([]); // Lưu danh sách sản phẩm hiển thị
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
+
+  // Hàm lấy ngẫu nhiên 6 sản phẩm từ danh sách
+  const getRandomProducts = (products, count) => {
+    const shuffled = [...products].sort(() => 0.5 - Math.random()); // Xáo trộn mảng
+    return shuffled.slice(0, count); // Lấy count sản phẩm đầu tiên
+  };
+
+  // Lấy danh sách sản phẩm từ backend
+  useEffect(() => {
+    const loadFashionProducts = async () => {
+      try {
+        setLoading(true);
+        const products = await fetchFashionProducts(); // Gọi API từ fashionService
+        const randomProducts = getRandomProducts(products, 6); // Lấy ngẫu nhiên 6 sản phẩm
+        setDisplayedFashionProducts(randomProducts);
+      } catch (error) {
+        console.error("Error loading fashion products:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFashionProducts();
+  }, []); // Chỉ gọi API một lần khi component được mount
 
   return (
     <div className="fashion-section max-w-[80rem] mx-auto py-2">
@@ -52,7 +78,11 @@ const FashionSection = () => {
 
           <div className="fashion-products w-full md:w-3/4 p-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
-              {displayedFashionProducts.length > 0 ? (
+              {loading ? (
+                <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
+              ) : error ? (
+                <div className="p-1.5 text-red-500">{error}</div>
+              ) : displayedFashionProducts.length > 0 ? (
                 displayedFashionProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}

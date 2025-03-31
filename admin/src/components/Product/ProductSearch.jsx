@@ -1,7 +1,7 @@
-// client/src/components/NewsSearch.js
+// src/components/Product/ProductSearch.js
 import React, { useState } from "react";
 
-const NewsSearch = ({ onSearch }) => {
+const ProductSearch = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchChange = (e) => {
@@ -22,7 +22,7 @@ const NewsSearch = ({ onSearch }) => {
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
-          placeholder="Tìm kiếm theo tiêu đề..."
+          placeholder="Tìm kiếm theo tên sản phẩm..."
           className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
         {searchTerm && (
@@ -44,4 +44,4 @@ const NewsSearch = ({ onSearch }) => {
   );
 };
 
-export default NewsSearch;
+export default ProductSearch;

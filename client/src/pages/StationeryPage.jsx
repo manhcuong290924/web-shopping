@@ -1,4 +1,5 @@
-import { useState } from "react";
+// client/src/pages/StationeryPage.jsx
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
@@ -6,16 +7,34 @@ import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
 import StationerySection from "../components/StationerySection";
 import Pagination from "../components/Pagination";
-import mockProducts from "../data/mockProducts";
+import { fetchStationeryProducts } from "../services/stationeryService"; // Import fetchStationeryProducts
 import "../styles/custom-layout.scss";
 
 const StationeryPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [stationeryProducts, setStationeryProducts] = useState([]); // Lưu danh sách sản phẩm văn phòng phẩm
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
   const productsPerPage = 12; // 12 sản phẩm mỗi trang
 
-  // Lấy sản phẩm thuộc danh mục "Văn phòng phẩm"
-  const stationeryProducts = mockProducts["Văn phòng phẩm"] || [];
+  // Lấy danh sách sản phẩm văn phòng phẩm từ backend
+  useEffect(() => {
+    const loadStationeryProducts = async () => {
+      try {
+        setLoading(true);
+        const products = await fetchStationeryProducts(); // Gọi API từ stationeryService
+        setStationeryProducts(products);
+      } catch (error) {
+        console.error("Error loading stationery products:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStationeryProducts();
+  }, []);
 
   // Tính toán số trang và sản phẩm hiển thị trên trang hiện tại
   const totalPages = Math.ceil(stationeryProducts.length / productsPerPage);
@@ -39,7 +58,7 @@ const StationeryPage = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
+      <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}
@@ -50,16 +69,25 @@ const StationeryPage = () => {
             {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} />
 
-            {/* Danh sách sản phẩm */}
-            <StationerySection products={currentProducts} />
+            {/* Hiển thị trạng thái loading hoặc lỗi */}
+            {loading ? (
+              <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
+            ) : error ? (
+              <div className="p-1.5 text-red-500">{error}</div>
+            ) : (
+              <>
+                {/* Danh sách sản phẩm */}
+                <StationerySection products={currentProducts} />
 
-            {/* Phân trang */}
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
+                {/* Phân trang */}
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
             )}
           </main>
         </div>

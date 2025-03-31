@@ -1,45 +1,56 @@
 // client/src/components/ProductCard.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product, showRightBorder }) => {
-  const { id, image_url, name, original_price, discounted_price, discount_percentage } = product;
+  // Kiểm tra nếu product không tồn tại
+  if (!product) {
+    return <div className="product-card p-6 border-t border-gray-200">Sản phẩm không tồn tại</div>;
+  }
+
+  // Chuyển đổi tên thuộc tính từ mock data sang tên thuộc tính từ backend
+  const { id, imageUrl, name, originalPrice, discountedPrice, discountPercentage } = product;
 
   // Hàm cuộn lên trên cùng khi nhấn vào sản phẩm
   const handleClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <Link to={`/products/${id}`} className="block" onClick={handleClick}>
       <div
         className={`product-card p-6 border-t border-gray-200 ${
-          showRightBorder ? 'border-r border-gray-200' : ''
+          showRightBorder ? "border-r border-gray-200" : ""
         }`}
       >
         <div className="relative">
-          <img src={image_url} alt={name} className="w-full h-48 object-contain" />
-          {discount_percentage > 0 && (
-            <span className="discount-badge">
-              -{discount_percentage}%
-            </span>
+          <img
+            src={imageUrl || "https://via.placeholder.com/150?text=No+Image"}
+            alt={name || "Sản phẩm"}
+            className="w-full h-48 object-contain"
+            onError={(e) => (e.target.src = "https://via.placeholder.com/150?text=No+Image")}
+          />
+          {discountPercentage > 0 && (
+            <span className="discount-badge">-{discountPercentage}%</span>
           )}
         </div>
         <div className="mt-2">
-          <h3 className="text-base font-medium text-gray-800 leading-tight">{name}</h3>
+          <h3 className="text-base font-medium text-gray-800 leading-tight">
+            {name || "Không có tên"}
+          </h3>
           <div className="price mt-1">
-            {discount_percentage > 0 ? (
+            {discountPercentage > 0 ? (
               <>
                 <span className="original text-gray-500">
-                  {original_price.toLocaleString()} đ
+                  {(originalPrice || 0).toLocaleString()} đ
                 </span>
                 <span className="discounted text-red-500 font-bold">
-                  {discounted_price.toLocaleString()} đ
+                  {(discountedPrice || 0).toLocaleString()} đ
                 </span>
               </>
             ) : (
               <span className="discounted text-red-500 font-bold">
-                {original_price.toLocaleString()} đ
+                {(originalPrice || 0).toLocaleString()} đ
               </span>
             )}
           </div>

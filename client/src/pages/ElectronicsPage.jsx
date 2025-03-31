@@ -1,4 +1,5 @@
-import { useState } from "react";
+// client/src/pages/ElectronicsPage.jsx
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
@@ -7,22 +8,44 @@ import Breadcrumb from "../components/Breadcrumb";
 import ChatBotIcon from "../components/ChatBotIcon";
 import ProductList from "../components/ProductList";
 import Pagination from "../components/Pagination";
-import mockProducts from "../data/mockProducts";
+import { fetchElectronicsProducts } from "../services/electronicsService"; // Import fetchElectronicsProducts
 import "../styles/custom-layout.scss";
 
 const ElectronicsPage = () => {
   const { subCategory } = useParams(); // Lấy subCategory từ URL (dien-thoai, lap-top, may-tinh-bang)
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [electronicsProducts, setElectronicsProducts] = useState([]); // Lưu danh sách sản phẩm điện tử
+  const [filteredProducts, setFilteredProducts] = useState([]); // Lưu danh sách sản phẩm đã lọc
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
   const productsPerPage = 12; // 12 sản phẩm mỗi trang
 
-  // Lấy sản phẩm thuộc danh mục "Điện tử"
-  const electronicsProducts = mockProducts["Điện tử"] || [];
+  // Lấy danh sách sản phẩm điện tử từ backend
+  useEffect(() => {
+    const loadElectronicsProducts = async () => {
+      try {
+        setLoading(true);
+        const products = await fetchElectronicsProducts(); // Gọi API từ electronicsService
+        setElectronicsProducts(products);
 
-  // Lọc sản phẩm theo subCategory nếu có
-  const filteredProducts = subCategory
-    ? electronicsProducts.filter(product => product.subCategory === subCategory.replace(/-/g, " "))
-    : electronicsProducts; // Khi không có subCategory (truy cập /dien-tu), hiển thị tất cả sản phẩm
+        // Lọc sản phẩm theo subCategory nếu có
+        const filtered = subCategory
+          ? products.filter(
+              (product) => product.subCategory === subCategory.replace(/-/g, " ")
+            )
+          : products;
+        setFilteredProducts(filtered);
+      } catch (error) {
+        console.error("Error loading electronics products:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadElectronicsProducts();
+  }, [subCategory]); // Gọi lại API khi subCategory thay đổi
 
   // Tính toán số trang và sản phẩm hiển thị trên trang hiện tại
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
@@ -49,7 +72,7 @@ const ElectronicsPage = () => {
       {/* Header */}
       <Header />
 
-      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
+      <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
           {/* Sidebar */}
@@ -60,19 +83,28 @@ const ElectronicsPage = () => {
             {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} />
 
-            {/* Danh sách sản phẩm */}
-            <ProductList
-              category={subCategory ? subCategory.replace(/-/g, " ") : "Điện tử"}
-              products={currentProducts}
-            />
+            {/* Hiển thị trạng thái loading hoặc lỗi */}
+            {loading ? (
+              <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
+            ) : error ? (
+              <div className="p-1.5 text-red-500">{error}</div>
+            ) : (
+              <>
+                {/* Danh sách sản phẩm */}
+                <ProductList
+                  category={subCategory ? subCategory.replace(/-/g, " ") : "Điện tử"}
+                  products={currentProducts}
+                />
 
-            {/* Phân trang */}
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
+                {/* Phân trang */}
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </>
             )}
           </main>
         </div>

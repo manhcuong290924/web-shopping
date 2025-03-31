@@ -1,13 +1,39 @@
 // client/src/components/BabySection.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
-import mockProducts from "../data/mockProducts";
+import { fetchBabyProducts } from "../services/babyService"; // Import fetchBabyProducts
 import "../styles/custom-layout.scss";
 
 const BabySection = () => {
-  const babyProducts = mockProducts["Mẹ và Bé"] || [];
-  const displayedProducts = babyProducts.slice(0, 4); // Giới hạn tối đa 4 sản phẩm
+  const [displayedProducts, setDisplayedProducts] = useState([]); // Lưu danh sách sản phẩm hiển thị
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
+
+  // Hàm lấy ngẫu nhiên 4 sản phẩm từ danh sách
+  const getRandomProducts = (products, count) => {
+    const shuffled = [...products].sort(() => 0.5 - Math.random()); // Xáo trộn mảng
+    return shuffled.slice(0, count); // Lấy count sản phẩm đầu tiên
+  };
+
+  // Lấy danh sách sản phẩm từ backend
+  useEffect(() => {
+    const loadBabyProducts = async () => {
+      try {
+        setLoading(true);
+        const products = await fetchBabyProducts(); // Gọi API từ babyService
+        const randomProducts = getRandomProducts(products, 4); // Lấy ngẫu nhiên 4 sản phẩm
+        setDisplayedProducts(randomProducts);
+      } catch (error) {
+        console.error("Error loading baby products:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBabyProducts();
+  }, []); // Chỉ gọi API một lần khi component được mount
 
   return (
     <div className="baby-section max-w-[80rem] mx-auto py-2">
@@ -35,7 +61,11 @@ const BabySection = () => {
 
         <div className="p-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1">
-            {displayedProducts.length > 0 ? (
+            {loading ? (
+              <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
+            ) : error ? (
+              <div className="p-1.5 text-red-500">{error}</div>
+            ) : displayedProducts.length > 0 ? (
               displayedProducts.map((product, index) => (
                 <ProductCard
                   key={product.id}

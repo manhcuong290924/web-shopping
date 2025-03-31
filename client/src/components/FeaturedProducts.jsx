@@ -1,19 +1,46 @@
 // client/src/components/FeaturedProducts.jsx
-import React, { useRef, useState } from 'react';
-import ProductCard from './ProductCard';
+import React, { useRef, useState, useEffect } from "react";
+import ProductCard from "./ProductCard";
+import { fetchProducts } from "../services/productService"; // Import fetchProducts
 
-const FeaturedProducts = ({ products = [] }) => {
+const FeaturedProducts = () => {
   const scrollRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0); // Theo dõi sản phẩm đầu tiên trong khung nhìn
+  const [displayedProducts, setDisplayedProducts] = useState([]); // Lưu danh sách sản phẩm hiển thị
+  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [error, setError] = useState(null); // Trạng thái lỗi
 
-  // Giới hạn tối đa 6 sản phẩm
-  const displayedProducts = products.slice(0, 6);
+  // Hàm lấy ngẫu nhiên 6 sản phẩm từ danh sách
+  const getRandomProducts = (products, count) => {
+    const shuffled = [...products].sort(() => 0.5 - Math.random()); // Xáo trộn mảng
+    return shuffled.slice(0, count); // Lấy count sản phẩm đầu tiên
+  };
+
+  // Lấy danh sách sản phẩm từ backend
+  useEffect(() => {
+    const loadFeaturedProducts = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchProducts(0, 1000); // Lấy tất cả sản phẩm (có thể điều chỉnh size)
+        const products = data.content || [];
+        const randomProducts = getRandomProducts(products, 6); // Lấy ngẫu nhiên 6 sản phẩm
+        setDisplayedProducts(randomProducts);
+      } catch (error) {
+        console.error("Error loading featured products:", error);
+        setError(error.message || "Không thể tải danh sách sản phẩm.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFeaturedProducts();
+  }, []); // Chỉ gọi API một lần khi component được mount
 
   const scrollToIndex = (index) => {
     if (scrollRef.current) {
       const productWidth = scrollRef.current.children[0].offsetWidth;
       const scrollPosition = index * productWidth;
-      scrollRef.current.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+      scrollRef.current.scrollTo({ left: scrollPosition, behavior: "smooth" });
       setCurrentIndex(index);
     }
   };
@@ -86,14 +113,18 @@ const FeaturedProducts = ({ products = [] }) => {
           <div
             ref={scrollRef}
             className="flex overflow-x-hidden scroll-smooth"
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
           >
-            {displayedProducts.length > 0 ? (
+            {loading ? (
+              <div className="p-6 text-gray-500">Đang tải sản phẩm...</div>
+            ) : error ? (
+              <div className="p-6 text-red-500">{error}</div>
+            ) : displayedProducts.length > 0 ? (
               displayedProducts.map((product, index) => (
                 <div
                   key={product.id}
                   className={`flex-shrink-0 w-1/4 border-t border-gray-200 ${
-                    index < displayedProducts.length - 1 ? 'border-r border-gray-200' : ''
+                    index < displayedProducts.length - 1 ? "border-r border-gray-200" : ""
                   } cursor-pointer`}
                   onClick={() => scrollToProduct(index)}
                 >

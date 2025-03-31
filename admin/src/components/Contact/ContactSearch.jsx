@@ -1,4 +1,4 @@
-// src/components/ContactSearch.js
+// src/components/Contact/ContactSearch.js
 import React, { useState } from "react";
 
 const ContactSearch = ({ onSearch }) => {
