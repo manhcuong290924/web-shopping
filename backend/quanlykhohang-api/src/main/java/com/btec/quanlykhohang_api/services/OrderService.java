@@ -1,90 +1,60 @@
+// src/main/java/com/btec/quanlykhohang_api/services/OrderService.java
 package com.btec.quanlykhohang_api.services;
 
 import com.btec.quanlykhohang_api.entities.Order;
-import com.btec.quanlykhohang_api.entities.Product;
 import com.btec.quanlykhohang_api.repositories.OrderRepository;
-import com.btec.quanlykhohang_api.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.TimeZone;
 
 @Service
 public class OrderService {
 
+    private final OrderRepository orderRepository;
+
     @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    // Get all orders
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
     }
 
-    // Get an order by ID
-    public Optional<Order> getOrderById(String id) {
-        return orderRepository.findById(id);
-    }
-
-    // Create or update an order
-//    public Order saveOrder(Order order) {
-//        order.setCreatedDate(new Date());
-//        order.setProducts(null);
-//        return orderRepository.save(order);
-//    }
-
-    // Create or update an order
-    public Order saveOrder(Order order) {
-        if (order.getProductIds() != null && !order.getProductIds().isEmpty()) {
-            List<Product> products = productRepository.findAllById(order.getProductIds());
-            order.setProducts(products);
-
-            double total = 0;
-            for(Product p: products){
-                total = total + p.getPrice();
-            }
-            order.setCreatedDate(new Date());
-            order.setTotalPrice(total);
-
-            // Populate product details
+    // Tạo đơn hàng mới
+    public Order createOrder(Order order) {
+        order.setOrderDate(LocalDateTime.now()); // Gán thời gian đặt hàng
+        if (order.getOrderStatus() == null) {
+            order.setOrderStatus("Chờ xử lý"); // Trạng thái mặc định
         }
         return orderRepository.save(order);
     }
 
-
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-
-    // Fetch orders within a date range
-//    public List<Order> getOrderFromDateToDateyyyyMMdd(Long startDate, Long endDate) throws ParseException, ParseException {
-//        // Convert Long to Date
-//        Date start = DATE_FORMAT.parse(String.valueOf(startDate));
-//        Date end = DATE_FORMAT.parse(String.valueOf(endDate));
-//        return orderRepository.findByCreatedDateBetween(start, end);
-//    }
-
-    public List<Order> getOrderFromDateToDateyyyyMMdd(Long startDate, Long endDate) throws ParseException {
-        // Create a SimpleDateFormat instance for yyyyMMdd format
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-        // Set the timezone to UTC
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-        // Convert Long to Date
-        Date start = dateFormat.parse(String.valueOf(startDate));
-        Date end = dateFormat.parse(String.valueOf(endDate));
-
-        // Adjust the end date to include the entire day
-        end = new Date(end.getTime() + (24 * 60 * 60 * 1000) - 1);
-
-        // Fetch orders between the two dates
-        return orderRepository.findByCreatedDateBetween(start, end);
+    // Lấy danh sách đơn hàng với phân trang và tìm kiếm
+    public Page<Order> getAllOrders(int page, int size, String search) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (search != null && !search.trim().isEmpty()) {
+            return orderRepository.findByEmailOrPhone(search, pageable);
+        }
+        return orderRepository.findAll(pageable);
     }
 
-    // Delete an order by ID
+    // Lấy đơn hàng theo ID
+    public Optional<Order> getOrderById(String id) {
+        return orderRepository.findById(id);
+    }
+
+    // Cập nhật đơn hàng
+    public Order updateOrder(String id, Order orderDetails) {
+        if (orderRepository.existsById(id)) {
+            orderDetails.setId(id);
+            return orderRepository.save(orderDetails);
+        }
+        return null;
+    }
+
+    // Xóa đơn hàng
     public void deleteOrder(String id) {
         orderRepository.deleteById(id);
     }

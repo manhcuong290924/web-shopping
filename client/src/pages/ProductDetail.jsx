@@ -56,6 +56,9 @@ const ProductDetail = () => {
       price: product.discountedPrice || product.originalPrice,
       quantity: quantity,
       image: product.imageUrl,
+      category: product.category, // Thêm category
+      subCategory: product.subCategory || "", // Thêm subCategory
+      discountPercentage: product.discountPercentage || 0, // Thêm discountPercentage
     };
 
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];

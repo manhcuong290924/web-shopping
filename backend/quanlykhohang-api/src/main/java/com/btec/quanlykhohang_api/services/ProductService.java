@@ -1,11 +1,15 @@
+// src/main/java/com/btec/quanlykhohang_api/services/ProductService.java
 package com.btec.quanlykhohang_api.services;
 
 import com.btec.quanlykhohang_api.entities.Product;
 import com.btec.quanlykhohang_api.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,39 +23,44 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    // Lấy tất cả sản phẩm với phân trang
+    public Page<Product> getAllProducts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findAll(pageable);
     }
 
+    // Lấy sản phẩm theo ID
     public Optional<Product> getProductById(String id) {
         return productRepository.findById(id);
     }
 
+    // Lấy sản phẩm theo danh mục
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategory(category);
     }
 
+    // Thêm sản phẩm mới
     public Product addProduct(Product product) {
+        product.setCreatedDate(LocalDateTime.now());
         return productRepository.save(product);
     }
+
+    // Tìm kiếm sản phẩm theo tên
     public List<Product> getProductsByName(String name) {
-        List<Product> products = getAllProducts();
-        List<Product> searchedProducts = new ArrayList<>();
-        for (Product product : products) {
-            if (product.getName().contains(name)) {
-                searchedProducts.add(product);
-            }
-        }
-        return searchedProducts;
+        return productRepository.findByNameContainingIgnoreCase(name);
     }
+
+    // Cập nhật sản phẩm
     public Product updateProduct(String id, Product productDetails) {
         if (productRepository.existsById(id)) {
             productDetails.setId(id);
+            productDetails.setCreatedDate(LocalDateTime.now());
             return productRepository.save(productDetails);
         }
         return null;
     }
 
+    // Xóa sản phẩm
     public void deleteProduct(String id) {
         productRepository.deleteById(id);
     }

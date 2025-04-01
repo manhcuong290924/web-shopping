@@ -1,3 +1,4 @@
+// src/main/java/com/btec/quanlykhohang_api/entities/User.java
 package com.btec.quanlykhohang_api.entities;
 
 import org.springframework.data.annotation.Id;
@@ -14,9 +15,10 @@ public class User {
     private String lastName;
     private String birthDay;
     private boolean active;
-    private String phone; // Thêm trường phone
+    private String phone;
+    private String role; // Thêm trường role (ADMIN hoặc USER)
 
-    // Getters and Setters
+    // Getters và Setters
     public String getId() {
         return id;
     }
@@ -79,5 +81,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

@@ -1,11 +1,10 @@
+// src/main/java/com/btec/quanlykhohang_api/entities/Order.java
 package com.btec.quanlykhohang_api.entities;
-
-import java.util.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "orders")
@@ -14,22 +13,23 @@ public class Order {
     @Id
     private String id;
 
-    private List<String> productIds = new ArrayList<>();
-    private List<Product> products = new ArrayList<>(); // List of product details
-    private double totalPrice;
-    private Date createdDate;
-    private String status; // e.g., "Pending", "Completed", "Canceled"
-    private String note;
+    // Thông tin từ User
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String address; // Thêm trường địa chỉ
+    private String note; // Thêm trường thông tin bổ sung
 
-    public List<String> getProductIds() {
-        return productIds;
-    }
+    // Danh sách sản phẩm
+    private List<ProductOrder> products;
 
-    public void setProductIds(List<String> productIds) {
-        this.productIds = productIds;
-    }
+    // Thông tin bổ sung
+    private String paymentMethod; // Phương thức thanh toán (ví dụ: "Thanh toán khi nhận hàng", "Chuyển khoản")
+    private String orderStatus; // Trạng thái đơn hàng (ví dụ: "Chờ xử lý", "Đang giao", "Hoàn thành")
+    private LocalDateTime orderDate; // Thời gian đặt hàng
 
-    // Getters and Setters
+    // Getters và Setters
     public String getId() {
         return id;
     }
@@ -38,36 +38,44 @@ public class Order {
         this.id = id;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public String getEmail() {
+        return email;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getStatus() {
-        return status;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getNote() {
@@ -76,5 +84,37 @@ public class Order {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public List<ProductOrder> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<ProductOrder> products) {
+        this.products = products;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
     }
 }

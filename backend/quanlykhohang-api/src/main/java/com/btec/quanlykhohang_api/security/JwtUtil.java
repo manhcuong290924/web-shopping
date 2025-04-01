@@ -1,14 +1,15 @@
+// src/main/java/com/btec/quanlykhohang_api/security/JwtUtil.java
 package com.btec.quanlykhohang_api.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.Date;
-
+@Component
 public class JwtUtil {
 
     private static final String SECRET_KEY = "Akjhsdfjkhsdfhsadhjaskdhasjkhdkjsahdjkashdjkashdjksahdjksadhsakjh"; // Use a secure key
@@ -21,7 +22,9 @@ public class JwtUtil {
      * @return The JWT token.
      */
     public static String generateToken(String email) {
+        Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -29,20 +32,34 @@ public class JwtUtil {
                 .compact();
     }
 
-    public static boolean verifyToken(String token) throws Exception {
+    public static boolean verifyToken(String token) {
         try {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
         } catch (SignatureException e) {
-            throw new Exception("Invalid JWT signature");
+            throw new RuntimeException("Invalid JWT signature");
         } catch (ExpiredJwtException e) {
-            throw new Exception("JWT token is expired");
+            throw new RuntimeException("JWT token is expired");
         } catch (Exception e) {
-            throw new Exception("Invalid JWT token");
+            throw new RuntimeException("Invalid JWT token");
         }
     }
 
+    // Trích xuất email từ token
+    public static String extractEmail(String token) throws Exception {
+        try {
+            Claims claims = extractAllClaims(token);
+            return claims.getSubject();
+        } catch (Exception e) {
+            throw new Exception("Cannot extract email from token: " + e.getMessage());
+        }
+    }
 
-
-    // Existing methods for validation and claims extraction
+    // Trích xuất tất cả claims từ token
+    private static Claims extractAllClaims(String token) throws Exception {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+    }
 }
