@@ -14,14 +14,12 @@ import java.util.List;
 @RequestMapping("/api")
 public class ChatController {
     private final ChatService chatService;
-//    @GetMapping("/{chat}")
-//    public ResponseEntity<Chat> promptWithPathVariable(@PathVariable String chat) {
-//        return ResponseEntity.ok(chatService.addChat(chat));
-//    }
+
     @GetMapping("chats")
     public List<Chat> getAllChats() {
         return chatService.getAllChats();
     }
+
     @PostMapping("/chat")
     public ResponseEntity<Chat> createChat(@RequestBody String promt) {
         return ResponseEntity.ok(chatService.addChat(promt));

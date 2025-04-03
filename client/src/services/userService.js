@@ -1,9 +1,7 @@
-// client/src/services/userService.js
 import axios from "axios";
 
 const API_URL = "http://localhost:8080/api/auth";
 
-// Lấy thông tin người dùng đã đăng nhập
 export const fetchCurrentUser = async () => {
   try {
     const token = localStorage.getItem("token");
@@ -16,8 +14,15 @@ export const fetchCurrentUser = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log("User data:", response.data); // Debug dữ liệu trả về
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data || "Failed to fetch user info");
+    const errorMessage =
+      error.response?.data?.error || // Nếu backend trả { error: "message" }
+      error.response?.data?.message || // Nếu backend trả { message: "text" }
+      (typeof error.response?.data === "string" ? error.response?.data : null) || // Nếu là chuỗi
+      error.message || // Lỗi từ axios
+      "Failed to fetch user info";
+    throw new Error(errorMessage);
   }
 };

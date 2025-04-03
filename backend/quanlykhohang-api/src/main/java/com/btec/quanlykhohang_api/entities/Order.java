@@ -1,4 +1,3 @@
-// src/main/java/com/btec/quanlykhohang_api/entities/Order.java
 package com.btec.quanlykhohang_api.entities;
 
 import org.springframework.data.annotation.Id;
@@ -13,23 +12,19 @@ public class Order {
     @Id
     private String id;
 
-    // Thông tin từ User
     private String email;
     private String firstName;
     private String lastName;
     private String phone;
-    private String address; // Thêm trường địa chỉ
-    private String note; // Thêm trường thông tin bổ sung
+    private String address;
+    private String note;
 
-    // Danh sách sản phẩm
     private List<ProductOrder> products;
 
-    // Thông tin bổ sung
-    private String paymentMethod; // Phương thức thanh toán (ví dụ: "Thanh toán khi nhận hàng", "Chuyển khoản")
-    private String orderStatus; // Trạng thái đơn hàng (ví dụ: "Chờ xử lý", "Đang giao", "Hoàn thành")
-    private LocalDateTime orderDate; // Thời gian đặt hàng
+    private String paymentMethod;
+    private String orderStatus;
+    private LocalDateTime orderDate;
 
-    // Getters và Setters
     public String getId() {
         return id;
     }

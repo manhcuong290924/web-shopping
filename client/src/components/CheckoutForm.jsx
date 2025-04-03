@@ -1,7 +1,5 @@
-// client/src/components/CheckoutForm.jsx
-import React, { useState, useEffect } from "react";
-import { fetchCurrentUser } from "../services/userService"; // Import fetchCurrentUser từ userService
-import { createOrder } from "../services/orderService"; // Import createOrder
+import React, { useState } from "react";
+import { createOrder } from "../services/orderService";
 
 const CheckoutForm = ({ cartItems, onCheckout }) => {
   // Tính tổng tiền
@@ -22,45 +20,7 @@ const CheckoutForm = ({ cartItems, onCheckout }) => {
   // State để quản lý phương thức thanh toán
   const [paymentMethod, setPaymentMethod] = useState("cod"); // Mặc định là "Thanh toán khi nhận hàng"
 
-  // State để quản lý trạng thái tải dữ liệu
-  const [loading, setLoading] = useState(true);
-
-  // Lấy thông tin người dùng từ API
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        setLoading(true);
-        const user = await fetchCurrentUser(); // Gọi API từ userService
-        console.log("User data from API:", user);
-
-        // Gán dữ liệu người dùng vào formData
-        const updatedFormData = {
-          ...formData,
-          name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : "",
-          phone: user.phone || "",
-          email: user.email || "",
-        };
-        setFormData(updatedFormData);
-
-        // Kiểm tra nếu thiếu phone hoặc email
-        if (!updatedFormData.phone) {
-          setError("Số điện thoại không có sẵn. Vui lòng cập nhật thông tin cá nhân.");
-        }
-        if (!updatedFormData.email) {
-          setError("Địa chỉ email không có sẵn. Vui lòng cập nhật thông tin cá nhân.");
-        }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-        setError(error.message || "Không thể lấy thông tin người dùng. Vui lòng đăng nhập lại.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
-
-  // Xử lý thay đổi input (chỉ áp dụng cho các trường không readOnly)
+  // Xử lý thay đổi input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -130,15 +90,15 @@ const CheckoutForm = ({ cartItems, onCheckout }) => {
         firstName: formData.name.split(" ")[0], // Lấy firstName từ name
         lastName: formData.name.split(" ").slice(1).join(" "), // Lấy lastName từ name
         phone: formData.phone,
-        address: formData.address, // Thêm địa chỉ
-        note: formData.note, // Thêm thông tin bổ sung
+        address: formData.address,
+        note: formData.note,
         products: products,
         paymentMethod: paymentMethod === "cod" ? "Thanh toán khi nhận hàng" : "Chuyển khoản",
         orderStatus: "Chờ xử lý",
       };
 
       // Gửi yêu cầu tạo đơn hàng
-      await createOrder(orderData); // Gọi API từ orderService
+      await createOrder(orderData);
 
       // Xóa giỏ hàng sau khi đặt hàng thành công
       localStorage.removeItem("cart");
@@ -150,10 +110,6 @@ const CheckoutForm = ({ cartItems, onCheckout }) => {
       setError(error.message || "Không thể tạo đơn hàng. Vui lòng thử lại!");
     }
   };
-
-  if (loading) {
-    return <div style={{ textAlign: "center", padding: "20px" }}>Đang tải thông tin...</div>;
-  }
 
   return (
     <div>
@@ -204,9 +160,7 @@ const CheckoutForm = ({ cartItems, onCheckout }) => {
                   border: "1px solid #ccc",
                   borderRadius: "4px",
                   fontSize: "14px",
-                  backgroundColor: "#f5f5f5",
                 }}
-                readOnly // Không cho phép chỉnh sửa
                 required
               />
             </div>
@@ -248,9 +202,7 @@ const CheckoutForm = ({ cartItems, onCheckout }) => {
                   border: "1px solid #ccc",
                   borderRadius: "4px",
                   fontSize: "14px",
-                  backgroundColor: "#f5f5f5",
                 }}
-                readOnly // Không cho phép chỉnh sửa
                 required
               />
             </div>
@@ -271,9 +223,7 @@ const CheckoutForm = ({ cartItems, onCheckout }) => {
                   border: "1px solid #ccc",
                   borderRadius: "4px",
                   fontSize: "14px",
-                  backgroundColor: "#f5f5f5",
                 }}
-                readOnly // Không cho phép chỉnh sửa
               />
             </div>
 

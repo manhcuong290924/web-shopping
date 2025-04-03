@@ -1,4 +1,3 @@
-// src/main/java/com/btec/quanlykhohang_api/services/OrderService.java
 package com.btec.quanlykhohang_api.services;
 
 import com.btec.quanlykhohang_api.entities.Order;
@@ -22,16 +21,18 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    // Tạo đơn hàng mới
     public Order createOrder(Order order) {
-        order.setOrderDate(LocalDateTime.now()); // Gán thời gian đặt hàng
-        if (order.getOrderStatus() == null) {
-            order.setOrderStatus("Chờ xử lý"); // Trạng thái mặc định
+        try {
+            order.setOrderDate(LocalDateTime.now());
+            if (order.getOrderStatus() == null) {
+                order.setOrderStatus("Chờ xử lý");
+            }
+            return orderRepository.save(order);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save order: " + e.getMessage());
         }
-        return orderRepository.save(order);
     }
 
-    // Lấy danh sách đơn hàng với phân trang và tìm kiếm
     public Page<Order> getAllOrders(int page, int size, String search) {
         Pageable pageable = PageRequest.of(page, size);
         if (search != null && !search.trim().isEmpty()) {
@@ -40,12 +41,10 @@ public class OrderService {
         return orderRepository.findAll(pageable);
     }
 
-    // Lấy đơn hàng theo ID
     public Optional<Order> getOrderById(String id) {
         return orderRepository.findById(id);
     }
 
-    // Cập nhật đơn hàng
     public Order updateOrder(String id, Order orderDetails) {
         if (orderRepository.existsById(id)) {
             orderDetails.setId(id);
@@ -54,7 +53,6 @@ public class OrderService {
         return null;
     }
 
-    // Xóa đơn hàng
     public void deleteOrder(String id) {
         orderRepository.deleteById(id);
     }

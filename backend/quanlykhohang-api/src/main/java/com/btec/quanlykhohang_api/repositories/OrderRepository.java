@@ -1,4 +1,3 @@
-// src/main/java/com/btec/quanlykhohang_api/repositories/OrderRepository.java
 package com.btec.quanlykhohang_api.repositories;
 
 import com.btec.quanlykhohang_api.entities.Order;

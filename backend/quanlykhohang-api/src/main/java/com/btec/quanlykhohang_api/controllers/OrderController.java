@@ -1,4 +1,3 @@
-// src/main/java/com/btec/quanlykhohang_api/controllers/OrderController.java
 package com.btec.quanlykhohang_api.controllers;
 
 import com.btec.quanlykhohang_api.entities.Order;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -23,15 +23,6 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    /**
-     * Get all orders with pagination and search.
-     *
-     * @param page The page number (default is 0).
-     * @param size The number of items per page (default is 10).
-     * @param search The search term to filter by email or phone (optional).
-     * @param request The HTTP request.
-     * @return ResponseEntity with the list of orders for the requested page.
-     */
     @GetMapping
     public ResponseEntity<?> getAllOrders(
             @RequestParam(defaultValue = "0") int page,
@@ -39,34 +30,34 @@ public class OrderController {
             @RequestParam(defaultValue = "") String search,
             HttpServletRequest request
     ) {
-        Page<Order> orders = orderService.getAllOrders(page, size, search);
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    }
-
-    /**
-     * Get an order by ID.
-     *
-     * @param id The ID of the order to retrieve.
-     * @param request The HTTP request.
-     * @return ResponseEntity with the order or error message.
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getOrderById(@PathVariable String id, HttpServletRequest request) {
-        Optional<Order> order = orderService.getOrderById(id);
-        if (order.isPresent()) {
-            return new ResponseEntity<>(order.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Order not found", HttpStatus.NOT_FOUND);
+        try {
+            Page<Order> orders = orderService.getAllOrders(page, size, search);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    Map.of("error", "Failed to fetch orders: " + e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
-    /**
-     * Create a new order.
-     *
-     * @param order The order object containing user info and list of products.
-     * @param request The HTTP request.
-     * @return The created order.
-     */
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOrderById(@PathVariable String id, HttpServletRequest request) {
+        try {
+            Optional<Order> order = orderService.getOrderById(id);
+            if (order.isPresent()) {
+                return new ResponseEntity<>(order.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Order not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    Map.of("error", "Failed to fetch order: " + e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody Order order, HttpServletRequest request) {
         try {
@@ -115,18 +106,15 @@ public class OrderController {
             Order createdOrder = orderService.createOrder(order);
             return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    Map.of("error", "Failed to create order: " + e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
-    /**
-     * Update an order by ID.
-     *
-     * @param id The ID of the order to update.
-     * @param orderDetails The updated order details.
-     * @param request The HTTP request.
-     * @return The updated order.
-     */
     @PutMapping("/{id}")
     public ResponseEntity<?> updateOrder(
             @PathVariable String id,
@@ -134,7 +122,6 @@ public class OrderController {
             HttpServletRequest request
     ) {
         try {
-            // Kiểm tra các trường bắt buộc
             if (orderDetails.getEmail() == null || orderDetails.getEmail().trim().isEmpty()) {
                 throw new IllegalArgumentException("Email is required");
             }
@@ -157,7 +144,6 @@ public class OrderController {
                 throw new IllegalArgumentException("Payment method is required");
             }
 
-            // Kiểm tra từng sản phẩm trong danh sách
             for (var product : orderDetails.getProducts()) {
                 if (product.getProductName() == null || product.getProductName().trim().isEmpty()) {
                     throw new IllegalArgumentException("Product name is required");
@@ -182,20 +168,25 @@ public class OrderController {
             }
             return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    Map.of("error", "Failed to update order: " + e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
-    /**
-     * Delete an order by ID.
-     *
-     * @param id The ID of the order to delete.
-     * @param request The HTTP request.
-     * @return ResponseEntity with success or error message.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrder(HttpServletRequest request, @PathVariable String id) {
-        orderService.deleteOrder(id);
-        return ResponseEntity.noContent().build();
+        try {
+            orderService.deleteOrder(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    Map.of("error", "Failed to delete order: " + e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }
