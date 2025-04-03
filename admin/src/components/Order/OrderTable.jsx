@@ -1,7 +1,13 @@
-// client/src/components/Order/OrderTable.js
 import React from "react";
 
 const OrderTable = ({ orders, onDelete, onEdit }) => {
+  // Hàm tính tổng số tiền cho một đơn hàng
+  const calculateTotal = (products) => {
+    return products.reduce((sum, product) => {
+      return sum + (product.discountedPrice * product.quantity);
+    }, 0);
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-lg font-semibold text-gray-600 mb-4">Order List</h2>
@@ -14,8 +20,7 @@ const OrderTable = ({ orders, onDelete, onEdit }) => {
               <tr className="bg-gray-100 border-b">
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">ID</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Email</th>
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">First Name</th>
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">Last Name</th>
+                <th className="p-3 text-left text-sm font-semibold text-gray-600">Full Name</th> {/* Gộp thành Full Name */}
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Phone</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Address</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Note</th>
@@ -23,6 +28,7 @@ const OrderTable = ({ orders, onDelete, onEdit }) => {
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Payment Method</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Order Status</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Order Date</th>
+                <th className="p-3 text-left text-sm font-semibold text-gray-600">Total Amount</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Actions</th>
               </tr>
             </thead>
@@ -31,8 +37,7 @@ const OrderTable = ({ orders, onDelete, onEdit }) => {
                 <tr key={order.id} className="border-b hover:bg-gray-50">
                   <td className="p-3 text-sm text-gray-700">{index + 1}</td>
                   <td className="p-3 text-sm text-gray-700">{order.email}</td>
-                  <td className="p-3 text-sm text-gray-700">{order.firstName}</td>
-                  <td className="p-3 text-sm text-gray-700">{order.lastName}</td>
+                  <td className="p-3 text-sm text-gray-700">{`${order.firstName} ${order.lastName}`}</td> {/* Gộp firstName và lastName */}
                   <td className="p-3 text-sm text-gray-700">{order.phone}</td>
                   <td className="p-3 text-sm text-gray-700">{order.address}</td>
                   <td className="p-3 text-sm text-gray-700">{order.note || "N/A"}</td>
@@ -58,6 +63,9 @@ const OrderTable = ({ orders, onDelete, onEdit }) => {
                     </span>
                   </td>
                   <td className="p-3 text-sm text-gray-700">{new Date(order.orderDate).toLocaleString()}</td>
+                  <td className="p-3 text-sm text-gray-700">
+                    {calculateTotal(order.products).toLocaleString("vi-VN")} đ
+                  </td>
                   <td className="p-3 text-sm text-gray-700 space-x-2">
                     <button
                       className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
