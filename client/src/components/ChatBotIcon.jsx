@@ -3,9 +3,7 @@ import '../styles/ChatBotIcon.scss';
 
 const ChatBotIcon = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { text: "Chào bạn! Tôi là Grok, được tạo bởi xAI. Hãy hỏi tôi bất cứ điều gì.", sender: 'bot' },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
 
   const toggleChat = () => {
@@ -14,27 +12,27 @@ const ChatBotIcon = () => {
 
   const handleSendMessage = async () => {
     if (inputText.trim() === '') return;
-  
+
     const userMessage = { text: inputText, sender: 'user' };
     setMessages([...messages, userMessage]);
     setInputText('');
-  
+
     try {
-      const response = await fetch('http://localhost:8080/api/chat', {
+      const response = await fetch('http://localhost:8080/api/ai/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(inputText),
+        body: JSON.stringify({ userId: 'user123', prompt: inputText }), // Điều chỉnh body để khớp với ChatRequestDTO
       });
-  
+
       if (!response.ok) {
         console.log('Mã trạng thái:', response.status); // Thêm log để xem mã lỗi
         throw new Error('Lỗi khi gọi API');
       }
-  
+
       const data = await response.json();
-      const botMessage = { text: data.answer, sender: 'bot' };
+      const botMessage = { text: data.response, sender: 'bot' }; // Lấy 'response' từ ChatResponseDTO
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
       console.error('Lỗi:', error);
@@ -62,7 +60,7 @@ const ChatBotIcon = () => {
       {isOpen && (
         <div className="chat-window">
           <div className="chat-header">
-            <h3>Chat Bot (Grok)</h3>
+            <h3>Chat Bot</h3>
             <button onClick={toggleChat}>✕</button>
           </div>
           <div className="chat-body">
