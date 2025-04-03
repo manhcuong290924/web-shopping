@@ -1,12 +1,11 @@
-// src/pages/RegisterPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signUp } from '../services/authService';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import ChatBotIcon from '../components/ChatBotIcon';
+import '../styles/custom-layout.scss';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +22,16 @@ const RegisterPage = () => {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Hiện Dialogflow Messenger trên RegisterPage
+    document.body.classList.add("show-dialogflow");
+
+    // Ẩn khi rời trang
+    return () => {
+      document.body.classList.remove("show-dialogflow");
+    };
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -35,7 +44,6 @@ const RegisterPage = () => {
     setError('');
     setSuccess('');
 
-    // Kiểm tra các trường bắt buộc
     if (
       !formData.email.trim() ||
       !formData.phone.trim() ||
@@ -49,40 +57,34 @@ const RegisterPage = () => {
       return;
     }
 
-    // Kiểm tra định dạng email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Email không hợp lệ.');
       return;
     }
 
-    // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp không
     if (formData.password !== formData.confirmPassword) {
       setError('Mật khẩu và xác nhận mật khẩu không khớp.');
       return;
     }
 
-    // Kiểm tra độ dài mật khẩu (tối thiểu 6 ký tự)
     if (formData.password.length < 6) {
       setError('Mật khẩu phải có ít nhất 6 ký tự.');
       return;
     }
 
-    // Kiểm tra định dạng số điện thoại (10 chữ số)
     const phoneRegex = /^[0-9]{10}$/;
     if (!phoneRegex.test(formData.phone)) {
       setError('Số điện thoại phải là 10 chữ số.');
       return;
     }
 
-    // Kiểm tra định dạng ngày sinh (YYYY-MM-DD)
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(formData.birthDay)) {
       setError('Ngày sinh phải có định dạng YYYY-MM-DD (ví dụ: 1990-01-01).');
       return;
     }
 
-    // Kiểm tra ngày sinh có hợp lệ không (không được là ngày trong tương lai)
     const today = new Date();
     const birthDate = new Date(formData.birthDay);
     if (birthDate > today) {
@@ -107,8 +109,7 @@ const RegisterPage = () => {
         navigate('/dang-nhap');
       }, 2000);
     } catch (err) {
-      console.error('Sign-up error:', err); // Log lỗi để debug
-      // Đảm bảo err.message là chuỗi
+      console.error('Sign-up error:', err);
       setError(
         typeof err.message === 'string'
           ? err.message
@@ -134,25 +135,19 @@ const RegisterPage = () => {
             <Breadcrumb items={breadcrumbItems} />
             <div className="max-w-md mx-auto">
               <h1 className="text-2xl font-bold mb-5">ĐĂNG KÝ</h1>
-
-              {/* Thông báo lỗi */}
               {error && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex items-center gap-2 mb-5">
                   <span>⚠</span>
                   <span>{error}</span>
                 </div>
               )}
-
-              {/* Thông báo thành công */}
               {success && (
                 <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded flex items-center gap-2 mb-5">
                   <span>✔</span>
                   <span>{success}</span>
                 </div>
               )}
-
               <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Email */}
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">
                     Email <span className="text-red-500">*</span>
@@ -167,8 +162,6 @@ const RegisterPage = () => {
                     required
                   />
                 </div>
-
-                {/* Số điện thoại */}
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">
                     Số điện thoại <span className="text-red-500">*</span>
@@ -183,8 +176,6 @@ const RegisterPage = () => {
                     required
                   />
                 </div>
-
-                {/* Họ */}
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">
                     Họ <span className="text-red-500">*</span>
@@ -199,8 +190,6 @@ const RegisterPage = () => {
                     required
                   />
                 </div>
-
-                {/* Tên */}
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">
                     Tên <span className="text-red-500">*</span>
@@ -215,8 +204,6 @@ const RegisterPage = () => {
                     required
                   />
                 </div>
-
-                {/* Ngày sinh */}
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">
                     Ngày sinh <span className="text-red-500">*</span>
@@ -230,8 +217,6 @@ const RegisterPage = () => {
                     required
                   />
                 </div>
-
-                {/* Mật khẩu */}
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">
                     Mật khẩu <span className="text-red-500">*</span>
@@ -246,8 +231,6 @@ const RegisterPage = () => {
                     required
                   />
                 </div>
-
-                {/* Xác nhận mật khẩu */}
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">
                     Xác nhận mật khẩu <span className="text-red-500">*</span>
@@ -262,8 +245,6 @@ const RegisterPage = () => {
                     required
                   />
                 </div>
-
-                {/* Nút Đăng ký */}
                 <button
                   type="submit"
                   disabled={loading}
@@ -274,8 +255,6 @@ const RegisterPage = () => {
                   {loading ? 'Đang xử lý...' : 'ĐĂNG KÝ'}
                 </button>
               </form>
-
-              {/* Link đến trang đăng nhập */}
               <p className="mt-4 text-center text-sm text-gray-600">
                 Đã có tài khoản?{' '}
                 <Link to="/dang-nhap" className="text-orange-500 hover:underline">
@@ -286,7 +265,6 @@ const RegisterPage = () => {
           </main>
         </div>
       </div>
-      <ChatBotIcon />
       <Footer />
     </div>
   );

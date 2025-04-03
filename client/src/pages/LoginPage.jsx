@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../services/authService';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import ChatBotIcon from '../components/ChatBotIcon';
 import '../styles/custom-layout.scss';
 
 const LoginPage = () => {
@@ -15,6 +14,16 @@ const LoginPage = () => {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Hiện Dialogflow Messenger trên LoginPage
+    document.body.classList.add("show-dialogflow");
+
+    // Ẩn khi rời trang
+    return () => {
+      document.body.classList.remove("show-dialogflow");
+    };
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,9 +41,7 @@ const LoginPage = () => {
 
     try {
       const response = await signIn(formData);
-      // Lưu token vào localStorage
       localStorage.setItem('token', response.token);
-      // Lưu thông tin user (firstName, lastName) vào localStorage
       const user = {
         firstName: response.firstName,
         lastName: response.lastName,
@@ -150,7 +157,6 @@ const LoginPage = () => {
           </main>
         </div>
       </div>
-      <ChatBotIcon />
       <Footer />
     </div>
   );

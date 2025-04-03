@@ -4,22 +4,18 @@ import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
-import ChatBotIcon from '../components/ChatBotIcon';
 import CartItem from '../components/CartItem';
 import '../styles/custom-layout.scss';
 
 const CartPage = () => {
-  // Lấy giỏ hàng từ localStorage
   const [cartItems, setCartItems] = useState(() => {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // Lấy thông báo từ state của location
   const location = useLocation();
   const [notification, setNotification] = useState(location.state?.notification || "");
 
-  // Ẩn thông báo sau 3 giây
   useEffect(() => {
     if (notification) {
       const timer = setTimeout(() => setNotification(""), 3000);
@@ -27,7 +23,6 @@ const CartPage = () => {
     }
   }, [notification]);
 
-  // Lắng nghe sự kiện storage để đồng bộ giỏ hàng
   useEffect(() => {
     const handleStorageChange = (e) => {
       if (e.key === 'cart') {
@@ -38,31 +33,34 @@ const CartPage = () => {
 
     window.addEventListener('storage', handleStorageChange);
 
-    // Dọn dẹp listener khi component unmount
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
 
-  // Cập nhật localStorage khi giỏ hàng thay đổi
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Dữ liệu đường dẫn cho Breadcrumb
+  // Thêm logic hiển thị Dialogflow Messenger
+  useEffect(() => {
+    document.body.classList.add("show-dialogflow");
+    return () => {
+      document.body.classList.remove("show-dialogflow");
+    };
+  }, []);
+
   const breadcrumbItems = [
     { title: 'Trang chủ', path: '/', icon: '🏠' },
     { title: 'Giỏ hàng', path: '/gio-hang' },
   ];
 
-  // Xử lý xóa sản phẩm
   const handleRemove = (id) => {
     setCartItems(cartItems.filter((item) => item.id !== id));
   };
 
-  // Xử lý cập nhật số lượng
   const handleUpdateQuantity = (id, quantity) => {
-    if (quantity < 1) return; // Không cho phép số lượng nhỏ hơn 1
+    if (quantity < 1) return;
     setCartItems(
       cartItems.map((item) =>
         item.id === id ? { ...item, quantity } : item
@@ -70,7 +68,6 @@ const CartPage = () => {
     );
   };
 
-  // Hàm để làm mới giỏ hàng từ localStorage
   const refreshCart = () => {
     const savedCart = localStorage.getItem('cart');
     setCartItems(savedCart ? JSON.parse(savedCart) : []);
@@ -78,26 +75,15 @@ const CartPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen font-sans">
-      {/* Header */}
       <Header />
-
       <div className="flex flex-1" style={{ paddingTop: '120px' }}>
-        {/* Container chính để chứa Sidebar và nội dung, căn giữa */}
         <div className="content-wrapper flex flex-col md:flex-row">
-          {/* Sidebar */}
           <Sidebar />
-
-          {/* Nội dung chính */}
           <main className="flex-1 p-4 md:p-6">
-            {/* Breadcrumb */}
             <Breadcrumb items={breadcrumbItems} />
-
-            {/* Tiêu đề */}
             <h1 style={{ color: '#ff6200', fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
               GIỎ HÀNG
             </h1>
-
-            {/* Component CartItem chứa toàn bộ giao diện giỏ hàng */}
             <CartItem
               cartItems={cartItems}
               onRemove={handleRemove}
@@ -108,11 +94,6 @@ const CartPage = () => {
           </main>
         </div>
       </div>
-
-      {/* ChatBotIcon */}
-      <ChatBotIcon />
-
-      {/* Footer */}
       <Footer />
     </div>
   );

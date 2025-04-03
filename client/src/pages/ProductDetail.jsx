@@ -1,13 +1,11 @@
-// client/src/pages/ProductDetail.jsx
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
-import ChatBotIcon from "../components/ChatBotIcon";
 import ProductDescriptionAndRelated from "../components/ProductDescriptionAndRelated";
-import { fetchProductById } from "../services/productService"; // Import fetchProductById
+import { fetchProductById } from "../services/productService";
 import "../styles/custom-layout.scss";
 
 const ProductDetail = () => {
@@ -16,11 +14,10 @@ const ProductDetail = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [user, setUser] = useState(null); // Thêm state để kiểm tra user
-  const [loading, setLoading] = useState(true); // Trạng thái loading
-  const [error, setError] = useState(null); // Trạng thái lỗi
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Kiểm tra trạng thái đăng nhập và lấy sản phẩm
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
@@ -30,7 +27,7 @@ const ProductDetail = () => {
     const loadProduct = async () => {
       try {
         setLoading(true);
-        const foundProduct = await fetchProductById(id); // Gọi API để lấy sản phẩm theo id
+        const foundProduct = await fetchProductById(id);
         setProduct(foundProduct);
       } catch (error) {
         console.error("Error loading product:", error);
@@ -41,6 +38,14 @@ const ProductDetail = () => {
     };
 
     loadProduct();
+
+    // Hiện Dialogflow Messenger trên ProductDetail
+    document.body.classList.add("show-dialogflow");
+
+    // Ẩn khi rời trang
+    return () => {
+      document.body.classList.remove("show-dialogflow");
+    };
   }, [id]);
 
   const handleIncrease = () => setQuantity(quantity + 1);
@@ -48,7 +53,6 @@ const ProductDetail = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
 
-  // Hàm xử lý thêm sản phẩm vào giỏ hàng và chuyển hướng
   const addToCartAndRedirect = () => {
     const cartItem = {
       id: product.id,
@@ -56,9 +60,9 @@ const ProductDetail = () => {
       price: product.discountedPrice || product.originalPrice,
       quantity: quantity,
       image: product.imageUrl,
-      category: product.category, // Thêm category
-      subCategory: product.subCategory || "", // Thêm subCategory
-      discountPercentage: product.discountPercentage || 0, // Thêm discountPercentage
+      category: product.category,
+      subCategory: product.subCategory || "",
+      discountPercentage: product.discountPercentage || 0,
     };
 
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -75,7 +79,6 @@ const ProductDetail = () => {
     });
   };
 
-  // Kiểm tra đăng nhập trước khi thực hiện hành động
   const checkLoginAndExecute = (action) => {
     if (!user) {
       alert("Vui lòng đăng nhập để thực hiện hành động này!");
@@ -85,12 +88,10 @@ const ProductDetail = () => {
     }
   };
 
-  // Xử lý khi nhấn "Thêm vào giỏ hàng"
   const handleAddToCart = () => {
     checkLoginAndExecute(addToCartAndRedirect);
   };
 
-  // Xử lý khi nhấn "Mua ngay"
   const handleBuyNow = () => {
     checkLoginAndExecute(addToCartAndRedirect);
   };
@@ -194,7 +195,6 @@ const ProductDetail = () => {
           </main>
         </div>
       </div>
-      <ChatBotIcon />
       <Footer />
     </div>
   );
