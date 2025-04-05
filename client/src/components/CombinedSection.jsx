@@ -1,5 +1,4 @@
-// client/src/components/CombinedSection.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import { fetchHouseholdProducts } from "../services/householdService";
@@ -13,6 +12,12 @@ const CombinedSection = () => {
   const [footwearProducts, setFootwearProducts] = useState([]); // Sản phẩm Giày dép
   const [loading, setLoading] = useState(true); // Trạng thái loading
   const [error, setError] = useState(null); // Trạng thái lỗi
+  const [currentIndexHousehold, setCurrentIndexHousehold] = useState(0); // Theo dõi sản phẩm hiện tại (Gia dụng và Nội thất)
+  const [currentIndexStationery, setCurrentIndexStationery] = useState(0); // Theo dõi sản phẩm hiện tại (Văn phòng phẩm)
+  const [currentIndexFootwear, setCurrentIndexFootwear] = useState(0); // Theo dõi sản phẩm hiện tại (Giày dép)
+  const householdRef = useRef(null); // Ref cho carousel Gia dụng và Nội thất
+  const stationeryRef = useRef(null); // Ref cho carousel Văn phòng phẩm
+  const footwearRef = useRef(null); // Ref cho carousel Giày dép
 
   // Hàm lấy ngẫu nhiên 3 sản phẩm từ danh sách
   const getRandomProducts = (products, count) => {
@@ -48,6 +53,54 @@ const CombinedSection = () => {
     loadProducts();
   }, []); // Chỉ gọi API một lần khi component được mount
 
+  // Theo dõi vị trí sản phẩm hiện tại khi vuốt (Gia dụng và Nội thất)
+  useEffect(() => {
+    const carousel = householdRef.current;
+    if (!carousel) return;
+
+    const handleScroll = () => {
+      const scrollLeft = carousel.scrollLeft;
+      const itemWidth = carousel.offsetWidth;
+      const newIndex = Math.round(scrollLeft / itemWidth);
+      setCurrentIndexHousehold(newIndex);
+    };
+
+    carousel.addEventListener("scroll", handleScroll);
+    return () => carousel.removeEventListener("scroll", handleScroll);
+  }, [householdProducts]);
+
+  // Theo dõi vị trí sản phẩm hiện tại khi vuốt (Văn phòng phẩm)
+  useEffect(() => {
+    const carousel = stationeryRef.current;
+    if (!carousel) return;
+
+    const handleScroll = () => {
+      const scrollLeft = carousel.scrollLeft;
+      const itemWidth = carousel.offsetWidth;
+      const newIndex = Math.round(scrollLeft / itemWidth);
+      setCurrentIndexStationery(newIndex);
+    };
+
+    carousel.addEventListener("scroll", handleScroll);
+    return () => carousel.removeEventListener("scroll", handleScroll);
+  }, [stationeryProducts]);
+
+  // Theo dõi vị trí sản phẩm hiện tại khi vuốt (Giày dép)
+  useEffect(() => {
+    const carousel = footwearRef.current;
+    if (!carousel) return;
+
+    const handleScroll = () => {
+      const scrollLeft = carousel.scrollLeft;
+      const itemWidth = carousel.offsetWidth;
+      const newIndex = Math.round(scrollLeft / itemWidth);
+      setCurrentIndexFootwear(newIndex);
+    };
+
+    carousel.addEventListener("scroll", handleScroll);
+    return () => carousel.removeEventListener("scroll", handleScroll);
+  }, [footwearProducts]);
+
   return (
     <div className="combined-section max-w-[80rem] mx-auto py-2">
       <div className="combined-frame bg-white border border-gray-200 rounded-lg shadow-md">
@@ -58,21 +111,37 @@ const CombinedSection = () => {
             <h3 className="text-xl font-bold text-orange-500 mb-2 text-center">
               GIA DỤNG VÀ NỘI THẤT
             </h3>
-            <div className="flex flex-col gap-1 flex-1">
-              {loading ? (
-                <div className="p-1.5 text-gray-500">Đang tải...</div>
-              ) : error ? (
-                <div className="p-1.5 text-red-500">{error}</div>
-              ) : householdProducts.length > 0 ? (
-                householdProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    showRightBorder={false}
-                  />
-                ))
-              ) : (
-                <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+            <div className="carousel-container">
+              <div ref={householdRef} className="carousel-wrapper">
+                {loading ? (
+                  <div className="p-1.5 text-gray-500">Đang tải...</div>
+                ) : error ? (
+                  <div className="p-1.5 text-red-500">{error}</div>
+                ) : householdProducts.length > 0 ? (
+                  <div className="carousel">
+                    {householdProducts.map((product) => (
+                      <div className="carousel-item" key={product.id}>
+                        <ProductCard
+                          product={product}
+                          showRightBorder={false}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+                )}
+              </div>
+              {/* Chấm tròn pagination (chỉ hiển thị trên mobile) */}
+              {householdProducts.length > 0 && (
+                <div className="carousel-dots">
+                  {householdProducts.map((_, index) => (
+                    <span
+                      key={index}
+                      className={`dot ${currentIndexHousehold === index ? 'active' : ''}`}
+                    ></span>
+                  ))}
+                </div>
               )}
             </div>
           </div>
@@ -82,21 +151,37 @@ const CombinedSection = () => {
             <h3 className="text-xl font-bold text-orange-500 mb-2 text-center">
               VĂN PHÒNG PHẨM
             </h3>
-            <div className="flex flex-col gap-1 flex-1">
-              {loading ? (
-                <div className="p-1.5 text-gray-500">Đang tải...</div>
-              ) : error ? (
-                <div className="p-1.5 text-red-500">{error}</div>
-              ) : stationeryProducts.length > 0 ? (
-                stationeryProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    showRightBorder={false}
-                  />
-                ))
-              ) : (
-                <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+            <div className="carousel-container">
+              <div ref={stationeryRef} className="carousel-wrapper">
+                {loading ? (
+                  <div className="p-1.5 text-gray-500">Đang tải...</div>
+                ) : error ? (
+                  <div className="p-1.5 text-red-500">{error}</div>
+                ) : stationeryProducts.length > 0 ? (
+                  <div className="carousel">
+                    {stationeryProducts.map((product) => (
+                      <div className="carousel-item" key={product.id}>
+                        <ProductCard
+                          product={product}
+                          showRightBorder={false}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+                )}
+              </div>
+              {/* Chấm tròn pagination (chỉ hiển thị trên mobile) */}
+              {stationeryProducts.length > 0 && (
+                <div className="carousel-dots">
+                  {stationeryProducts.map((_, index) => (
+                    <span
+                      key={index}
+                      className={`dot ${currentIndexStationery === index ? 'active' : ''}`}
+                    ></span>
+                  ))}
+                </div>
               )}
             </div>
           </div>
@@ -114,21 +199,37 @@ const CombinedSection = () => {
                 Xem tất cả >
               </Link>
             </div>
-            <div className="flex flex-col gap-1 flex-1">
-              {loading ? (
-                <div className="p-1.5 text-gray-500">Đang tải...</div>
-              ) : error ? (
-                <div className="p-1.5 text-red-500">{error}</div>
-              ) : footwearProducts.length > 0 ? (
-                footwearProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    showRightBorder={false}
-                  />
-                ))
-              ) : (
-                <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+            <div className="carousel-container">
+              <div ref={footwearRef} className="carousel-wrapper">
+                {loading ? (
+                  <div className="p-1.5 text-gray-500">Đang tải...</div>
+                ) : error ? (
+                  <div className="p-1.5 text-red-500">{error}</div>
+                ) : footwearProducts.length > 0 ? (
+                  <div className="carousel">
+                    {footwearProducts.map((product) => (
+                      <div className="carousel-item" key={product.id}>
+                        <ProductCard
+                          product={product}
+                          showRightBorder={false}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+                )}
+              </div>
+              {/* Chấm tròn pagination (chỉ hiển thị trên mobile) */}
+              {footwearProducts.length > 0 && (
+                <div className="carousel-dots">
+                  {footwearProducts.map((_, index) => (
+                    <span
+                      key={index}
+                      className={`dot ${currentIndexFootwear === index ? 'active' : ''}`}
+                    ></span>
+                  ))}
+                </div>
               )}
             </div>
           </div>

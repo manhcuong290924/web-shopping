@@ -1,16 +1,18 @@
 // client/src/components/Slide.jsx
 import React, { useState, useEffect } from "react";
 import "../styles/custom-layout.scss";
-
+import slide1 from "../styles/image/slide1.png"
+import slide2 from "../styles/image/slide2.jpg"
+import slide3 from "../styles/image/slide3.png"
+import slide4 from "../styles/image/slide4.png"
+import slide5 from "../styles/image/slide5.webp"
+import slide6 from "../styles/image/slide6.jpg"
 const Slide = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Danh sách 4 ảnh cho banner chính
   const bannerImages = [
-    "https://picsum.photos/800/400?random=1",
-    "https://picsum.photos/800/400?random=2",
-    "https://picsum.photos/800/400?random=3",
-    "https://picsum.photos/800/400?random=4",
+    slide1,slide2,slide3,slide4,
   ];
 
   // Tự động nháy ảnh sau mỗi 2 giây
@@ -47,24 +49,18 @@ const Slide = () => {
               </div>
             ))}
           </div>
-          <div className="banner-text">
-            <p>AMERICA'S #1 FRIES SINCE 1981</p>
-          </div>
-          <div className="discount-circle">
-            <p>75% OFF</p>
-          </div>
         </div>
 
         {/* Quảng cáo phía dưới */}
         <div className="ad-banners">
           {/* Quảng cáo trái (Fashion Sale) */}
-          <div className="ad-banner fashion-sale">
+          <div className="ad-banner slide5">
             <img
-              src="https://picsum.photos/400/200?random=5"
-              alt="Fashion Sale"
+              src={slide5}
+              alt="slide5"
               className="ad-image"
               onError={(e) => {
-                console.error(`Failed to load image: https://picsum.photos/400/200?random=5`);
+                console.error(`Failed to load image: slide5.webp`);
                 e.target.src = "https://via.placeholder.com/400x200?text=Image+Not+Found";
               }}
             />
@@ -76,13 +72,13 @@ const Slide = () => {
             </div>
           </div>
           {/* Quảng cáo phải (Electronics Sale) */}
-          <div className="ad-banner electronics-sale">
+          <div className="ad-banner slide6">
             <img
-              src="https://picsum.photos/400/200?random=6"
-              alt="Electronics Sale"
+              src={slide6}
+              alt="slide6"
               className="ad-image"
               onError={(e) => {
-                console.error(`Failed to load image: https://picsum.photos/400/200?random=6`);
+                console.error(`Failed to load image: slide6.jpg`);
                 e.target.src = "https://via.placeholder.com/400x200?text=Image+Not+Found";
               }}
             />

@@ -5,6 +5,7 @@ import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import Breadcrumb from '../components/Breadcrumb';
 import CartItem from '../components/CartItem';
+import ChatBotIcon from '../components/ChatBotIcon'; // Import ChatBotIcon
 import '../styles/custom-layout.scss';
 
 const CartPage = () => {
@@ -78,7 +79,10 @@ const CartPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar />
+          {/* Thêm class sidebar-wrapper để điều khiển hiển thị Sidebar */}
+          <div className="sidebar-wrapper">
+            <Sidebar />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             <h1 style={{ color: '#ff6200', fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
@@ -95,6 +99,7 @@ const CartPage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

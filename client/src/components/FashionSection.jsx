@@ -1,14 +1,16 @@
-// client/src/components/FashionSection.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import { fetchFashionProducts } from "../services/fashionService"; // Import fetchFashionProducts
 import "../styles/custom-layout.scss";
+import thoitrang from "../styles/image/thoitrang.jpg"
 
 const FashionSection = () => {
   const [displayedFashionProducts, setDisplayedFashionProducts] = useState([]); // Lưu danh sách sản phẩm hiển thị
   const [loading, setLoading] = useState(true); // Trạng thái loading
   const [error, setError] = useState(null); // Trạng thái lỗi
+  const [currentIndex, setCurrentIndex] = useState(0); // Theo dõi sản phẩm hiện tại
+  const carouselRef = useRef(null); // Ref để tham chiếu carousel
 
   // Hàm lấy ngẫu nhiên 6 sản phẩm từ danh sách
   const getRandomProducts = (products, count) => {
@@ -35,6 +37,22 @@ const FashionSection = () => {
     loadFashionProducts();
   }, []); // Chỉ gọi API một lần khi component được mount
 
+  // Theo dõi vị trí sản phẩm hiện tại khi vuốt (chỉ áp dụng trên mobile)
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const handleScroll = () => {
+      const scrollLeft = carousel.scrollLeft;
+      const itemWidth = carousel.offsetWidth; // Chiều rộng của 1 item
+      const newIndex = Math.round(scrollLeft / itemWidth); // Tính index dựa trên vị trí cuộn
+      setCurrentIndex(newIndex);
+    };
+
+    carousel.addEventListener("scroll", handleScroll);
+    return () => carousel.removeEventListener("scroll", handleScroll);
+  }, [displayedFashionProducts]);
+
   return (
     <div className="fashion-section max-w-[80rem] mx-auto py-2">
       <div className="fashion-frame bg-white border border-gray-200 rounded-lg shadow-md">
@@ -60,38 +78,49 @@ const FashionSection = () => {
         </div>
 
         <div className="flex flex-col md:flex-row">
-          <div className="fashion-banner w-full md:w-1/4 p-1">
+          {/* Ẩn banner trên mobile */}
+          <div className="fashion-banner w-full md:w-1/4 p-1 hidden md:block">
             <div className="banner-content relative">
               <img
-                src="https://picsum.photos/300/600?random=7"
+                src={thoitrang}
                 alt="Fashion Banner"
                 className="banner-image w-full h-auto object-cover rounded-lg"
               />
-              <div className="banner-overlay absolute top-0 left-0 w-full h-full flex flex-col justify-between p-1">
-                <div className="banner-text text-white">
-                  <p className="text-xl font-bold">EVERY WEEKLY SALE</p>
-                  <p className="text-sm">WENESDAY | 12AM - MIDNIGHT</p>
-                </div>
-              </div>
             </div>
           </div>
 
-          <div className="fashion-products w-full md:w-3/4 p-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
-              {loading ? (
-                <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
-              ) : error ? (
-                <div className="p-1.5 text-red-500">{error}</div>
-              ) : displayedFashionProducts.length > 0 ? (
-                displayedFashionProducts.map((product, index) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    showRightBorder={(index + 1) % 3 !== 0}
-                  />
-                ))
-              ) : (
-                <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+          <div className="fashion-products w-full p-1">
+            <div className="carousel-container">
+              <div ref={carouselRef} className="carousel-wrapper">
+                {loading ? (
+                  <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
+                ) : error ? (
+                  <div className="p-1.5 text-red-500">{error}</div>
+                ) : displayedFashionProducts.length > 0 ? (
+                  <div className="carousel">
+                    {displayedFashionProducts.map((product, index) => (
+                      <div className="carousel-item" key={product.id}>
+                        <ProductCard
+                          product={product}
+                          showRightBorder={false} // Không cần border trên carousel
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+                )}
+              </div>
+              {/* Chấm tròn pagination (chỉ hiển thị trên mobile) */}
+              {displayedFashionProducts.length > 0 && (
+                <div className="carousel-dots">
+                  {displayedFashionProducts.map((_, index) => (
+                    <span
+                      key={index}
+                      className={`dot ${currentIndex === index ? 'active' : ''}`}
+                    ></span>
+                  ))}
+                </div>
               )}
             </div>
           </div>

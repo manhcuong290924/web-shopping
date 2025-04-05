@@ -1,4 +1,3 @@
-// client/src/components/FeaturedProducts.jsx
 import React, { useRef, useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { fetchProducts } from "../services/productService"; // Import fetchProducts
@@ -36,9 +35,25 @@ const FeaturedProducts = () => {
     loadFeaturedProducts();
   }, []); // Chỉ gọi API một lần khi component được mount
 
+  // Theo dõi vị trí sản phẩm hiện tại khi vuốt (chỉ áp dụng trên mobile)
+  useEffect(() => {
+    const scroll = scrollRef.current;
+    if (!scroll) return;
+
+    const handleScroll = () => {
+      const scrollLeft = scroll.scrollLeft;
+      const productWidth = scroll.children[0].offsetWidth; // Chiều rộng của 1 sản phẩm
+      const newIndex = Math.round(scrollLeft / productWidth); // Tính index dựa trên vị trí cuộn
+      setCurrentIndex(newIndex);
+    };
+
+    scroll.addEventListener("scroll", handleScroll);
+    return () => scroll.removeEventListener("scroll", handleScroll);
+  }, [displayedProducts]);
+
   const scrollToIndex = (index) => {
     if (scrollRef.current) {
-      const productWidth = scrollRef.current.children[0].offsetWidth;
+      const productWidth = scrollRef.current.children[0].offsetWidth; // Chiều rộng của 1 sản phẩm
       const scrollPosition = index * productWidth;
       scrollRef.current.scrollTo({ left: scrollPosition, behavior: "smooth" });
       setCurrentIndex(index);
@@ -113,7 +128,13 @@ const FeaturedProducts = () => {
           <div
             ref={scrollRef}
             className="flex overflow-x-hidden scroll-smooth"
-            style={{ width: "100%" }}
+            style={{
+              width: "100%",
+              scrollbarWidth: "none", // Ẩn thanh cuộn trên Firefox
+              msOverflowStyle: "none", // Ẩn thanh cuộn trên Edge
+              WebkitOverflowScrolling: "touch", // Cải thiện trải nghiệm vuốt trên iOS
+              scrollSnapType: "x mandatory", // Tự động căn chỉnh khi vuốt trên mobile
+            }}
           >
             {loading ? (
               <div className="p-6 text-gray-500">Đang tải sản phẩm...</div>
@@ -123,9 +144,13 @@ const FeaturedProducts = () => {
               displayedProducts.map((product, index) => (
                 <div
                   key={product.id}
-                  className={`flex-shrink-0 w-1/4 border-t border-gray-200 ${
+                  className={`flex-shrink-0 border-t border-gray-200 ${
                     index < displayedProducts.length - 1 ? "border-r border-gray-200" : ""
                   } cursor-pointer`}
+                  style={{
+                    width: window.innerWidth < 768 ? "100%" : "25%", // 1 sản phẩm trên mobile, 4 sản phẩm trên desktop
+                    scrollSnapAlign: "start",
+                  }}
                   onClick={() => scrollToProduct(index)}
                 >
                   <ProductCard product={product} showRightBorder={false} />
@@ -135,6 +160,32 @@ const FeaturedProducts = () => {
               <div className="p-6 text-gray-500">Không có sản phẩm nổi bật</div>
             )}
           </div>
+          {/* Chấm tròn pagination (chỉ hiển thị trên mobile) */}
+          {displayedProducts.length > 0 && (
+            <div
+              className="carousel-dots"
+              style={{
+                display: window.innerWidth < 768 ? "flex" : "none",
+                justifyContent: "center",
+                gap: "8px",
+                padding: "1rem 0",
+              }}
+            >
+              {Array.from({ length: displayedProducts.length }).map((_, index) => (
+                <span
+                  key={index}
+                  className={`dot ${currentIndex === index ? 'active' : ''}`}
+                  style={{
+                    width: "10px",
+                    height: "10px",
+                    backgroundColor: currentIndex === index ? "#ff6200" : "#d1d5db",
+                    borderRadius: "50%",
+                    transition: "background-color 0.3s",
+                  }}
+                ></span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

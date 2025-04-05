@@ -23,7 +23,10 @@ const HomePage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          {/* Thêm class sidebar-wrapper để điều khiển hiển thị Sidebar */}
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Slide />
             <FeaturedProducts products={featuredProducts} />

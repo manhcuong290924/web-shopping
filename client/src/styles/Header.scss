@@ -1,0 +1,7 @@
+.hide-on-desktop {
+    display: block;
+  
+    @media (min-width: 768px) {
+      display: none !important;
+    }
+  }

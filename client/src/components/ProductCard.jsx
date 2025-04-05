@@ -1,11 +1,10 @@
-// client/src/components/ProductCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 
 const ProductCard = ({ product, showRightBorder }) => {
   // Kiểm tra nếu product không tồn tại
   if (!product) {
-    return <div className="product-card p-6 border-t border-gray-200">Sản phẩm không tồn tại</div>;
+    return <div className="product-card p-4 border-t border-gray-200">Sản phẩm không tồn tại</div>;
   }
 
   // Chuyển đổi tên thuộc tính từ mock data sang tên thuộc tính từ backend
@@ -19,9 +18,9 @@ const ProductCard = ({ product, showRightBorder }) => {
   return (
     <Link to={`/products/${id}`} className="block" onClick={handleClick}>
       <div
-        className={`product-card p-6 border-t border-gray-200 ${
-          showRightBorder ? "border-r border-gray-200" : ""
-        }`}
+        className={`product-card p-4 border-t border-gray-200 ${
+          showRightBorder ? "border-r border-gray-200 md:border-r" : ""
+        }`} // Chỉ hiển thị border trên desktop nếu showRightBorder là true
       >
         <div className="relative">
           <img

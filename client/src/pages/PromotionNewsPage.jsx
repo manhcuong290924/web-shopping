@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import PromotionNewsContent from "../components/PromotionNewsContent";
+import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import "../styles/custom-layout.scss";
 
 const PromotionNewsPage = () => {
@@ -29,7 +30,10 @@ const PromotionNewsPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          {/* Thêm class sidebar-wrapper để điều khiển hiển thị Sidebar */}
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             <PromotionNewsContent />
@@ -37,6 +41,7 @@ const PromotionNewsPage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

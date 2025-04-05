@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ContactForm from "../components/ContactForm";
 import ContactMap from "../components/ContactMap";
+import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import "../styles/custom-layout.scss";
 
 const ContactPage = () => {
@@ -30,7 +31,10 @@ const ContactPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          {/* Thêm class sidebar-wrapper để điều khiển hiển thị Sidebar */}
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             <ContactForm />
@@ -39,6 +43,7 @@ const ContactPage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

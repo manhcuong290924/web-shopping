@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import TabletSection from "../components/TabletSection";
 import Pagination from "../components/Pagination";
+import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import { fetchTabletProducts } from "../services/tabletService";
 import "../styles/custom-layout.scss";
 
@@ -62,7 +63,10 @@ const TabletPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          {/* Thêm class sidebar-wrapper để điều khiển hiển thị Sidebar */}
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             {loading ? (
@@ -85,6 +89,7 @@ const TabletPage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

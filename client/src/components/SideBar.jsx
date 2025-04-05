@@ -1,4 +1,3 @@
-// client/src/components/Sidebar.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
@@ -12,7 +11,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     <>
       <aside
         className={`sidebar-container bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-64"
+          isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 z-40`}
       >
         {/* Nút toggle cho mobile */}
@@ -58,6 +57,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                           key={subIndex}
                           to={subItem.link}
                           className="block px-4 py-2 text-gray-600 hover:bg-gray-200 hover:text-gray-800 rounded-md transition-colors duration-200"
+                          onClick={() => setIsOpen(false)} // Đóng khi chọn trên mobile
                         >
                           {subItem.name}
                         </Link>
@@ -69,6 +69,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 <Link
                   to={item.link}
                   className="flex items-center px-4 py-3 text-gray-800 hover:bg-gray-100 transition-colors duration-200"
+                  onClick={() => setIsOpen(false)} // Đóng khi chọn trên mobile
                 >
                   {item.icon && <item.icon className="w-5 h-5 mr-3" />}
                   <span className="font-medium text-base">{item.name}</span>

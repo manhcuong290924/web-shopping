@@ -1,32 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { signUp } from '../services/authService';
-import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
-import Footer from '../components/Footer';
-import Breadcrumb from '../components/Breadcrumb';
-import '../styles/custom-layout.scss';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "../services/authService";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
+import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
+import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
+import "../styles/custom-layout.scss";
 
 const RegisterPage = () => {
+  const [isOpen, setIsOpen] = useState(false); // Thêm trạng thái cho Sidebar
   const [formData, setFormData] = useState({
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    birthDay: '',
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    birthDay: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState('');
+  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Hiện Dialogflow Messenger trên RegisterPage
     document.body.classList.add("show-dialogflow");
 
-    // Ẩn khi rời trang
     return () => {
       document.body.classList.remove("show-dialogflow");
     };
@@ -35,14 +35,14 @@ const RegisterPage = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     if (
       !formData.email.trim() ||
@@ -53,42 +53,42 @@ const RegisterPage = () => {
       !formData.lastName.trim() ||
       !formData.birthDay.trim()
     ) {
-      setError('Vui lòng nhập đầy đủ các trường thông tin.');
+      setError("Vui lòng nhập đầy đủ các trường thông tin.");
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      setError('Email không hợp lệ.');
+      setError("Email không hợp lệ.");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Mật khẩu và xác nhận mật khẩu không khớp.');
+      setError("Mật khẩu và xác nhận mật khẩu không khớp.");
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Mật khẩu phải có ít nhất 6 ký tự.');
+      setError("Mật khẩu phải có ít nhất 6 ký tự.");
       return;
     }
 
     const phoneRegex = /^[0-9]{10}$/;
     if (!phoneRegex.test(formData.phone)) {
-      setError('Số điện thoại phải là 10 chữ số.');
+      setError("Số điện thoại phải là 10 chữ số.");
       return;
     }
 
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(formData.birthDay)) {
-      setError('Ngày sinh phải có định dạng YYYY-MM-DD (ví dụ: 1990-01-01).');
+      setError("Ngày sinh phải có định dạng YYYY-MM-DD (ví dụ: 1990-01-01).");
       return;
     }
 
     const today = new Date();
     const birthDate = new Date(formData.birthDay);
     if (birthDate > today) {
-      setError('Ngày sinh không được là ngày trong tương lai.');
+      setError("Ngày sinh không được là ngày trong tương lai.");
       return;
     }
 
@@ -104,16 +104,16 @@ const RegisterPage = () => {
         active: true,
       };
       await signUp(userData);
-      setSuccess('Đăng ký thành công! Đang chuyển hướng đến trang đăng nhập...');
+      setSuccess("Đăng ký thành công! Đang chuyển hướng đến trang đăng nhập...");
       setTimeout(() => {
-        navigate('/dang-nhap');
+        navigate("/dang-nhap");
       }, 2000);
     } catch (err) {
-      console.error('Sign-up error:', err);
+      console.error("Sign-up error:", err);
       setError(
-        typeof err.message === 'string'
+        typeof err.message === "string"
           ? err.message
-          : 'Đăng ký thất bại. Email có thể đã được sử dụng.'
+          : "Đăng ký thất bại. Email có thể đã được sử dụng."
       );
     } finally {
       setLoading(false);
@@ -121,16 +121,18 @@ const RegisterPage = () => {
   };
 
   const breadcrumbItems = [
-    { title: 'Trang chủ', path: '/', icon: '🏠' },
-    { title: 'Đăng ký', path: '/dang-ky' },
+    { title: "Trang chủ", path: "/", icon: "🏠" },
+    { title: "Đăng ký", path: "/dang-ky" },
   ];
 
   return (
     <div className="flex flex-col min-h-screen font-sans">
       <Header />
-      <div className="flex flex-1 pt-[120px]">
-        <div className="content-wrapper flex flex-col md:flex-row w-full">
-          <Sidebar />
+      <div className="flex flex-1" style={{ paddingTop: "120px" }}>
+        <div className="content-wrapper flex flex-col md:flex-row">
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             <div className="max-w-md mx-auto">
@@ -249,14 +251,16 @@ const RegisterPage = () => {
                   type="submit"
                   disabled={loading}
                   className={`w-full py-2 rounded font-bold text-white ${
-                    loading ? 'bg-orange-400 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600'
+                    loading
+                      ? "bg-orange-400 cursor-not-allowed"
+                      : "bg-orange-500 hover:bg-orange-600"
                   } transition-colors duration-200`}
                 >
-                  {loading ? 'Đang xử lý...' : 'ĐĂNG KÝ'}
+                  {loading ? "Đang xử lý..." : "ĐĂNG KÝ"}
                 </button>
               </form>
               <p className="mt-4 text-center text-sm text-gray-600">
-                Đã có tài khoản?{' '}
+                Đã có tài khoản?{" "}
                 <Link to="/dang-nhap" className="text-orange-500 hover:underline">
                   Đăng nhập ngay
                 </Link>
@@ -266,6 +270,7 @@ const RegisterPage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon />
     </div>
   );
 };

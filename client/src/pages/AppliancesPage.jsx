@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import AppliancesSection from "../components/AppliancesSection";
 import Pagination from "../components/Pagination";
+import ChatBotIcon from "../components/ChatBotIcon";
 import { fetchAppliancesProducts } from "../services/appliancesService";
 import "../styles/custom-layout.scss";
 
 const AppliancesPage = () => {
+  const { subCategory } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [appliancesProducts, setAppliancesProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const productsPerPage = 12;
@@ -22,6 +26,13 @@ const AppliancesPage = () => {
         setLoading(true);
         const products = await fetchAppliancesProducts();
         setAppliancesProducts(products);
+
+        const filtered = subCategory
+          ? products.filter(
+              (product) => product.subCategory === subCategory.replace(/-/g, " ")
+            )
+          : products;
+        setFilteredProducts(filtered);
       } catch (error) {
         console.error("Error loading appliances products:", error);
         setError(error.message || "Không thể tải danh sách sản phẩm.");
@@ -32,19 +43,17 @@ const AppliancesPage = () => {
 
     loadAppliancesProducts();
 
-    // Hiện Dialogflow Messenger trên AppliancesPage
     document.body.classList.add("show-dialogflow");
 
-    // Ẩn khi rời trang
     return () => {
       document.body.classList.remove("show-dialogflow");
     };
-  }, []);
+  }, [subCategory]);
 
-  const totalPages = Math.ceil(appliancesProducts.length / productsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const currentProducts = appliancesProducts.slice(startIndex, endIndex);
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -54,7 +63,14 @@ const AppliancesPage = () => {
   const breadcrumbItems = [
     { title: "Trang chủ", path: "/", icon: "🏠" },
     { title: "Gia dụng và nội thất", path: "/gia-dung-va-noi-that" },
-    { title: "Đồ gia dụng", path: "/gia-dung-va-noi-that/do-gia-dung" },
+    ...(subCategory
+      ? [
+          {
+            title: subCategory.replace(/-/g, " "),
+            path: `/gia-dung-va-noi-that/${subCategory}`,
+          },
+        ]
+      : [{ title: "Đồ gia dụng", path: "/gia-dung-va-noi-that/do-gia-dung" }]),
   ];
 
   return (
@@ -62,7 +78,9 @@ const AppliancesPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             {loading ? (
@@ -71,7 +89,12 @@ const AppliancesPage = () => {
               <div className="p-1.5 text-red-500">{error}</div>
             ) : (
               <>
-                <AppliancesSection products={currentProducts} />
+                <AppliancesSection
+                  category={
+                    subCategory ? subCategory.replace(/-/g, " ") : "Đồ gia dụng"
+                  }
+                  products={currentProducts}
+                />
                 {totalPages > 1 && (
                   <Pagination
                     currentPage={currentPage}
@@ -85,6 +108,7 @@ const AppliancesPage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon />
     </div>
   );
 };

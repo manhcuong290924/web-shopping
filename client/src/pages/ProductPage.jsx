@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ProductList from "../components/ProductList";
 import Pagination from "../components/Pagination";
+import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import { fetchProducts } from "../services/productService";
 import "../styles/custom-layout.scss";
 
@@ -58,7 +59,10 @@ const ProductPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          {/* Thêm class sidebar-wrapper để điều khiển hiển thị Sidebar */}
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             {loading ? (
@@ -81,6 +85,7 @@ const ProductPage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

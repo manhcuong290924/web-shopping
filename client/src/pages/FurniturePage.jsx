@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import FurnitureSection from "../components/FurnitureSection";
 import Pagination from "../components/Pagination";
+import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
 import { fetchFurnitureProducts } from "../services/furnitureService";
 import "../styles/custom-layout.scss";
 
 const FurniturePage = () => {
+  const { subCategory } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [furnitureProducts, setFurnitureProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const productsPerPage = 12;
@@ -22,6 +26,13 @@ const FurniturePage = () => {
         setLoading(true);
         const products = await fetchFurnitureProducts();
         setFurnitureProducts(products);
+
+        const filtered = subCategory
+          ? products.filter(
+              (product) => product.subCategory === subCategory.replace(/-/g, " ")
+            )
+          : products;
+        setFilteredProducts(filtered);
       } catch (error) {
         console.error("Error loading furniture products:", error);
         setError(error.message || "Không thể tải danh sách sản phẩm.");
@@ -39,12 +50,12 @@ const FurniturePage = () => {
     return () => {
       document.body.classList.remove("show-dialogflow");
     };
-  }, []);
+  }, [subCategory]); // Thêm subCategory vào dependency
 
-  const totalPages = Math.ceil(furnitureProducts.length / productsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const currentProducts = furnitureProducts.slice(startIndex, endIndex);
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -54,7 +65,14 @@ const FurniturePage = () => {
   const breadcrumbItems = [
     { title: "Trang chủ", path: "/", icon: "🏠" },
     { title: "Gia dụng và nội thất", path: "/gia-dung-va-noi-that" },
-    { title: "Nội thất", path: "/gia-dung-va-noi-that/noi-that" },
+    ...(subCategory
+      ? [
+          {
+            title: subCategory.replace(/-/g, " "),
+            path: `/gia-dung-va-noi-that/${subCategory}`,
+          },
+        ]
+      : [{ title: "Nội thất", path: "/gia-dung-va-noi-that/noi-that" }]),
   ];
 
   return (
@@ -62,7 +80,9 @@ const FurniturePage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             {loading ? (
@@ -71,7 +91,12 @@ const FurniturePage = () => {
               <div className="p-1.5 text-red-500">{error}</div>
             ) : (
               <>
-                <FurnitureSection products={currentProducts} />
+                <FurnitureSection
+                  category={
+                    subCategory ? subCategory.replace(/-/g, " ") : "Nội thất"
+                  }
+                  products={currentProducts}
+                />
                 {totalPages > 1 && (
                   <Pagination
                     currentPage={currentPage}
@@ -85,6 +110,7 @@ const FurniturePage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon /> {/* Thêm ChatBotIcon */}
     </div>
   );
 };

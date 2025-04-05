@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import CosmeticsSection from "../components/CosmeticsSection";
 import Pagination from "../components/Pagination";
+import ChatBotIcon from "../components/ChatBotIcon";
 import { fetchCosmeticsProducts } from "../services/cosmeticsService";
 import "../styles/custom-layout.scss";
 
 const CosmeticsPage = () => {
+  const { subCategory } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [cosmeticsProducts, setCosmeticsProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const productsPerPage = 12;
@@ -22,6 +26,13 @@ const CosmeticsPage = () => {
         setLoading(true);
         const products = await fetchCosmeticsProducts();
         setCosmeticsProducts(products);
+
+        const filtered = subCategory
+          ? products.filter(
+              (product) => product.subCategory === subCategory.replace(/-/g, " ")
+            )
+          : products;
+        setFilteredProducts(filtered);
       } catch (error) {
         console.error("Error loading cosmetics products:", error);
         setError(error.message || "Không thể tải danh sách sản phẩm.");
@@ -32,19 +43,17 @@ const CosmeticsPage = () => {
 
     loadCosmeticsProducts();
 
-    // Hiện Dialogflow Messenger trên CosmeticsPage
     document.body.classList.add("show-dialogflow");
 
-    // Ẩn khi rời trang
     return () => {
       document.body.classList.remove("show-dialogflow");
     };
-  }, []);
+  }, [subCategory]);
 
-  const totalPages = Math.ceil(cosmeticsProducts.length / productsPerPage);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
   const endIndex = startIndex + productsPerPage;
-  const currentProducts = cosmeticsProducts.slice(startIndex, endIndex);
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -53,7 +62,15 @@ const CosmeticsPage = () => {
 
   const breadcrumbItems = [
     { title: "Trang chủ", path: "/", icon: "🏠" },
-    { title: "Mỹ Phẩm", path: "/my-pham" },
+    { title: "Mỹ phẩm", path: "/my-pham" },
+    ...(subCategory
+      ? [
+          {
+            title: subCategory.replace(/-/g, " "),
+            path: `/my-pham/${subCategory}`,
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -61,7 +78,9 @@ const CosmeticsPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             {loading ? (
@@ -70,7 +89,12 @@ const CosmeticsPage = () => {
               <div className="p-1.5 text-red-500">{error}</div>
             ) : (
               <>
-                <CosmeticsSection products={currentProducts} />
+                <CosmeticsSection
+                  category={
+                    subCategory ? subCategory.replace(/-/g, " ") : "Mỹ phẩm"
+                  }
+                  products={currentProducts}
+                />
                 {totalPages > 1 && (
                   <Pagination
                     currentPage={currentPage}
@@ -84,6 +108,7 @@ const CosmeticsPage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon />
     </div>
   );
 };

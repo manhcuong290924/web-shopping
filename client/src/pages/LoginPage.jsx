@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { signIn } from '../services/authService';
-import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
-import Footer from '../components/Footer';
-import Breadcrumb from '../components/Breadcrumb';
-import '../styles/custom-layout.scss';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { signIn } from "../services/authService";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
+import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
+import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
+import "../styles/custom-layout.scss";
 
 const LoginPage = () => {
+  const [isOpen, setIsOpen] = useState(false); // Thêm trạng thái cho Sidebar
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Hiện Dialogflow Messenger trên LoginPage
     document.body.classList.add("show-dialogflow");
 
-    // Ẩn khi rời trang
     return () => {
       document.body.classList.remove("show-dialogflow");
     };
@@ -28,61 +28,63 @@ const LoginPage = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setError('');
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.email.trim() || !formData.password.trim()) {
-      setError('Vui lòng nhập đầy đủ email và mật khẩu.');
+      setError("Vui lòng nhập đầy đủ email và mật khẩu.");
       return;
     }
 
     try {
       const response = await signIn(formData);
-      localStorage.setItem('token', response.token);
+      localStorage.setItem("token", response.token);
       const user = {
         firstName: response.firstName,
         lastName: response.lastName,
       };
-      localStorage.setItem('user', JSON.stringify(user));
-      console.log('Đăng nhập thành công:', response.token);
-      navigate('/');
+      localStorage.setItem("user", JSON.stringify(user));
+      console.log("Đăng nhập thành công:", response.token);
+      navigate("/");
     } catch (err) {
-      setError(err || 'Đăng nhập thất bại. Vui lòng kiểm tra lại email hoặc mật khẩu.');
+      setError(err || "Đăng nhập thất bại. Vui lòng kiểm tra lại email hoặc mật khẩu.");
     }
   };
 
   const breadcrumbItems = [
-    { title: 'Trang chủ', path: '/', icon: '🏠' },
-    { title: 'Đăng nhập', path: '/dang-nhap' },
+    { title: "Trang chủ", path: "/", icon: "🏠" },
+    { title: "Đăng nhập", path: "/dang-nhap" },
   ];
 
   return (
     <div className="flex flex-col min-h-screen font-sans">
       <Header />
-      <div className="flex flex-1" style={{ paddingTop: '120px' }}>
+      <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar />
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             <div className="max-w-md mx-auto">
-              <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
+              <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "20px" }}>
                 ĐĂNG NHẬP
               </h1>
               {error && (
                 <div
                   style={{
-                    backgroundColor: '#ffe6e6',
-                    padding: '10px',
-                    marginBottom: '20px',
-                    border: '1px solid #ff9999',
-                    borderRadius: '4px',
-                    color: '#ff3333',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
+                    backgroundColor: "#ffe6e6",
+                    padding: "10px",
+                    marginBottom: "20px",
+                    border: "1px solid #ff9999",
+                    borderRadius: "4px",
+                    color: "#ff3333",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
                   }}
                 >
                   <span>⚠</span>
@@ -90,9 +92,16 @@ const LoginPage = () => {
                 </div>
               )}
               <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '15px' }}>
-                  <label style={{ display: 'block', fontSize: '14px', color: '#333', marginBottom: '5px' }}>
-                    Email <span style={{ color: 'red' }}>*</span>
+                <div style={{ marginBottom: "15px" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "14px",
+                      color: "#333",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    Email <span style={{ color: "red" }}>*</span>
                   </label>
                   <input
                     type="email"
@@ -101,18 +110,25 @@ const LoginPage = () => {
                     onChange={handleInputChange}
                     placeholder="Nhập email của bạn"
                     style={{
-                      width: '100%',
-                      padding: '10px',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      fontSize: '14px',
+                      width: "100%",
+                      padding: "10px",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      fontSize: "14px",
                     }}
                     required
                   />
                 </div>
-                <div style={{ marginBottom: '15px' }}>
-                  <label style={{ display: 'block', fontSize: '14px', color: '#333', marginBottom: '5px' }}>
-                    Mật khẩu <span style={{ color: 'red' }}>*</span>
+                <div style={{ marginBottom: "15px" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "14px",
+                      color: "#333",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    Mật khẩu <span style={{ color: "red" }}>*</span>
                   </label>
                   <input
                     type="password"
@@ -121,11 +137,11 @@ const LoginPage = () => {
                     onChange={handleInputChange}
                     placeholder="Nhập mật khẩu của bạn"
                     style={{
-                      width: '100%',
-                      padding: '10px',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      fontSize: '14px',
+                      width: "100%",
+                      padding: "10px",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      fontSize: "14px",
                     }}
                     required
                   />
@@ -133,22 +149,29 @@ const LoginPage = () => {
                 <button
                   type="submit"
                   style={{
-                    backgroundColor: '#ff6200',
-                    color: 'white',
-                    padding: '10px 20px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    width: '100%',
-                    marginTop: '10px',
+                    backgroundColor: "#ff6200",
+                    color: "white",
+                    padding: "10px 20px",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    width: "100%",
+                    marginTop: "10px",
                   }}
                 >
                   ĐĂNG NHẬP
                 </button>
               </form>
-              <p style={{ marginTop: '15px', textAlign: 'center', fontSize: '14px', color: '#666' }}>
-                Bạn chưa có tài khoản?{' '}
+              <p
+                style={{
+                  marginTop: "15px",
+                  textAlign: "center",
+                  fontSize: "14px",
+                  color: "#666",
+                }}
+              >
+                Bạn chưa có tài khoản?{" "}
                 <Link to="/dang-ky" className="text-orange-500 hover:underline">
                   Đăng ký ngay
                 </Link>
@@ -158,6 +181,7 @@ const LoginPage = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon />
     </div>
   );
 };

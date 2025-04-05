@@ -43,19 +43,19 @@ const ContactForm = () => {
         <h2>LIÊN HỆ</h2>
         <hr />
         <h3>THÔNG TIN LIÊN HỆ</h3>
-        <p>Công ty thiết kế website sáng tạo tại Việt Nam</p>
+        <p>Công ty bán hàng tại Việt Nam</p>
         <ul>
           <li>
-            <strong>Địa chỉ:</strong> Số 10, Đường Sáng Tạo, Khu Công nghệ, TP. Đà Nẵng
+            <strong>Địa chỉ:</strong> Tòa D, 13 P. Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội, Việt Nam
           </li>
           <li>
-            <strong>Email:</strong> contact@innovatevn.com
+            <strong>Email:</strong> ledoanduong9@gmail.com
           </li>
           <li>
-            <strong>Hotline:</strong> 0987.654.321
+            <strong>Hotline:</strong> 0559099024
           </li>
           <li>
-            <strong>Website:</strong> innovatevn.com
+            <strong>Website:</strong> webshoppingtec.io.vn
           </li>
         </ul>
       </div>
@@ -111,6 +111,9 @@ const ContactForm = () => {
           </button>
         </form>
       </div>
+
+
+      
     </div>
   );
 };

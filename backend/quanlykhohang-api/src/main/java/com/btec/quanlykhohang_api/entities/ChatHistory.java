@@ -12,7 +12,7 @@ public class ChatHistory {
     private String response;
     private String timestamp;
 
-    // Constructors, getters, setters
+    // Constructors
     public ChatHistory() {}
 
     public ChatHistory(String userId, String prompt, String response, String timestamp) {
@@ -22,6 +22,7 @@ public class ChatHistory {
         this.timestamp = timestamp;
     }
 
+    // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUserId() { return userId; }

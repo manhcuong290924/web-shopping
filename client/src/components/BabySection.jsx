@@ -1,5 +1,4 @@
-// client/src/components/BabySection.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import { fetchBabyProducts } from "../services/babyService"; // Import fetchBabyProducts
@@ -9,6 +8,8 @@ const BabySection = () => {
   const [displayedProducts, setDisplayedProducts] = useState([]); // Lưu danh sách sản phẩm hiển thị
   const [loading, setLoading] = useState(true); // Trạng thái loading
   const [error, setError] = useState(null); // Trạng thái lỗi
+  const [currentIndex, setCurrentIndex] = useState(0); // Theo dõi sản phẩm hiện tại
+  const carouselRef = useRef(null); // Ref để tham chiếu carousel
 
   // Hàm lấy ngẫu nhiên 4 sản phẩm từ danh sách
   const getRandomProducts = (products, count) => {
@@ -35,6 +36,22 @@ const BabySection = () => {
     loadBabyProducts();
   }, []); // Chỉ gọi API một lần khi component được mount
 
+  // Theo dõi vị trí sản phẩm hiện tại khi vuốt (chỉ áp dụng trên mobile)
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const handleScroll = () => {
+      const scrollLeft = carousel.scrollLeft;
+      const itemWidth = carousel.offsetWidth; // Chiều rộng của 1 item
+      const newIndex = Math.round(scrollLeft / itemWidth); // Tính index dựa trên vị trí cuộn
+      setCurrentIndex(newIndex);
+    };
+
+    carousel.addEventListener("scroll", handleScroll);
+    return () => carousel.removeEventListener("scroll", handleScroll);
+  }, [displayedProducts]);
+
   return (
     <div className="baby-section max-w-[80rem] mx-auto py-2">
       <div className="baby-frame bg-white border border-gray-200 rounded-lg shadow-md">
@@ -60,21 +77,37 @@ const BabySection = () => {
         </div>
 
         <div className="p-1">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1">
-            {loading ? (
-              <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
-            ) : error ? (
-              <div className="p-1.5 text-red-500">{error}</div>
-            ) : displayedProducts.length > 0 ? (
-              displayedProducts.map((product, index) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  showRightBorder={(index + 1) % 4 !== 0}
-                />
-              ))
-            ) : (
-              <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+          <div className="carousel-container">
+            <div ref={carouselRef} className="carousel-wrapper">
+              {loading ? (
+                <div className="p-1.5 text-gray-500">Đang tải sản phẩm...</div>
+              ) : error ? (
+                <div className="p-1.5 text-red-500">{error}</div>
+              ) : displayedProducts.length > 0 ? (
+                <div className="carousel">
+                  {displayedProducts.map((product, index) => (
+                    <div className="carousel-item" key={product.id}>
+                      <ProductCard
+                        product={product}
+                        showRightBorder={false} // Không cần border trên carousel
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-1.5 text-gray-500">Không có sản phẩm</div>
+              )}
+            </div>
+            {/* Chấm tròn pagination (chỉ hiển thị trên mobile) */}
+            {displayedProducts.length > 0 && (
+              <div className="carousel-dots">
+                {displayedProducts.map((_, index) => (
+                  <span
+                    key={index}
+                    className={`dot ${currentIndex === index ? 'active' : ''}`}
+                  ></span>
+                ))}
+              </div>
             )}
           </div>
         </div>

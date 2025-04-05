@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ProductDescriptionAndRelated from "../components/ProductDescriptionAndRelated";
+import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
 import { fetchProductById } from "../services/productService";
 import "../styles/custom-layout.scss";
 
@@ -39,10 +40,8 @@ const ProductDetail = () => {
 
     loadProduct();
 
-    // Hiện Dialogflow Messenger trên ProductDetail
     document.body.classList.add("show-dialogflow");
 
-    // Ẩn khi rời trang
     return () => {
       document.body.classList.remove("show-dialogflow");
     };
@@ -122,7 +121,9 @@ const ProductDetail = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             <div className="flex flex-col md:flex-row gap-6 mt-4">
@@ -196,6 +197,7 @@ const ProductDetail = () => {
         </div>
       </div>
       <Footer />
+      <ChatBotIcon />
     </div>
   );
 };

@@ -1,4 +1,3 @@
-// client/src/components/ProductList.jsx
 import React from 'react';
 import ProductCard from './ProductCard';
 
@@ -10,7 +9,17 @@ const ProductList = ({ category, products = [] }) => {
           <h2 className="text-2xl font-bold text-orange-500">{category.toUpperCase()}</h2>
           {/* "Xem tất cả >" đã được xóa trước đó */}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+        <div
+          className="grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)', // Dự phòng: 2 sản phẩm mỗi hàng trên mobile
+            gap: '1rem',
+            '@media (minWidth: 768px)': {
+              gridTemplateColumns: 'repeat(4, 1fr)', // 4 sản phẩm mỗi hàng trên desktop
+            },
+          }}
+        >
           {products.length > 0 ? (
             products.map((product, index) => (
               <ProductCard

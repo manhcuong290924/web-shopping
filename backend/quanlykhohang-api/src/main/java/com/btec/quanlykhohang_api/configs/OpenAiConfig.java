@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class GoogleAiConfig {
+public class OpenAiConfig {
 
-    @Value("${google.ai.api.key}")
+    @Value("${openai.api.key}")
     private String apiKey;
 
     public String getApiKey() {

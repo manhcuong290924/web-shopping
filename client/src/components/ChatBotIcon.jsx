@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/ChatBotIcon.scss';
+import customIcon from '../styles/image/iconchatbot.webp'; // Import icon của bạn
 
 const ChatBotIcon = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,16 +24,16 @@ const ChatBotIcon = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: 'user123', prompt: inputText }), // Điều chỉnh body để khớp với ChatRequestDTO
+        body: JSON.stringify({ userId: 'user123', prompt: inputText }),
       });
 
       if (!response.ok) {
-        console.log('Mã trạng thái:', response.status); // Thêm log để xem mã lỗi
+        console.log('Mã trạng thái:', response.status);
         throw new Error('Lỗi khi gọi API');
       }
 
       const data = await response.json();
-      const botMessage = { text: data.response, sender: 'bot' }; // Lấy 'response' từ ChatResponseDTO
+      const botMessage = { text: data.response, sender: 'bot' };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
       console.error('Lỗi:', error);
@@ -53,7 +54,7 @@ const ChatBotIcon = () => {
     <div className="chatbot-container">
       <div className="chat-icon" onClick={toggleChat}>
         <img
-          src="https://cdn-icons-png.flaticon.com/512/894/894737.png"
+          src={customIcon} // Sử dụng biến đã import
           alt="Chat Bot"
         />
       </div>
@@ -73,7 +74,7 @@ const ChatBotIcon = () => {
               >
                 {message.sender === 'bot' && (
                   <img
-                    src="https://cdn-icons-png.flaticon.com/512/894/894737.png"
+                    src={customIcon} // Sử dụng biến đã import
                     alt="Bot Avatar"
                     className="bot-avatar"
                   />

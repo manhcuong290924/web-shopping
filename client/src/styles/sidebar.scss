@@ -1,22 +1,28 @@
-// client/src/styles/Sidebar.scss
-
 // Sidebar styles
 .sidebar-container {
-  width: 300px; // w-64 = 256px, cố định chiều rộng
-  height: 450px; // Đặt chiều cao cố định 450px
-  margin-right: 1px; // Khoảng cách giữa Sidebar và Slide
-  margin-top: 16px;
-  overflow-y: auto;
+  width: 300px; // Chiều rộng cố định cho desktop
+  height: 100vh; // Chiều cao full màn hình thay vì cố định 450px
+  overflow-y: auto; // Cho phép cuộn nếu nội dung dài
+  position: fixed; // Giữ sidebar cố định trên mobile
+  top: 0;
+  left: 0;
   z-index: 40;
-  position: relative; // Đảm bảo Sidebar là tham chiếu cho các phần tử bên trong
 
   .toggle-button {
     left: 16px;
     right: auto;
   }
 
-  // Trên mobile (xếp dọc)
+  // Trên mobile
   @media (max-width: 767px) {
-    margin-right: 0; // Bỏ khoảng cách trên mobile
+    width: 75%; // Giảm chiều rộng trên mobile để không chiếm toàn màn hình
+    max-width: 300px; // Giới hạn tối đa chiều rộng
+    height: 100vh; // Full chiều cao màn hình
+    margin-right: 0; // Bỏ khoảng cách
+  }
+
+  // Điều chỉnh nội dung bên trong
+  .sidebar-content {
+    padding-bottom: 20px; // Thêm padding để không bị cắt nội dung khi cuộn
   }
 }

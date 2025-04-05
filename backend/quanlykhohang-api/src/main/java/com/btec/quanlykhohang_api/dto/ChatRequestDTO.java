@@ -4,7 +4,7 @@ public class ChatRequestDTO {
     private String userId;
     private String prompt;
 
-    // Constructors, getters, setters
+    // Constructors
     public ChatRequestDTO() {}
 
     public ChatRequestDTO(String userId, String prompt) {
@@ -12,6 +12,7 @@ public class ChatRequestDTO {
         this.prompt = prompt;
     }
 
+    // Getters and Setters
     public String getUserId() { return userId; }
     public void setUserId(String userId) { this.userId = userId; }
     public String getPrompt() { return prompt; }
