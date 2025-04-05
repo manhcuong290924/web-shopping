@@ -1,16 +1,14 @@
-// src/services/authService.js
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:8080/api/auth'; // Sửa thành /api/auth
+const API_URL = "http://localhost:8080/api/auth";
 
 export const signUp = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/sign-up`, userData);
     return response.data;
   } catch (error) {
-    console.error('Sign-up error:', error.response); // Log chi tiết lỗi
-    // Lấy message từ error.response.data (backend trả về string)
-    const errorMessage = error.response?.data || 'Đăng ký thất bại';
+    console.error("Sign-up error:", error.response);
+    const errorMessage = error.response?.data || "Đăng ký thất bại";
     throw new Error(errorMessage);
   }
 };
@@ -20,8 +18,64 @@ export const signIn = async (loginData) => {
     const response = await axios.post(`${API_URL}/sign-in`, loginData);
     return response.data;
   } catch (error) {
-    console.error('Sign-in error:', error.response);
-    const errorMessage = error.response?.data || 'Đăng nhập thất bại';
+    console.error("Sign-in error:", error.response);
+    const errorMessage = error.response?.data || "Đăng nhập thất bại";
+    throw new Error(errorMessage);
+  }
+};
+
+export const fetchCurrentUser = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No token found. Please log in.");
+    }
+    const response = await axios.get(`${API_URL}/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("User data:", response.data);
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.error ||
+      error.response?.data?.message ||
+      (typeof error.response?.data === "string" ? error.response?.data : null) ||
+      error.message ||
+      "Failed to fetch user info";
+    throw new Error(errorMessage);
+  }
+};
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await axios.post(`${API_URL}/forgot-password`, { email });
+    return response.data;
+  } catch (error) {
+    console.error("Forgot password error:", error.response);
+    const errorMessage =
+      typeof error.response?.data === "string"
+        ? error.response.data
+        : error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Gửi mã xác nhận thất bại.";
+    throw new Error(errorMessage);
+  }
+};
+
+export const resetPassword = async (data) => {
+  try {
+    const response = await axios.post(`${API_URL}/reset-password`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Reset password error:", error.response);
+    const errorMessage =
+      typeof error.response?.data === "string"
+        ? error.response.data
+        : error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Đặt lại mật khẩu thất bại.";
     throw new Error(errorMessage);
   }
 };

@@ -5,11 +5,11 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
-import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
+import ChatBotIcon from "../components/ChatBotIcon";
 import "../styles/custom-layout.scss";
 
 const LoginPage = () => {
-  const [isOpen, setIsOpen] = useState(false); // Thêm trạng thái cho Sidebar
+  const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,7 +19,6 @@ const LoginPage = () => {
 
   useEffect(() => {
     document.body.classList.add("show-dialogflow");
-
     return () => {
       document.body.classList.remove("show-dialogflow");
     };
@@ -41,16 +40,24 @@ const LoginPage = () => {
 
     try {
       const response = await signIn(formData);
-      localStorage.setItem("token", response.token);
+      localStorage.setItem("token", response.id); // Lưu id làm token tạm thời
       const user = {
         firstName: response.firstName,
         lastName: response.lastName,
+        role: response.role,
       };
       localStorage.setItem("user", JSON.stringify(user));
-      console.log("Đăng nhập thành công:", response.token);
+      console.log("Đăng nhập thành công:", response.id);
       navigate("/");
     } catch (err) {
-      setError(err || "Đăng nhập thất bại. Vui lòng kiểm tra lại email hoặc mật khẩu.");
+      const errorMessage = err.message;
+      if (errorMessage === "Sai mật khẩu.") {
+        setError("Sai mật khẩu.");
+      } else if (errorMessage === "Email không tồn tại.") {
+        setError("Email không tồn tại.");
+      } else {
+        setError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+      }
     }
   };
 
@@ -174,6 +181,10 @@ const LoginPage = () => {
                 Bạn chưa có tài khoản?{" "}
                 <Link to="/dang-ky" className="text-orange-500 hover:underline">
                   Đăng ký ngay
+                </Link>
+                {" | "}
+                <Link to="/quen-mat-khau" className="text-orange-500 hover:underline">
+                  Quên mật khẩu?
                 </Link>
               </p>
             </div>

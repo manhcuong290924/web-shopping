@@ -24,8 +24,9 @@ import CosmeticsPage from './pages/CosmeticsPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
-import LoginPage from './pages/LoginPage'; // Import LoginPage
-import RegisterPage from './pages/RegisterPage'; // Import RegisterPage
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage'; // Import ForgotPasswordPage
 
 function App() {
   return (
@@ -98,6 +99,9 @@ function App() {
 
         {/* Route cho trang đăng ký */}
         <Route path="/dang-ky" element={<RegisterPage />} />
+
+        {/* Route cho trang quên mật khẩu */}
+        <Route path="/quen-mat-khau" element={<ForgotPasswordPage />} />
 
         {/* Route mặc định cho các đường link không tồn tại */}
         <Route path="*" element={<div>404 - Trang không tồn tại</div>} />
