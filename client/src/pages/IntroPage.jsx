@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import SideBar from "../components/SideBar";
 import IntroContent from "../components/IntroContent";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
@@ -30,9 +30,9 @@ const IntroPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: '120px' }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          {/* Thêm class sidebar-wrapper để điều khiển hiển thị Sidebar */}
-          <div className="sidebar-wrapper">
-            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          {/* Thêm class SideBar-wrapper để điều khiển hiển thị SideBar */}
+          <div className="SideBar-wrapper">
+            <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />

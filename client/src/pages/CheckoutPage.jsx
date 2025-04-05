@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import CheckoutForm from "../components/CheckoutForm";
@@ -10,7 +10,7 @@ import "../styles/custom-layout.scss";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false); // Thêm trạng thái cho Sidebar
+  const [isOpen, setIsOpen] = useState(false); // Thêm trạng thái cho SideBar
   const [cartItems, setCartItems] = useState(() => {
     const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
@@ -48,8 +48,8 @@ const CheckoutPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <div className="sidebar-wrapper">
-            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          <div className="SideBar-wrapper">
+            <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />

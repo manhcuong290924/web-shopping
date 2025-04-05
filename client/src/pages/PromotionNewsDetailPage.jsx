@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import PromotionNewsDetailContent from "../components/PromotionNewsDetailContent";
@@ -52,8 +52,8 @@ const PromotionNewsDetailPage = () => {
         <Header />
         <div className="flex flex-1" style={{ paddingTop: "120px" }}>
           <div className="content-wrapper flex flex-col md:flex-row">
-            <div className="sidebar-wrapper">
-              <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+            <div className="SideBar-wrapper">
+              <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
             </div>
             <main className="flex-1 p-4 md:p-6">
               <Breadcrumb items={breadcrumbItems} />
@@ -72,8 +72,8 @@ const PromotionNewsDetailPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <div className="sidebar-wrapper">
-            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+          <div className="SideBar-wrapper">
+            <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />

@@ -1,8 +1,7 @@
-// Content wrapper (bao quanh Sidebar và main, căn giữa)
-@import "sidebar";
+@import "SideBar";
 
 .content-wrapper {
-  width: 1456px; // Tổng chiều rộng: 200px (Sidebar) + 8px (gap) + 1200px (Slide) + 16px (padding) + 16px (padding) + 16px (margin)
+  width: 1456px; // Tổng chiều rộng: 200px (SideBar) + 8px (gap) + 1200px (Slide) + 16px (padding) + 16px (padding) + 16px (margin)
   max-width: 100%;
   margin: 0 auto; // Căn giữa trên trang
   display: flex;
@@ -12,8 +11,8 @@
     flex-direction: row;
   }
 
-  // Ẩn Sidebar trên mobile
-  .sidebar-wrapper {
+  // Ẩn SideBar trên mobile
+  .SideBar-wrapper {
     display: none; // Ẩn trên mobile (dưới 768px)
 
     @media (min-width: 768px) {

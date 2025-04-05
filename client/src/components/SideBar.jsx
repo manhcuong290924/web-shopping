@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
-import sidebarData from "../data/sidebarData";
-import "../styles/Sidebar.scss";
+import SideBarData from "../data/SideBarData";
+import "../styles/SideBar.scss";
 
-const Sidebar = ({ isOpen, setIsOpen }) => {
+const SideBar = ({ isOpen, setIsOpen }) => {
   const [activeMenu, setActiveMenu] = useState(null);
 
   return (
     <>
       <aside
-        className={`sidebar-container bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
+        className={`SideBar-container bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 z-40`}
       >
@@ -22,7 +22,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
 
-        {/* Header Sidebar */}
+        {/* Header SideBar */}
         <div className="p-4 bg-orange-500 text-white flex items-center justify-between">
           <h2 className="text-lg font-bold tracking-wide">DANH MỤC SẢN PHẨM</h2>
           <button className="md:hidden" onClick={() => setIsOpen(false)}>
@@ -30,9 +30,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </button>
         </div>
 
-        {/* Menu Sidebar */}
-        <nav className="sidebar-content mt-2">
-          {sidebarData.map((item, index) => (
+        {/* Menu SideBar */}
+        <nav className="SideBar-content mt-2">
+          {SideBarData.map((item, index) => (
             <div key={index} className="relative">
               {item.subMenu ? (
                 <>
@@ -81,7 +81,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </nav>
       </aside>
 
-      {/* Overlay khi sidebar mở trên mobile */}
+      {/* Overlay khi SideBar mở trên mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-30"
@@ -92,4 +92,4 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   );
 };
 
-export default Sidebar;
+export default SideBar;
