@@ -79,3 +79,53 @@ export const resetPassword = async (data) => {
     throw new Error(errorMessage);
   }
 };
+
+// Thêm hàm cập nhật thông tin người dùng
+export const updateUserProfile = async (userData) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No token found. Please log in.");
+    }
+    const response = await axios.put(`${API_URL}/update-profile`, userData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Update profile error:", error.response);
+    const errorMessage =
+      typeof error.response?.data === "string"
+        ? error.response.data
+        : error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Cập nhật thông tin thất bại.";
+    throw new Error(errorMessage);
+  }
+};
+
+// Thêm hàm đổi mật khẩu
+export const changePassword = async (passwordData) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No token found. Please log in.");
+    }
+    const response = await axios.put(`${API_URL}/change-password`, passwordData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Change password error:", error.response);
+    const errorMessage =
+      typeof error.response?.data === "string"
+        ? error.response.data
+        : error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Đổi mật khẩu thất bại.";
+    throw new Error(errorMessage);
+  }
+};

@@ -11,14 +11,14 @@ import {
 } from '../services/authCartService';
 import { searchProducts } from '../services/productService';
 import debounce from 'lodash/debounce';
-import '../styles/Header.scss'; // Thêm dòng này vào đầu Header.jsx nếu chưa có
-import { Monitor, Home, Footprints, Baby, Shirt, Briefcase, Scissors } from 'lucide-react'; // Import icons từ sidebarData
+import '../styles/Header.scss';
+import { Monitor, Home, Footprints, Baby, Shirt, Briefcase, Scissors } from 'lucide-react';
 
 const Header = () => {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false); // Điều khiển menu chính
-  const [dropdownOpen, setDropdownOpen] = useState(null); // Điều khiển dropdown chính (DANH MỤC)
-  const [activeSubMenu, setActiveSubMenu] = useState(null); // Điều khiển submenu con (Điện tử, Thời trang, v.v.)
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [cartItems, setCartItems] = useState([]);
   const [cartPopupOpen, setCartPopupOpen] = useState(false);
@@ -27,8 +27,10 @@ const Header = () => {
   const [searchPopupOpen, setSearchPopupOpen] = useState(false);
 
   useEffect(() => {
+    const storedUser = getUserFromStorage();
+    console.log("Stored user on mount:", storedUser); // Debug giá trị user
     setCartItems(getCartFromStorage());
-    setUser(getUserFromStorage());
+    setUser(storedUser);
 
     const handleStorageChange = (e) => {
       if (e.key === 'cart') setCartItems(getCartFromStorage());
@@ -88,7 +90,12 @@ const Header = () => {
   };
 
   const handleUserClick = () => {
-    if (!user) navigate('/dang-nhap');
+    console.log("User clicked, user state:", user); // Debug sự kiện click
+    if (!user) {
+      navigate('/dang-nhap');
+    } else {
+      navigate('/profile');
+    }
   };
 
   const handleLogout = () => {
@@ -105,17 +112,15 @@ const Header = () => {
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  // Dữ liệu menu chính
   const menuData = [
     { name: "TRANG CHỦ", link: "/" },
     { name: "GIỚI THIỆU", link: "/gioi-thieu" },
     { name: "SẢN PHẨM", link: "/tat-ca-san-pham" },
     { name: "TIN TỨC", link: "/tin-tuc-khuyen-mai", subMenu: [{ name: "Tin Tức Khuyến Mãi", link: "/tin-tuc-khuyen-mai" }] },
     { name: "LIÊN HỆ", link: "/lien-he" },
-    { name: "DANH MỤC", isDropdown: true, className: "hide-on-desktop" }, // Thêm class để ẩn trên desktop
+    { name: "DANH MỤC", isDropdown: true, className: "hide-on-desktop" },
   ];
 
-  // Dữ liệu từ sidebarData.js (sử dụng trực tiếp trong dropdown)
   const sidebarData = [
     {
       name: "Điện tử",
@@ -195,11 +200,28 @@ const Header = () => {
 
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-2">
-              <div className="flex items-center cursor-pointer" onClick={handleUserClick}>
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={handleUserClick}
+                style={{ pointerEvents: "auto" }}
+              >
                 <User className="w-6 h-6 text-gray-700" />
-                {user && <span className="ml-2 text-gray-700 font-medium">{user.firstName} {user.lastName}</span>}
+                {user && (
+                  <span className="ml-2 text-gray-700 font-medium">
+                    {user.firstName} {user.lastName}
+                  </span>
+                )}
               </div>
-              {user && <div className="cursor-pointer" onClick={handleLogout} title="Đăng xuất"><LogOut className="w-6 h-6 text-red-500 hover:text-red-700" /></div>}
+              {user && (
+                <div
+                  className="cursor-pointer"
+                  onClick={handleLogout}
+                  title="Đăng xuất"
+                  style={{ pointerEvents: "auto" }}
+                >
+                  <LogOut className="w-6 h-6 text-red-500 hover:text-red-700" />
+                </div>
+              )}
             </div>
 
             <div className="relative cursor-pointer" onClick={() => setCartPopupOpen(!cartPopupOpen)}>
@@ -244,7 +266,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Main Header (Navigation Menu) - Desktop */}
       <div className="bg-orange-500 text-white hidden md:block">
         <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
           <nav className="flex space-x-6" style={{ marginLeft: '180px' }}>
@@ -329,7 +350,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu (Menu chính) */}
       <div className="md:hidden">
         <div className="bg-orange-500 text-white">
           <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">

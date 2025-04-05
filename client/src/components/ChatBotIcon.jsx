@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/ChatBotIcon.scss';
-import customIcon from '../styles/image/iconchatbot.webp'; // Import icon của bạn
+import customIcon from '../styles/image/iconchatbot.webp';
 
 const ChatBotIcon = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,11 +29,12 @@ const ChatBotIcon = () => {
 
       if (!response.ok) {
         console.log('Mã trạng thái:', response.status);
+        console.log('Thông báo lỗi từ server:', await response.text());
         throw new Error('Lỗi khi gọi API');
       }
 
       const data = await response.json();
-      const botMessage = { text: data.response, sender: 'bot' };
+      const botMessage = { text: data.response || 'Không có phản hồi từ AI.', sender: 'bot' };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
       console.error('Lỗi:', error);
@@ -53,10 +54,7 @@ const ChatBotIcon = () => {
   return (
     <div className="chatbot-container">
       <div className="chat-icon" onClick={toggleChat}>
-        <img
-          src={customIcon} // Sử dụng biến đã import
-          alt="Chat Bot"
-        />
+        <img src={customIcon} alt="Chat Bot" />
       </div>
       {isOpen && (
         <div className="chat-window">
@@ -74,7 +72,7 @@ const ChatBotIcon = () => {
               >
                 {message.sender === 'bot' && (
                   <img
-                    src={customIcon} // Sử dụng biến đã import
+                    src={customIcon}
                     alt="Bot Avatar"
                     className="bot-avatar"
                   />
