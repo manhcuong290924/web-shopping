@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Menu, X, ChevronRight, ChevronDown, Search, User, LogOut } from 'lucide-react';
 import {
@@ -25,6 +25,7 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [searchPopupOpen, setSearchPopupOpen] = useState(false);
+  const searchPopupRef = useRef(null); // Thêm ref để tham chiếu popup tìm kiếm
 
   useEffect(() => {
     const storedUser = getUserFromStorage();
@@ -40,6 +41,23 @@ const Header = () => {
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  // Thêm useEffect để xử lý nhấp chuột bên ngoài
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchPopupRef.current && !searchPopupRef.current.contains(event.target)) {
+        setSearchPopupOpen(false);
+      }
+    };
+
+    if (searchPopupOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [searchPopupOpen]);
 
   const debouncedSearch = debounce(async (query) => {
     if (query.trim() === '') {
@@ -160,7 +178,9 @@ const Header = () => {
     <header className="shadow-md" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000 }}>
       <div className="bg-white p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <a href="/" className="text-2xl font-bold text-orange-500">TOPDEAL</a>
+          <a href="/">
+            <img src="/src/logo.jpg" alt="Your Logo" className="h-10 w-auto" />
+          </a>
 
           <form className="flex-1 mx-4 max-w-xl relative">
             <div className="relative">
@@ -176,7 +196,11 @@ const Header = () => {
               </button>
             </div>
             {searchPopupOpen && (
-              <div className="absolute top-12 left-0 w-full max-w-xl bg-white shadow-lg rounded-lg z-50 p-4 max-h-80 overflow-y-auto" style={{ border: '1px solid #e5e5e5' }}>
+              <div
+                ref={searchPopupRef} // Gắn ref vào popup tìm kiếm
+                className="absolute top-12 left-0 w-full max-w-xl bg-white shadow-lg rounded-lg z-50 p-4 max-h-80 overflow-y-auto"
+                style={{ border: '1px solid #e5e5e5' }}
+              >
                 {searchResults.length > 0 ? (
                   <>
                     <h3 className="text-lg font-bold mb-2">Sản phẩm tìm thấy</h3>

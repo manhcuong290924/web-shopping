@@ -5,7 +5,6 @@ import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import PromotionNewsDetailContent from "../components/PromotionNewsDetailContent";
-import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
 import { fetchNewsById } from "../services/newsService";
 import "../styles/custom-layout.scss";
 
@@ -29,8 +28,10 @@ const PromotionNewsDetailPage = () => {
     };
     loadNewsDetail();
 
+    // Hiện Dialogflow Messenger trên PromotionNewsDetailPage
     document.body.classList.add("show-dialogflow");
 
+    // Ẩn khi rời trang
     return () => {
       document.body.classList.remove("show-dialogflow");
     };
@@ -52,9 +53,7 @@ const PromotionNewsDetailPage = () => {
         <Header />
         <div className="flex flex-1" style={{ paddingTop: "120px" }}>
           <div className="content-wrapper flex flex-col md:flex-row">
-            <div className="SideBar-wrapper">
-              <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
-            </div>
+            <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
             <main className="flex-1 p-4 md:p-6">
               <Breadcrumb items={breadcrumbItems} />
               <div>Lỗi: {error}</div>
@@ -62,7 +61,6 @@ const PromotionNewsDetailPage = () => {
           </div>
         </div>
         <Footer />
-        <ChatBotIcon />
       </div>
     );
   }
@@ -72,9 +70,7 @@ const PromotionNewsDetailPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <div className="SideBar-wrapper">
-            <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
-          </div>
+          <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
             <PromotionNewsDetailContent article={article} />
@@ -82,7 +78,6 @@ const PromotionNewsDetailPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

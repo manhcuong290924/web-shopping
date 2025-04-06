@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react"; // Thêm useState vào import
 import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
-import SideBar from "../components/SideBar";
+import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import OrderConfirmation from "../components/OrderConfirmation";
@@ -9,7 +9,7 @@ import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
 import "../styles/custom-layout.scss";
 
 const OrderConfirmationPage = () => {
-  const [isOpen, setIsOpen] = useState(false); // Thêm trạng thái cho SideBar
+  const [isOpen, setIsOpen] = useState(false); // Thêm trạng thái cho Sidebar
   const location = useLocation();
   const order = location.state?.order || { customerInfo: {}, cartItems: [], orderId: "N/A" };
 
@@ -31,8 +31,8 @@ const OrderConfirmationPage = () => {
       <Header />
       <div className="flex flex-1" style={{ paddingTop: "120px" }}>
         <div className="content-wrapper flex flex-col md:flex-row">
-          <div className="SideBar-wrapper">
-            <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
+          <div className="sidebar-wrapper">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
           </div>
           <main className="flex-1 p-4 md:p-6">
             <Breadcrumb items={breadcrumbItems} />
