@@ -3,12 +3,17 @@ package com.btec.quanlykhohang_api.services;
 import com.btec.quanlykhohang_api.entities.User;
 import com.btec.quanlykhohang_api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserService {
@@ -16,10 +21,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    private Map<String, String> resetCodes = new HashMap<>();
+
+    // Các phương thức hiện có
     public User createUser(User user) {
-        // Hash the password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -52,5 +62,47 @@ public class UserService {
 
     public void deleteUser(String id) {
         userRepository.deleteById(id);
+    }
+
+    public void sendResetCode(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (!userOptional.isPresent()) {
+            throw new RuntimeException("Email không tồn tại.");
+        }
+        String resetCode = String.format("%06d", new Random().nextInt(999999));
+        resetCodes.put(email, resetCode);
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Mã xác nhận đặt lại mật khẩu");
+        message.setText("Mã xác nhận của bạn là: " + resetCode + "\nMã này có hiệu lực trong 10 phút.");
+        mailSender.send(message);
+    }
+
+    public void resetPassword(String email, String code, String newPassword) {
+        String storedCode = resetCodes.get(email);
+        if (storedCode == null || !storedCode.equals(code)) {
+            throw new RuntimeException("Mã xác nhận không hợp lệ hoặc đã hết hạn.");
+        }
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            resetCodes.remove(email);
+        } else {
+            throw new RuntimeException("Email không tồn tại.");
+        }
+    }
+
+    // Thêm phương thức đăng nhập
+    public User signIn(String email, String password) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            throw new RuntimeException("Email không tồn tại.");
+        }
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Sai mật khẩu.");
+        }
+        return user; // Trả về user nếu đăng nhập thành công
     }
 }

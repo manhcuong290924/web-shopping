@@ -1,6 +1,5 @@
 package com.btec.quanlykhohang_api.controllers;
 
-
 import com.btec.quanlykhohang_api.entities.User;
 import com.btec.quanlykhohang_api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -46,5 +46,42 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        try {
+            userService.sendResetCode(email);
+            return ResponseEntity.ok("Mã xác nhận đã được gửi đến email của bạn.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String code = request.get("code");
+        String newPassword = request.get("newPassword");
+        try {
+            userService.resetPassword(email, code, newPassword);
+            return ResponseEntity.ok("Mật khẩu đã được đặt lại thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // Thêm endpoint đăng nhập
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String password = request.get("password");
+        try {
+            User user = userService.signIn(email, password);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null); // Trả về lỗi nếu đăng nhập thất bại
+        }
     }
 }

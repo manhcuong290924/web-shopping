@@ -1,4 +1,3 @@
-// src/main/java/com/btec/quanlykhohang_api/controllers/AuthController.java
 package com.btec.quanlykhohang_api.controllers;
 
 import com.btec.quanlykhohang_api.entities.User;
@@ -22,80 +21,167 @@ public class AuthController {
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    /**
-     * Sign-up: Create a new user.
-     *
-     * @param user The user object containing sign-up details.
-     * @return ResponseEntity with the created user.
-     */
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody User user) {
-        // Check if the email already exists
         if (userService.getUserByEmail(user.getEmail()) != null) {
-            return new ResponseEntity<>("Email is already taken", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Email đã được sử dụng.", HttpStatus.BAD_REQUEST);
         }
-
-        // Set role mặc định là USER
         user.setRole("USER");
-        // Save the user with a hashed password
         User createdUser = userService.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    /**
-     * Sign-in: Authenticate a user and return user info.
-     *
-     * @param loginRequest A map containing email and password.
-     * @return ResponseEntity with the firstName, lastName, role or error message.
-     */
     @PostMapping("/sign-in")
     public ResponseEntity<?> signIn(@RequestBody Map<String, String> loginRequest) {
         String email = loginRequest.get("email");
         String password = loginRequest.get("password");
 
-        // Find the user by email
         User user = userService.getUserByEmail(email);
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-            return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
+        if (user == null) {
+            return new ResponseEntity<>("Email không tồn tại.", HttpStatus.UNAUTHORIZED);
+        }
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return new ResponseEntity<>("Sai mật khẩu.", HttpStatus.UNAUTHORIZED);
         }
 
-        // Prepare response with user info
         Map<String, Object> response = new HashMap<>();
         response.put("firstName", user.getFirstName());
         response.put("lastName", user.getLastName());
         response.put("role", user.getRole());
+        response.put("id", user.getId());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /**
-     * Admin sign-in: Authenticate an admin and return user info.
-     *
-     * @param loginRequest A map containing email and password.
-     * @return ResponseEntity with the firstName, lastName, role or error message.
-     */
     @PostMapping("/admin/sign-in")
     public ResponseEntity<?> adminSignIn(@RequestBody Map<String, String> loginRequest) {
         String email = loginRequest.get("email");
         String password = loginRequest.get("password");
 
-        // Find the user by email
         User user = userService.getUserByEmail(email);
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-            return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
+        if (user == null) {
+            return new ResponseEntity<>("Email không tồn tại.", HttpStatus.UNAUTHORIZED);
         }
-
-        // Kiểm tra role
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return new ResponseEntity<>("Sai mật khẩu.", HttpStatus.UNAUTHORIZED);
+        }
         if (!"ADMIN".equals(user.getRole())) {
-            return new ResponseEntity<>("You are not authorized to access admin panel", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Bạn không có quyền truy cập panel admin.", HttpStatus.FORBIDDEN);
         }
 
-        // Prepare response with user info
         Map<String, Object> response = new HashMap<>();
         response.put("firstName", user.getFirstName());
         response.put("lastName", user.getLastName());
         response.put("role", user.getRole());
+        response.put("id", user.getId());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@RequestHeader("Authorization") String authorization) {
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return new ResponseEntity<>("Token không hợp lệ.", HttpStatus.UNAUTHORIZED);
+        }
+        String token = authorization.substring(7);
+        User user = userService.getUserById(token).orElse(null);
+        if (user == null) {
+            return new ResponseEntity<>("Người dùng không tồn tại hoặc token không hợp lệ.", HttpStatus.UNAUTHORIZED);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("firstName", user.getFirstName());
+        response.put("lastName", user.getLastName());
+        response.put("role", user.getRole());
+        response.put("id", user.getId());
+        response.put("birthDay", user.getBirthDay());
+        response.put("phone", user.getPhone());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        try {
+            userService.sendResetCode(email);
+            return new ResponseEntity<>("Mã xác nhận đã được gửi đến email của bạn.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String code = request.get("code");
+        String newPassword = request.get("newPassword");
+        try {
+            userService.resetPassword(email, code, newPassword);
+            return new ResponseEntity<>("Mật khẩu đã được đặt lại thành công.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // Thêm endpoint cập nhật thông tin người dùng
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestHeader("Authorization") String authorization, @RequestBody User updatedUser) {
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return new ResponseEntity<>("Token không hợp lệ.", HttpStatus.UNAUTHORIZED);
+        }
+        String token = authorization.substring(7);
+        User user = userService.getUserById(token).orElse(null);
+        if (user == null) {
+            return new ResponseEntity<>("Người dùng không tồn tại hoặc token không hợp lệ.", HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            user.setFirstName(updatedUser.getFirstName());
+            user.setLastName(updatedUser.getLastName());
+            user.setBirthDay(updatedUser.getBirthDay());
+            user.setPhone(updatedUser.getPhone());
+            User savedUser = userService.updateUser(user.getId(), user);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("firstName", savedUser.getFirstName());
+            response.put("lastName", savedUser.getLastName());
+            response.put("role", savedUser.getRole());
+            response.put("id", savedUser.getId());
+            response.put("birthDay", savedUser.getBirthDay());
+            response.put("phone", savedUser.getPhone());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Cập nhật thông tin thất bại.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // Thêm endpoint đổi mật khẩu
+    @PutMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, String> request) {
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return new ResponseEntity<>("Token không hợp lệ.", HttpStatus.UNAUTHORIZED);
+        }
+        String token = authorization.substring(7);
+        User user = userService.getUserById(token).orElse(null);
+        if (user == null) {
+            return new ResponseEntity<>("Người dùng không tồn tại hoặc token không hợp lệ.", HttpStatus.UNAUTHORIZED);
+        }
+
+        String currentPassword = request.get("currentPassword");
+        String newPassword = request.get("newPassword");
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            return new ResponseEntity<>("Mật khẩu hiện tại không đúng.", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userService.updateUser(user.getId(), user);
+            return new ResponseEntity<>("Đổi mật khẩu thành công.", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Đổi mật khẩu thất bại.", HttpStatus.BAD_REQUEST);
+        }
     }
 }
