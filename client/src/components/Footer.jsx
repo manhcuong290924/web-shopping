@@ -1,15 +1,22 @@
 // client/src/components/Footer.jsx
 import React from 'react';
-import '../styles/footer.scss'; // Import file SCSS cho Footer (nếu có)
+import '../styles/footer.scss'; // Import file SCSS cho Footer
 
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-column">
-          <h3>Công ty của bạn</h3>
-          <p>Logo hoặc slogan</p>
-          <p>Mô tả ngắn: Chúng tôi là công ty chuyên nghiệp cung cấp giải pháp tuyệt vời.</p>
+          <h3>WEBSHOPINGTEC</h3>
+          <a href="/" className="logo-link">
+            <img 
+              src="/src/logo.jpg" // Giả sử logo nằm trong thư mục public
+              alt="Logo Công ty" 
+              className="footer-logo" 
+              style={{ maxWidth: '50px', height: 'auto' }} // Thu nhỏ logo trực tiếp
+            />  
+          </a>
+          <p>Mô tả ngắn: Chúng tôi là trang web bán hàng đơn giản.</p>
         </div>
         <div className="footer-column">
           <h3>Liên kết</h3>
@@ -21,9 +28,9 @@ const Footer = () => {
         </div>
         <div className="footer-column">
           <h3>Liên hệ</h3>
-          <p>Email: info@congtyban.com</p>
-          <p>Điện thoại: 0123 456 789</p>
-          <p>Địa chỉ: 123 Đường ABC, TP. XYZ</p>
+          <p>Email: duongbtbh00626@fpt.edu.vn</p>
+          <p>Điện thoại: 0389617500</p>
+          <p>Địa chỉ: Tòa D, 13 P. Trịnh Văn Bô, Xuân Phương, Nam Từ Liêm, Hà Nội</p>
         </div>
         <div className="footer-column">
           <h3>Mạng xã hội</h3>
@@ -33,7 +40,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2023 Công ty của bạn. Mọi quyền được bảo lưu.</p>
+        <p>© 2025 Công ty của bạn. Mọi quyền được bảo lưu.</p>
       </div>
     </footer>
   );
