@@ -71,10 +71,18 @@ public class UserService {
         String resetCode = String.format("%06d", new Random().nextInt(999999));
         resetCodes.put(email, resetCode);
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("duongbtbh00626@fpt.edu.vn");
         message.setTo(email);
         message.setSubject("Mã xác nhận đặt lại mật khẩu");
         message.setText("Mã xác nhận của bạn là: " + resetCode + "\nMã này có hiệu lực trong 10 phút.");
-        mailSender.send(message);
+        try {
+            mailSender.send(message);
+            System.out.println("Email sent successfully to: " + email);
+        } catch (Exception e) {
+            System.err.println("Failed to send email: " + e.getMessage());
+            e.printStackTrace();
+            throw e; // Ném lại exception để frontend nhận được lỗi
+        }
     }
 
     public void resetPassword(String email, String code, String newPassword) {
