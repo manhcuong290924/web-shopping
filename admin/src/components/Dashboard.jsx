@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Dashboard = () => {
-  // Sample statistics data
-  const stats = [
-    { title: "Total Users", value: "1,234" },
-    { title: "Revenue", value: "$12,345" },
-    { title: "Active Products", value: "42" },
-  ];
+  const [stats, setStats] = useState([
+    { title: "Total Users", value: "Loading..." },
+    { title: "Revenue", value: "Loading..." },
+    { title: "Active Products", value: "Loading..." },
+  ]);
 
-  // Sample recent activity data
   const recentActivity = [
     { user: "U1", action: "User 1 completed an action", time: "1 hour ago" },
     { user: "U2", action: "User 2 completed an action", time: "2 hours ago" },
@@ -16,6 +15,53 @@ const Dashboard = () => {
     { user: "U4", action: "User 4 completed an action", time: "4 hours ago" },
     { user: "U5", action: "User 5 completed an action", time: "5 hours ago" },
   ];
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const admin = JSON.parse(sessionStorage.getItem("admin"));
+        const token = admin?.token;
+
+        // Lấy tổng số người dùng
+        const usersResponse = await axios.get("http://localhost:8080/api/users/total-users", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const totalUsers = usersResponse.data.totalUsers;
+
+        // Lấy tổng doanh thu từ các đơn hàng hoàn thành
+        const revenueResponse = await axios.get("http://localhost:8080/api/orders/total-revenue", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const totalRevenue = revenueResponse.data.totalRevenue;
+
+        // Lấy tổng số sản phẩm
+        const productsResponse = await axios.get("http://localhost:8080/api/products/total-products", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const totalProducts = productsResponse.data.totalProducts;
+
+        // Cập nhật stats
+        setStats((prevStats) =>
+          prevStats.map((stat) =>
+            stat.title === "Total Users"
+              ? { ...stat, value: totalUsers.toString() }
+              : stat.title === "Revenue"
+              ? { ...stat, value: `${totalRevenue.toLocaleString("vi-VN")} VNĐ` }
+              : stat.title === "Active Products"
+              ? { ...stat, value: totalProducts.toString() }
+              : stat
+          )
+        );
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        setStats((prevStats) =>
+          prevStats.map((stat) => ({ ...stat, value: "Error" }))
+        );
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">

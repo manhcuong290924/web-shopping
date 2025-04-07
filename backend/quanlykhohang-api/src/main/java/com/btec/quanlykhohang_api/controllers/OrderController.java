@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -188,5 +189,14 @@ public class OrderController {
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    // Thêm endpoint để lấy tổng doanh thu từ các đơn hàng hoàn thành
+    @GetMapping("/total-revenue")
+    public ResponseEntity<Map<String, Double>> getTotalRevenue() {
+        double totalRevenue = orderService.getTotalRevenue();
+        Map<String, Double> response = new HashMap<>();
+        response.put("totalRevenue", totalRevenue);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

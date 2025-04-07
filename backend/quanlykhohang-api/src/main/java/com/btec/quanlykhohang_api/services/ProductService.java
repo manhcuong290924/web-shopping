@@ -1,4 +1,3 @@
-// src/main/java/com/btec/quanlykhohang_api/services/ProductService.java
 package com.btec.quanlykhohang_api.services;
 
 import com.btec.quanlykhohang_api.entities.Product;
@@ -23,34 +22,28 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    // Lấy tất cả sản phẩm với phân trang
     public Page<Product> getAllProducts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findAll(pageable);
     }
 
-    // Lấy sản phẩm theo ID
     public Optional<Product> getProductById(String id) {
         return productRepository.findById(id);
     }
 
-    // Lấy sản phẩm theo danh mục
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategory(category);
     }
 
-    // Thêm sản phẩm mới
     public Product addProduct(Product product) {
         product.setCreatedDate(LocalDateTime.now());
         return productRepository.save(product);
     }
 
-    // Tìm kiếm sản phẩm theo tên
     public List<Product> getProductsByName(String name) {
         return productRepository.findByNameContainingIgnoreCase(name);
     }
 
-    // Cập nhật sản phẩm
     public Product updateProduct(String id, Product productDetails) {
         if (productRepository.existsById(id)) {
             productDetails.setId(id);
@@ -60,8 +53,12 @@ public class ProductService {
         return null;
     }
 
-    // Xóa sản phẩm
     public void deleteProduct(String id) {
         productRepository.deleteById(id);
+    }
+
+    // Thêm phương thức để tính tổng số sản phẩm
+    public long getTotalProducts() {
+        return productRepository.count();
     }
 }

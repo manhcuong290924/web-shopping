@@ -1,4 +1,3 @@
-// client/src/pages/AdminLoginPage.js
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -17,10 +16,10 @@ const AdminLoginPage = () => {
         email,
         password,
       });
-      const { email: adminEmail } = response.data;
+      const { email: adminEmail, token } = response.data; // Hỗ trợ token nếu backend trả về
 
-      // Lưu thông tin admin vào sessionStorage
-      sessionStorage.setItem("admin", JSON.stringify({ email: adminEmail }));
+      // Lưu thông tin admin và token (nếu có) vào sessionStorage
+      sessionStorage.setItem("admin", JSON.stringify({ email: adminEmail, token }));
 
       // Chuyển hướng đến trang dashboard
       const from = location.state?.from || "/dashboard";

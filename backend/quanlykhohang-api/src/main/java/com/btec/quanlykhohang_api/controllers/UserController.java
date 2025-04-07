@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -72,7 +73,6 @@ public class UserController {
         }
     }
 
-    // Thêm endpoint đăng nhập
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -81,7 +81,16 @@ public class UserController {
             User user = userService.signIn(email, password);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null); // Trả về lỗi nếu đăng nhập thất bại
+            return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    // Thêm endpoint để lấy tổng số người dùng
+    @GetMapping("/total-users")
+    public ResponseEntity<Map<String, Long>> getTotalUsers() {
+        long totalUsers = userService.getTotalUsers();
+        Map<String, Long> response = new HashMap<>();
+        response.put("totalUsers", totalUsers);
+        return ResponseEntity.ok(response);
     }
 }

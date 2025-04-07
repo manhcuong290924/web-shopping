@@ -28,7 +28,6 @@ public class UserService {
 
     private Map<String, String> resetCodes = new HashMap<>();
 
-    // Các phương thức hiện có
     public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -94,7 +93,6 @@ public class UserService {
         }
     }
 
-    // Thêm phương thức đăng nhập
     public User signIn(String email, String password) {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
@@ -103,6 +101,11 @@ public class UserService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Sai mật khẩu.");
         }
-        return user; // Trả về user nếu đăng nhập thành công
+        return user;
+    }
+
+    // Thêm phương thức để đếm tổng số người dùng
+    public long getTotalUsers() {
+        return userRepository.count();
     }
 }

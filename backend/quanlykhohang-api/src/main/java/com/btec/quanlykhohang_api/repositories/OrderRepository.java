@@ -6,7 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.List;
+
 public interface OrderRepository extends MongoRepository<Order, String> {
     @Query("{$or: [{email: {$regex: ?0, $options: 'i'}}, {phone: {$regex: ?0, $options: 'i'}}]}")
     Page<Order> findByEmailOrPhone(String search, Pageable pageable);
+
+    // Thêm phương thức tìm theo trạng thái
+    @Query("{ 'orderStatus': ?0 }")
+    List<Order> findByOrderStatus(String status);
 }

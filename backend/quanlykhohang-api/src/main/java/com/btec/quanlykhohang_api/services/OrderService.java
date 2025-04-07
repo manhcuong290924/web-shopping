@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,5 +56,18 @@ public class OrderService {
 
     public void deleteOrder(String id) {
         orderRepository.deleteById(id);
+    }
+
+    // Thêm phương thức tính tổng doanh thu từ đơn hàng hoàn thành
+    public double getTotalRevenue() {
+        List<Order> completedOrders = orderRepository.findAll().stream()
+                .filter(order -> "Hoàn thành".equals(order.getOrderStatus())) // Thay "COMPLETED" bằng "Hoàn thành"
+                .toList();
+
+        return completedOrders.stream()
+                .mapToDouble(order -> order.getProducts().stream()
+                        .mapToDouble(product -> product.getDiscountedPrice() * product.getQuantity())
+                        .sum())
+                .sum();
     }
 }

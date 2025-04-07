@@ -25,8 +25,8 @@ public class OpenAiController {
     @PostMapping("/generate")
     public ResponseEntity<ChatResponseDTO> generateResponse(@RequestBody ChatRequestDTO request) {
         try {
-            logger.info("Received request: userId={}, prompt={}", request.getUserId(), request.getPrompt());
-            String response = openAiService.generateResponse(request.getUserId(), request.getPrompt());
+            logger.info("Received request: prompt={}", request.getPrompt());
+            String response = openAiService.generateResponse(request.getPrompt());
             logger.info("Generated response: {}", response);
             return ResponseEntity.ok(new ChatResponseDTO(response));
         } catch (Exception e) {

@@ -1,8 +1,6 @@
 package com.btec.quanlykhohang_api.services;
 
 import com.btec.quanlykhohang_api.configs.OpenAiConfig;
-import com.btec.quanlykhohang_api.entities.ChatHistory;
-import com.btec.quanlykhohang_api.repositories.ChatHistoryRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -14,28 +12,33 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
-
 @Service
 public class OpenAiService {
 
     private static final Logger logger = LoggerFactory.getLogger(OpenAiService.class);
-    private final ChatHistoryRepository chatHistoryRepository;
     private final String apiKey;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private static final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+    private static final String FIRST_MESSAGE_RESPONSE = "Chào bạn! Chào mừng bạn đến với hệ thống hỗ trợ mua sắm trực tuyến của chúng tôi. Chúng tôi là nhóm phát triển thuộc lớp SE06203, trường BTEC, sẵn sàng giúp bạn tìm kiếm và chọn lựa sản phẩm tuyệt vời nhất!";
+    private static boolean isFirstMessage = true; // Biến tĩnh để kiểm tra lần đầu tiên
 
     @Autowired
-    public OpenAiService(ChatHistoryRepository chatHistoryRepository, OpenAiConfig openAiConfig) {
-        this.chatHistoryRepository = chatHistoryRepository;
+    public OpenAiService(OpenAiConfig openAiConfig) {
         this.apiKey = openAiConfig.getApiKey();
         this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
     }
 
-    public String generateResponse(String userId, String prompt) throws Exception {
-        logger.info("Generating response for userId={}, prompt={}", userId, prompt);
+    public String generateResponse(String prompt) throws Exception {
+        logger.info("Generating response for prompt={}", prompt);
+
+        // Kiểm tra nếu là tin nhắn đầu tiên
+        if (isFirstMessage) {
+            logger.info("First message detected");
+            isFirstMessage = false; // Đặt lại cờ sau lần đầu
+            return FIRST_MESSAGE_RESPONSE;
+        }
 
         // Tạo request body cho OpenAI API
         String requestBody = String.format(
@@ -61,10 +64,6 @@ public class OpenAiService {
 
         // Log phản hồi đã parse
         logger.info("Parsed response: {}", aiResponse);
-
-        // Lưu lịch sử chat
-        ChatHistory chatHistory = new ChatHistory(userId, prompt, aiResponse, LocalDateTime.now().toString());
-        chatHistoryRepository.save(chatHistory);
 
         return aiResponse;
     }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchCurrentUser, updateUserProfile, changePassword } from "../services/authService";
+import { fetchCurrentUser, updateUserProfile } from "../services/authService";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
@@ -16,11 +16,6 @@ const ProfilePage = () => {
     lastName: "",
     birthDay: "",
     phone: "",
-  });
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -57,13 +52,6 @@ const ProfilePage = () => {
     setSuccess("");
   };
 
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setPasswordData({ ...passwordData, [name]: value });
-    setError("");
-    setSuccess("");
-  };
-
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     if (!formData.firstName.trim() || !formData.lastName.trim()) {
@@ -76,37 +64,6 @@ const ProfilePage = () => {
       setUser(updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser)); // Cập nhật localStorage
       setSuccess("Cập nhật thông tin thành công!");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const handleChangePassword = async (e) => {
-    e.preventDefault();
-    if (!passwordData.currentPassword.trim() || !passwordData.newPassword.trim() || !passwordData.confirmPassword.trim()) {
-      setError("Vui lòng nhập đầy đủ thông tin mật khẩu.");
-      return;
-    }
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setError("Mật khẩu mới và xác nhận mật khẩu không khớp.");
-      return;
-    }
-    if (passwordData.newPassword.length < 6) {
-      setError("Mật khẩu mới phải có ít nhất 6 ký tự.");
-      return;
-    }
-
-    try {
-      await changePassword({
-        currentPassword: passwordData.currentPassword,
-        newPassword: passwordData.newPassword,
-      });
-      setSuccess("Đổi mật khẩu thành công! Vui lòng đăng nhập lại.");
-      setTimeout(() => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        navigate("/dang-nhap");
-      }, 2000);
     } catch (err) {
       setError(err.message);
     }
@@ -168,236 +125,129 @@ const ProfilePage = () => {
                 </div>
               )}
               {user && (
-                <>
-                  {/* Form cập nhật thông tin cá nhân */}
-                  <form onSubmit={handleUpdateProfile}>
-                    <div style={{ marginBottom: "15px" }}>
-                      <label
-                        style={{
-                          display: "block",
-                          fontSize: "14px",
-                          color: "#333",
-                          marginBottom: "5px",
-                        }}
-                      >
-                        Họ <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        placeholder="Nhập họ của bạn"
-                        style={{
-                          width: "100%",
-                          padding: "10px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          fontSize: "14px",
-                        }}
-                        required
-                      />
-                    </div>
-                    <div style={{ marginBottom: "15px" }}>
-                      <label
-                        style={{
-                          display: "block",
-                          fontSize: "14px",
-                          color: "#333",
-                          marginBottom: "5px",
-                        }}
-                      >
-                        Tên <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        placeholder="Nhập tên của bạn"
-                        style={{
-                          width: "100%",
-                          padding: "10px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          fontSize: "14px",
-                        }}
-                        required
-                      />
-                    </div>
-                    <div style={{ marginBottom: "15px" }}>
-                      <label
-                        style={{
-                          display: "block",
-                          fontSize: "14px",
-                          color: "#333",
-                          marginBottom: "5px",
-                        }}
-                      >
-                        Ngày sinh
-                      </label>
-                      <input
-                        type="date"
-                        name="birthDay"
-                        value={formData.birthDay}
-                        onChange={handleInputChange}
-                        style={{
-                          width: "100%",
-                          padding: "10px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          fontSize: "14px",
-                        }}
-                      />
-                    </div>
-                    <div style={{ marginBottom: "15px" }}>
-                      <label
-                        style={{
-                          display: "block",
-                          fontSize: "14px",
-                          color: "#333",
-                          marginBottom: "5px",
-                        }}
-                      >
-                        Số điện thoại
-                      </label>
-                      <input
-                        type="text"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder="Nhập số điện thoại"
-                        style={{
-                          width: "100%",
-                          padding: "10px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          fontSize: "14px",
-                        }}
-                      />
-                    </div>
-                    <button
-                      type="submit"
+                <form onSubmit={handleUpdateProfile}>
+                  <div style={{ marginBottom: "15px" }}>
+                    <label
                       style={{
-                        backgroundColor: "#ff6200",
-                        color: "white",
-                        padding: "10px 20px",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        width: "100%",
-                        marginTop: "10px",
+                        display: "block",
+                        fontSize: "14px",
+                        color: "#333",
+                        marginBottom: "5px",
                       }}
                     >
-                      CẬP NHẬT THÔNG TIN
-                    </button>
-                  </form>
-
-                  {/* Form đổi mật khẩu */}
-                  <h2 style={{ fontSize: "20px", fontWeight: "bold", marginTop: "30px", marginBottom: "20px" }}>
-                    ĐỔI MẬT KHẨU
-                  </h2>
-                  <form onSubmit={handleChangePassword}>
-                    <div style={{ marginBottom: "15px" }}>
-                      <label
-                        style={{
-                          display: "block",
-                          fontSize: "14px",
-                          color: "#333",
-                          marginBottom: "5px",
-                        }}
-                      >
-                        Mật khẩu hiện tại <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        type="password"
-                        name="currentPassword"
-                        value={passwordData.currentPassword}
-                        onChange={handlePasswordChange}
-                        placeholder="Nhập mật khẩu hiện tại"
-                        style={{
-                          width: "100%",
-                          padding: "10px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          fontSize: "14px",
-                        }}
-                        required
-                      />
-                    </div>
-                    <div style={{ marginBottom: "15px" }}>
-                      <label
-                        style={{
-                          display: "block",
-                          fontSize: "14px",
-                          color: "#333",
-                          marginBottom: "5px",
-                        }}
-                      >
-                        Mật khẩu mới <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        type="password"
-                        name="newPassword"
-                        value={passwordData.newPassword}
-                        onChange={handlePasswordChange}
-                        placeholder="Nhập mật khẩu mới"
-                        style={{
-                          width: "100%",
-                          padding: "10px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          fontSize: "14px",
-                        }}
-                        required
-                      />
-                    </div>
-                    <div style={{ marginBottom: "15px" }}>
-                      <label
-                        style={{
-                          display: "block",
-                          fontSize: "14px",
-                          color: "#333",
-                          marginBottom: "5px",
-                        }}
-                      >
-                        Xác nhận mật khẩu <span style={{ color: "red" }}>*</span>
-                      </label>
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        value={passwordData.confirmPassword}
-                        onChange={handlePasswordChange}
-                        placeholder="Nhập lại mật khẩu mới"
-                        style={{
-                          width: "100%",
-                          padding: "10px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                          fontSize: "14px",
-                        }}
-                        required
-                      />
-                    </div>
-                    <button
-                      type="submit"
+                      Họ <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      placeholder="Nhập họ của bạn"
                       style={{
-                        backgroundColor: "#ff6200",
-                        color: "white",
-                        padding: "10px 20px",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
                         width: "100%",
-                        marginTop: "10px",
+                        padding: "10px",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                        fontSize: "14px",
+                      }}
+                      required
+                    />
+                  </div>
+                  <div style={{ marginBottom: "15px" }}>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        color: "#333",
+                        marginBottom: "5px",
                       }}
                     >
-                      ĐỔI MẬT KHẨU
-                    </button>
-                  </form>
-                </>
+                      Tên <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      placeholder="Nhập tên của bạn"
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                        fontSize: "14px",
+                      }}
+                      required
+                    />
+                  </div>
+                  <div style={{ marginBottom: "15px" }}>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        color: "#333",
+                        marginBottom: "5px",
+                      }}
+                    >
+                      Ngày sinh
+                    </label>
+                    <input
+                      type="date"
+                      name="birthDay"
+                      value={formData.birthDay}
+                      onChange={handleInputChange}
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                        fontSize: "14px",
+                      }}
+                    />
+                  </div>
+                  <div style={{ marginBottom: "15px" }}>
+                    <label
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        color: "#333",
+                        marginBottom: "5px",
+                      }}
+                    >
+                      Số điện thoại
+                    </label>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="Nhập số điện thoại"
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                        fontSize: "14px",
+                      }}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    style={{
+                      backgroundColor: "#ff6200",
+                      color: "white",
+                      padding: "10px 20px",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      width: "100%",
+                      marginTop: "10px",
+                    }}
+                  >
+                    CẬP NHẬT THÔNG TIN
+                  </button>
+                </form>
               )}
             </div>
           </main>

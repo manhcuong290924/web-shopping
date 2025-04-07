@@ -1,8 +1,6 @@
-// src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import SideBar from "./components/SideBar";
-import Dashboard from "./components/Dashboard";
 import UserPage from "./pages/UserPage";
 import ContactPage from "./pages/ContactPage";
 import NewsPage from "./pages/NewsPage";
@@ -18,11 +16,15 @@ const ProtectedAdminRoutes = ({ children }) => {
 
   React.useEffect(() => {
     const admin = JSON.parse(sessionStorage.getItem("admin"));
+
+    // Kiểm tra trạng thái đăng nhập
     if (!admin) {
+      // Nếu không có admin trong sessionStorage, chuyển hướng về login
       navigate("/admin/login", { state: { from: location.pathname } });
     }
-  }, [navigate, location]);
+  }, [navigate, location]); // Giữ dependency để kiểm tra khi location thay đổi
 
+  // Không xóa sessionStorage khi reload hoặc đóng tab nữa
   return children;
 };
 
@@ -45,7 +47,6 @@ function App() {
                   <Route path="/news" element={<NewsPage />} />
                   <Route path="/products" element={<ProductPage />} />
                   <Route path="/orders" element={<AdminOrders />} />
-                  <Route path="/logout" element={<div>Logout Page</div>} />
                 </Routes>
               </div>
             </ProtectedAdminRoutes>
