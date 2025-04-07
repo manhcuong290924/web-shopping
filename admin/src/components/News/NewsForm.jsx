@@ -1,5 +1,7 @@
 // src/components/News/NewsForm.js
 import React, { useState, useEffect } from "react";
+import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css"; // Import CSS của SunEditor
 
 const NewsForm = ({ news, onSave, onCancel, isEdit = false }) => {
   const [formData, setFormData] = useState({
@@ -39,9 +41,9 @@ const NewsForm = ({ news, onSave, onCancel, isEdit = false }) => {
     }
   };
 
-  const handleContentChange = (index, value) => {
+  const handleContentChange = (index, content) => {
     const newContent = [...formData.content];
-    newContent[index] = value;
+    newContent[index] = content;
     setFormData({ ...formData, content: newContent });
   };
 
@@ -76,9 +78,26 @@ const NewsForm = ({ news, onSave, onCancel, isEdit = false }) => {
     onSave(dataToSend);
   };
 
+  // Cấu hình tùy chọn cho SunEditor
+  const editorOptions = {
+    buttonList: [
+      ["undo", "redo"],
+      ["font", "fontSize", "formatBlock"],
+      ["bold", "underline", "italic", "strike", "subscript", "superscript"],
+      ["removeFormat"],
+      ["fontColor", "hiliteColor"],
+      ["outdent", "indent"],
+      ["align", "horizontalRule", "list", "table"],
+      ["link", "image", "video"],
+      ["fullScreen", "showBlocks", "codeView"],
+      ["preview", "print"],
+    ],
+    height: "200px",
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl max-h-[80vh] overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">{isEdit ? "Chỉnh sửa tin tức" : "Thêm tin tức mới"}</h2>
 
         {error && (
@@ -125,18 +144,17 @@ const NewsForm = ({ news, onSave, onCancel, isEdit = false }) => {
           <div>
             <label className="block text-sm text-gray-700 mb-1">Nội dung</label>
             {formData.content.map((paragraph, index) => (
-              <div key={index} className="flex items-center gap-2 mb-2">
-                <textarea
-                  value={typeof paragraph === "string" ? paragraph : ""}
-                  onChange={(e) => handleContentChange(index, e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  rows="3"
+              <div key={index} className="flex items-start gap-2 mb-2">
+                <SunEditor
+                  setContents={typeof paragraph === "string" ? paragraph : ""}
+                  onChange={(content) => handleContentChange(index, content)}
+                  setOptions={editorOptions}
                 />
                 {formData.content.length > 1 && (
                   <button
                     type="button"
                     onClick={() => removeContentParagraph(index)}
-                    className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                    className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 mt-2"
                   >
                     Xóa
                   </button>
