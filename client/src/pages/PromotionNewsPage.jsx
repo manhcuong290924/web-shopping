@@ -4,8 +4,7 @@ import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import PromotionNewsContent from "../components/PromotionNewsContent";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
-import "../styles/custom-layout.scss";
+
 
 const PromotionNewsPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +40,6 @@ const PromotionNewsPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

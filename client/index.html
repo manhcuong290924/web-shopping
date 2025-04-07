@@ -9,5 +9,15 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Tích hợp Dialogflow Messenger với logo tùy chỉnh -->
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+    <df-messenger
+      intent="WELCOME"
+      chat-title="ChatBot"
+      agent-id="9587de7a-7003-4856-ac9e-bfcae6426d72"
+      language-code="vi"
+      chat-icon="/src/logo.jpg"
+    ></df-messenger>
   </body>
 </html>

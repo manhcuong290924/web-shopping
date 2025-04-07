@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import BabyPageSection from "../components/BabyPageSection";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon";
 import { fetchBabyProducts } from "../services/babyService";
 import "../styles/custom-layout.scss";
 
@@ -108,7 +107,6 @@ const BabyPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

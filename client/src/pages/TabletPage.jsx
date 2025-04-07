@@ -5,9 +5,8 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import TabletSection from "../components/TabletSection";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import { fetchTabletProducts } from "../services/tabletService";
-import "../styles/custom-layout.scss";
+
 
 const TabletPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -89,7 +88,6 @@ const TabletPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

@@ -5,7 +5,6 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ContactForm from "../components/ContactForm";
 import ContactMap from "../components/ContactMap";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import "../styles/custom-layout.scss";
 
 const ContactPage = () => {
@@ -43,7 +42,6 @@ const ContactPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

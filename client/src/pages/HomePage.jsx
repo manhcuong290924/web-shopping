@@ -10,7 +10,6 @@ import Slide from "../components/Slide";
 import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
 import "../styles/custom-layout.scss";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +37,6 @@ const HomePage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây, nó sẽ hiển thị như một biểu tượng chatbot nổi */}
     </div>
   );
 };

@@ -6,9 +6,8 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import StationerySection from "../components/StationerySection";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon";
 import { fetchStationeryProducts } from "../services/stationeryService";
-import "../styles/custom-layout.scss";
+
 
 const StationeryPage = () => {
   const { subCategory } = useParams();
@@ -110,7 +109,6 @@ const StationeryPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

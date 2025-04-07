@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import FurnitureSection from "../components/FurnitureSection";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
 import { fetchFurnitureProducts } from "../services/furnitureService";
 import "../styles/custom-layout.scss";
 
@@ -110,7 +109,6 @@ const FurniturePage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon */}
     </div>
   );
 };

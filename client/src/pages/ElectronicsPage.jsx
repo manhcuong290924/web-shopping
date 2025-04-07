@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ProductList from "../components/ProductList";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import { fetchElectronicsProducts } from "../services/electronicsService";
 import "../styles/custom-layout.scss";
 
@@ -104,7 +103,6 @@ const ElectronicsPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

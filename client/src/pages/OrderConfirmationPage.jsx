@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react"; // Thêm useState vào import
 import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/SideBar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import OrderConfirmation from "../components/OrderConfirmation";
-import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
 import "../styles/custom-layout.scss";
 
 const OrderConfirmationPage = () => {
@@ -41,7 +40,6 @@ const OrderConfirmationPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import MensClothingSection from "../components/MensClothingSection";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon";
 import { fetchFashionProducts } from "../services/fashionService"; // Thêm fetchFashionProducts
 import "../styles/custom-layout.scss";
 
@@ -111,7 +110,6 @@ const MensClothingPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

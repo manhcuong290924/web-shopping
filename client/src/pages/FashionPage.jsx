@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import FashionPageSection from "../components/FashionPageSection";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon";
 import { fetchFashionProducts } from "../services/fashionService";
 import "../styles/custom-layout.scss";
 
@@ -108,7 +107,6 @@ const FashionPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

@@ -5,8 +5,7 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
-import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
-import "../styles/custom-layout.scss";
+
 
 const RegisterPage = () => {
   const [isOpen, setIsOpen] = useState(false); // Thêm trạng thái cho SideBar
@@ -270,7 +269,6 @@ const RegisterPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

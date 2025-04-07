@@ -5,7 +5,6 @@ import SideBar from "../components/SideBar"; // Giữ nguyên SideBar với "B" 
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import CartItem from "../components/CartItem";
-import ChatBotIcon from "../components/ChatBotIcon";
 import "../styles/custom-layout.scss";
 
 const CartPage = () => {
@@ -96,7 +95,6 @@ const CartPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

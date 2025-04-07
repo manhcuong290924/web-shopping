@@ -4,7 +4,6 @@ import SideBar from "../components/SideBar";
 import IntroContent from "../components/IntroContent";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
-import ChatBotIcon from "../components/ChatBotIcon"; 
 import "../styles/custom-layout.scss";
 
 const IntroPage = () => {
@@ -41,7 +40,6 @@ const IntroPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

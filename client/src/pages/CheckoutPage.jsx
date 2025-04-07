@@ -5,7 +5,6 @@ import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import CheckoutForm from "../components/CheckoutForm";
-import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
 import "../styles/custom-layout.scss";
 
 const CheckoutPage = () => {
@@ -58,7 +57,6 @@ const CheckoutPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

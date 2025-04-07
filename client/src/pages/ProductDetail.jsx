@@ -5,9 +5,8 @@ import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ProductDescriptionAndRelated from "../components/ProductDescriptionAndRelated";
-import ChatBotIcon from "../components/ChatBotIcon"; // Thêm ChatBotIcon
 import { fetchProductById } from "../services/productService";
-import "../styles/custom-layout.scss";
+
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -197,7 +196,6 @@ const ProductDetail = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

@@ -5,7 +5,6 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import LapTopSection from "../components/LapTopSection";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import { fetchLaptopProducts } from "../services/laptopService";
 import "../styles/custom-layout.scss";
 
@@ -89,7 +88,6 @@ const LapTopPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

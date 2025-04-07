@@ -5,7 +5,6 @@ import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
-import ChatBotIcon from "../components/ChatBotIcon";
 import "../styles/custom-layout.scss";
 
 const LoginPage = () => {
@@ -192,7 +191,6 @@ const LoginPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

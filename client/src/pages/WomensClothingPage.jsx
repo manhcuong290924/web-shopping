@@ -6,9 +6,8 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import WomensClothingSection from "../components/WomensClothingSection";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon";
 import { fetchFashionProducts } from "../services/fashionService"; // Thêm fetchFashionProducts
-import "../styles/custom-layout.scss";
+
 
 const WomensClothingPage = () => {
   const { subCategory } = useParams();
@@ -111,7 +110,6 @@ const WomensClothingPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon />
     </div>
   );
 };

@@ -5,9 +5,8 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import ProductList from "../components/ProductList";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import { fetchProducts } from "../services/productService";
-import "../styles/custom-layout.scss";
+
 
 const ProductPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -85,7 +84,6 @@ const ProductPage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };

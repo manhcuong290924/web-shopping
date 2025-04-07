@@ -5,7 +5,6 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb";
 import PhoneSection from "../components/PhoneSection";
 import Pagination from "../components/Pagination";
-import ChatBotIcon from "../components/ChatBotIcon"; // Import ChatBotIcon
 import { fetchPhoneProducts } from "../services/phoneService";
 import "../styles/custom-layout.scss";
 
@@ -89,7 +88,6 @@ const PhonePage = () => {
         </div>
       </div>
       <Footer />
-      <ChatBotIcon /> {/* Thêm ChatBotIcon vào đây */}
     </div>
   );
 };
