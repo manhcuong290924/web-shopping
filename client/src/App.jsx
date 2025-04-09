@@ -1,6 +1,6 @@
 import './styles/index.scss';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react'; // Thêm useEffect để xử lý sự kiện
+import { useEffect } from 'react';
 import HomePage from './pages/HomePage';
 import IntroPage from './pages/IntroPage';
 import ProductPage from './pages/ProductPage';
@@ -29,20 +29,17 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ProfilePage from './pages/ProfilePage';
+import PurchaseHistoryPage from './pages/PurchaseHistoryPage'; // Thêm import cho PurchaseHistoryPage
 
 function App() {
-  // Sử dụng useEffect để lắng nghe sự kiện beforeunload
   useEffect(() => {
     const handleBeforeUnload = () => {
-      // Xóa thông tin đăng nhập từ localStorage khi trang được load lại
       localStorage.removeItem("token");
       localStorage.removeItem("user");
     };
 
-    // Gắn sự kiện beforeunload
     window.addEventListener("beforeunload", handleBeforeUnload);
 
-    // Cleanup sự kiện khi component unmount
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
@@ -81,6 +78,7 @@ function App() {
         <Route path="/dang-ky" element={<RegisterPage />} />
         <Route path="/quen-mat-khau" element={<ForgotPasswordPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/lich-su-mua-hang" element={<PurchaseHistoryPage />} /> {/* Thêm route cho PurchaseHistoryPage */}
         <Route path="*" element={<div>404 - Trang không tồn tại</div>} />
       </Routes>
     </Router>

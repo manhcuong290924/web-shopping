@@ -89,6 +89,7 @@ public class ProductController {
             @RequestParam(value = "category", required = false) String category,
             @RequestParam(value = "subCategory", required = false) String subCategory,
             @RequestParam(value = "desc", required = false) String desc,
+            @RequestParam(value = "quantity", required = false, defaultValue = "0") int quantity,
             HttpServletRequest request
     ) {
         try {
@@ -100,6 +101,7 @@ public class ProductController {
             product.setDiscountedPrice(discountedPrice);
             product.setDiscountPercentage(discountPercentage);
             product.setDesc(desc);
+            product.setQuantity(quantity);
 
             if (image != null && !image.isEmpty()) {
                 String uploadDir = "uploads/";
@@ -139,6 +141,7 @@ public class ProductController {
             @RequestParam(value = "category", required = false) String category,
             @RequestParam(value = "subCategory", required = false) String subCategory,
             @RequestParam(value = "desc", required = false) String desc,
+            @RequestParam(value = "quantity", required = false, defaultValue = "0") int quantity,
             HttpServletRequest request
     ) {
         try {
@@ -150,6 +153,7 @@ public class ProductController {
             product.setDiscountedPrice(discountedPrice);
             product.setDiscountPercentage(discountPercentage);
             product.setDesc(desc);
+            product.setQuantity(quantity);
 
             if (image != null && !image.isEmpty()) {
                 String uploadDir = "uploads/";
@@ -198,12 +202,20 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    // Thêm endpoint để lấy tổng số sản phẩm
     @GetMapping("/total-products")
     public ResponseEntity<Map<String, Long>> getTotalProducts() {
         long totalProducts = productService.getTotalProducts();
         Map<String, Long> response = new HashMap<>();
         response.put("totalProducts", totalProducts);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-quantity")
+    public ResponseEntity<?> getProductsByQuantity(
+            @RequestParam int minQuantity,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<Product> products = productService.getProductsByQuantity(minQuantity, page, size);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }

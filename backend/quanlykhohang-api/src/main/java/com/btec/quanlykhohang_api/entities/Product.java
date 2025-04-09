@@ -1,4 +1,3 @@
-// src/main/java/com/btec/quanlykhohang_api/entities/Product.java
 package com.btec.quanlykhohang_api.entities;
 
 import org.springframework.data.annotation.Id;
@@ -24,8 +23,8 @@ public class Product {
     private double discountPercentage;
     private LocalDateTime createdDate;
     private String desc;
+    private int quantity;
 
-    // Danh sách category cố định
     private static final List<String> VALID_CATEGORIES = Arrays.asList(
             "Điện tử",
             "Sản phẩm nổi bật",
@@ -37,7 +36,6 @@ public class Product {
             "Mỹ Phẩm"
     );
 
-    // Danh sách subCategory tương ứng với từng category
     private static final Map<String, List<String>> SUB_CATEGORY_MAP = new HashMap<>();
 
     static {
@@ -51,7 +49,6 @@ public class Product {
         SUB_CATEGORY_MAP.put("Mỹ Phẩm", Arrays.asList());
     }
 
-    // Getters và Setters
     public String getId() {
         return id;
     }
@@ -157,5 +154,16 @@ public class Product {
             throw new IllegalArgumentException("Description is required");
         }
         this.desc = desc;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantity must be non-negative");
+        }
+        this.quantity = quantity;
     }
 }

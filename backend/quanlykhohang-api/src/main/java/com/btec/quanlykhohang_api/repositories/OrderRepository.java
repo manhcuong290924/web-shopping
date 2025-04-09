@@ -12,7 +12,6 @@ public interface OrderRepository extends MongoRepository<Order, String> {
     @Query("{$or: [{email: {$regex: ?0, $options: 'i'}}, {phone: {$regex: ?0, $options: 'i'}}]}")
     Page<Order> findByEmailOrPhone(String search, Pageable pageable);
 
-    // Thêm phương thức tìm theo trạng thái
     @Query("{ 'orderStatus': ?0 }")
     List<Order> findByOrderStatus(String status);
 }

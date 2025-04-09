@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,23 +30,13 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByCategory(category);
-    }
-
     public Product addProduct(Product product) {
-        product.setCreatedDate(LocalDateTime.now());
         return productRepository.save(product);
-    }
-
-    public List<Product> getProductsByName(String name) {
-        return productRepository.findByNameContainingIgnoreCase(name);
     }
 
     public Product updateProduct(String id, Product productDetails) {
         if (productRepository.existsById(id)) {
             productDetails.setId(id);
-            productDetails.setCreatedDate(LocalDateTime.now());
             return productRepository.save(productDetails);
         }
         return null;
@@ -57,8 +46,20 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    // Thêm phương thức để tính tổng số sản phẩm
+    public List<Product> getProductsByCategory(String category) {
+        return productRepository.findByCategory(category);
+    }
+
+    public List<Product> getProductsByName(String name) {
+        return productRepository.findByNameContainingIgnoreCase(name); // Sửa từ findByNameContaining thành findByNameContainingIgnoreCase
+    }
+
     public long getTotalProducts() {
         return productRepository.count();
+    }
+
+    public Page<Product> getProductsByQuantity(int minQuantity, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByQuantityGreaterThanEqual(minQuantity, pageable);
     }
 }

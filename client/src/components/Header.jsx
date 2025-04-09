@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Menu, X, ChevronRight, ChevronDown, Search, User, LogOut } from 'lucide-react';
+import { ShoppingCart, Menu, X, ChevronRight, ChevronDown, Search, User, LogOut, History } from 'lucide-react';
 import {
   getUserFromStorage,
   getCartFromStorage,
@@ -25,11 +25,13 @@ const Header = () => {
   const [user, setUser] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [searchPopupOpen, setSearchPopupOpen] = useState(false);
-  const searchPopupRef = useRef(null); // Thêm ref để tham chiếu popup tìm kiếm
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const searchPopupRef = useRef(null);
+  const userMenuRef = useRef(null);
 
   useEffect(() => {
     const storedUser = getUserFromStorage();
-    console.log("Stored user on mount:", storedUser); // Debug giá trị user
+    console.log("Stored user on mount:", storedUser);
     setCartItems(getCartFromStorage());
     setUser(storedUser);
 
@@ -42,22 +44,24 @@ const Header = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Thêm useEffect để xử lý nhấp chuột bên ngoài
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchPopupRef.current && !searchPopupRef.current.contains(event.target)) {
         setSearchPopupOpen(false);
       }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
     };
 
-    if (searchPopupOpen) {
+    if (searchPopupOpen || userMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [searchPopupOpen]);
+  }, [searchPopupOpen, userMenuOpen]);
 
   const debouncedSearch = debounce(async (query) => {
     if (query.trim() === '') {
@@ -108,23 +112,32 @@ const Header = () => {
   };
 
   const handleUserClick = () => {
-    console.log("User clicked, user state:", user); // Debug sự kiện click
     if (!user) {
       navigate('/dang-nhap');
     } else {
-      navigate('/profile');
+      setUserMenuOpen(!userMenuOpen); // Chỉ mở menu nếu đã đăng nhập
     }
   };
 
   const handleLogout = () => {
     logout();
     setUser(null);
+    setUserMenuOpen(false);
     navigate('/');
   };
 
   const handleProductClick = (id) => {
     setSearchPopupOpen(false);
     navigate(`/products/${id}`);
+  };
+
+  const handleHistoryClick = () => {
+    if (!user) {
+      navigate('/dang-nhap');
+    } else {
+      setUserMenuOpen(false);
+      navigate('/lich-su-mua-hang');
+    }
   };
 
   const cartItemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -179,7 +192,7 @@ const Header = () => {
       <div className="bg-white p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <a href="/">
-            <img src="/src/logo.jpg" alt="Your Logo" className="h-10 w-auto" />
+            <img src="/src/styles/image/logo.jpg" alt="Your Logo" className="h-10 w-auto" />
           </a>
 
           <form className="flex-1 mx-4 max-w-xl relative">
@@ -197,7 +210,7 @@ const Header = () => {
             </div>
             {searchPopupOpen && (
               <div
-                ref={searchPopupRef} // Gắn ref vào popup tìm kiếm
+                ref={searchPopupRef}
                 className="absolute top-12 left-0 w-full max-w-xl bg-white shadow-lg rounded-lg z-50 p-4 max-h-80 overflow-y-auto"
                 style={{ border: '1px solid #e5e5e5' }}
               >
@@ -223,7 +236,7 @@ const Header = () => {
           </form>
 
           <div className="flex items-center gap-8">
-            <div className="flex items-center gap-2">
+            <div className="relative flex items-center gap-2">
               <div
                 className="flex items-center cursor-pointer"
                 onClick={handleUserClick}
@@ -236,14 +249,34 @@ const Header = () => {
                   </span>
                 )}
               </div>
-              {user && (
+              {user && userMenuOpen && (
                 <div
-                  className="cursor-pointer"
-                  onClick={handleLogout}
-                  title="Đăng xuất"
-                  style={{ pointerEvents: "auto" }}
+                  ref={userMenuRef}
+                  className="absolute top-12 right-0 w-48 bg-white shadow-lg rounded-lg z-50 p-2"
+                  style={{ border: '1px solid #e5e5e5' }}
                 >
-                  <LogOut className="w-6 h-6 text-red-500 hover:text-red-700" />
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    onClick={() => setUserMenuOpen(false)}
+                  >
+                    <User className="w-5 h-5" />
+                    Thông tin cá nhân
+                  </Link>
+                  <div
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleHistoryClick}
+                  >
+                    <History className="w-5 h-5" />
+                    Lịch sử mua hàng
+                  </div>
+                  <div
+                    className="flex items-center gap-2 px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="w-5 h-5" />
+                    Đăng xuất
+                  </div>
                 </div>
               )}
             </div>
@@ -440,10 +473,8 @@ const Header = () => {
                                   className="flex items-center flex-1"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    console.log('Trước khi nhấn:', activeSubMenu);
                                     const newActiveSubMenu = activeSubMenu === sidebarIndex ? null : sidebarIndex;
                                     setActiveSubMenu(newActiveSubMenu);
-                                    console.log('Sau khi nhấn:', newActiveSubMenu);
                                   }}
                                 >
                                   {sidebarItem.icon && <sidebarItem.icon className="w-5 h-5 mr-2 text-white" />}
@@ -453,10 +484,8 @@ const Header = () => {
                                   className={`w-5 h-5 text-white transition-transform duration-200 ${activeSubMenu === sidebarIndex ? 'rotate-180' : ''}`}
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    console.log('Trước khi nhấn ChevronDown:', activeSubMenu);
                                     const newActiveSubMenu = activeSubMenu === sidebarIndex ? null : sidebarIndex;
                                     setActiveSubMenu(newActiveSubMenu);
-                                    console.log('Sau khi nhấn ChevronDown:', newActiveSubMenu);
                                   }}
                                 />
                               </div>

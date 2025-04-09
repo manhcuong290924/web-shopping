@@ -62,7 +62,6 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody Order order, HttpServletRequest request) {
         try {
-            // Kiểm tra các trường bắt buộc
             if (order.getEmail() == null || order.getEmail().trim().isEmpty()) {
                 throw new IllegalArgumentException("Email is required");
             }
@@ -85,7 +84,6 @@ public class OrderController {
                 throw new IllegalArgumentException("Payment method is required");
             }
 
-            // Kiểm tra từng sản phẩm trong danh sách
             for (var product : order.getProducts()) {
                 if (product.getProductName() == null || product.getProductName().trim().isEmpty()) {
                     throw new IllegalArgumentException("Product name is required");
@@ -191,12 +189,25 @@ public class OrderController {
         }
     }
 
-    // Thêm endpoint để lấy tổng doanh thu từ các đơn hàng hoàn thành
     @GetMapping("/total-revenue")
     public ResponseEntity<Map<String, Double>> getTotalRevenue() {
         double totalRevenue = orderService.getTotalRevenue();
         Map<String, Double> response = new HashMap<>();
         response.put("totalRevenue", totalRevenue);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/sold-quantity/{productId}")
+    public ResponseEntity<Map<String, Object>> getSoldQuantity(@PathVariable String productId) {
+        try {
+            int soldQuantity = orderService.getSoldQuantity(productId);
+            Map<String, Object> response = new HashMap<>();
+            response.put("soldQuantity", soldQuantity);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("error", "Failed to fetch sold quantity: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -1,7 +1,6 @@
 import React from "react";
 
 const OrderTable = ({ orders, onDelete, onEdit }) => {
-  // Hàm tính tổng số tiền cho một đơn hàng
   const calculateTotal = (products) => {
     return products.reduce((sum, product) => {
       return sum + (product.discountedPrice * product.quantity);
@@ -20,7 +19,7 @@ const OrderTable = ({ orders, onDelete, onEdit }) => {
               <tr className="bg-gray-100 border-b">
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">ID</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Email</th>
-                <th className="p-3 text-left text-sm font-semibold text-gray-600">Full Name</th> {/* Gộp thành Full Name */}
+                <th className="p-3 text-left text-sm font-semibold text-gray-600">Full Name</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Phone</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Address</th>
                 <th className="p-3 text-left text-sm font-semibold text-gray-600">Note</th>
@@ -37,7 +36,7 @@ const OrderTable = ({ orders, onDelete, onEdit }) => {
                 <tr key={order.id} className="border-b hover:bg-gray-50">
                   <td className="p-3 text-sm text-gray-700">{index + 1}</td>
                   <td className="p-3 text-sm text-gray-700">{order.email}</td>
-                  <td className="p-3 text-sm text-gray-700">{`${order.firstName} ${order.lastName}`}</td> {/* Gộp firstName và lastName */}
+                  <td className="p-3 text-sm text-gray-700">{`${order.firstName} ${order.lastName}`}</td>
                   <td className="p-3 text-sm text-gray-700">{order.phone}</td>
                   <td className="p-3 text-sm text-gray-700">{order.address}</td>
                   <td className="p-3 text-sm text-gray-700">{order.note || "N/A"}</td>
@@ -56,7 +55,11 @@ const OrderTable = ({ orders, onDelete, onEdit }) => {
                           ? "bg-yellow-100 text-yellow-800"
                           : order.orderStatus === "Đang giao"
                           ? "bg-blue-100 text-blue-800"
-                          : "bg-green-100 text-green-800"
+                          : order.orderStatus === "Hoàn thành"
+                          ? "bg-green-100 text-green-800"
+                          : order.orderStatus === "Đơn hàng bị hủy"
+                          ? "bg-red-100 text-red-800" // Thêm màu cho trạng thái "Đơn hàng bị hủy"
+                          : "bg-gray-100 text-gray-800"
                       }`}
                     >
                       {order.orderStatus}

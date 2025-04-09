@@ -15,3 +15,4 @@ public interface ContactRepository extends MongoRepository<Contact, String> {
     @Query("{ $or: [ { 'name': { $regex: ?0, $options: 'i' } }, { 'email': { $regex: ?0, $options: 'i' } } ] }")
     List<Contact> findByNameOrEmail(String searchTerm);
 }
+

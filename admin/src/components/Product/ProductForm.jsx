@@ -1,4 +1,3 @@
-// src/components/Product/ProductForm.js
 import React, { useState, useEffect } from "react";
 
 const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
@@ -11,6 +10,7 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
     discountedPrice: product?.discountedPrice || 0,
     discountPercentage: product?.discountPercentage || 0,
     desc: product?.desc || "",
+    quantity: product?.quantity || 0, // Thêm quantity
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(product?.imageUrl || "");
@@ -27,7 +27,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
   ]);
   const [subCategories, setSubCategories] = useState([]);
 
-  // Định nghĩa danh sách subCategory tương ứng với từng category
   const subCategoryMap = {
     "Điện tử": ["Điện thoại", "Laptop", "Máy tính bảng"],
     "Thời Trang": ["Quần áo nữ", "Quần áo nam"],
@@ -39,7 +38,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
     "Mỹ Phẩm": [],
   };
 
-  // Cập nhật subCategory khi có product (trường hợp chỉnh sửa)
   useEffect(() => {
     if (product && product.category) {
       const subCats = subCategoryMap[product.category] || [];
@@ -47,24 +45,19 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
     }
   }, [product]);
 
-  // Xử lý khi thay đổi category
   const handleCategoryChange = (e) => {
     const selectedCategory = e.target.value;
     setFormData({ ...formData, category: selectedCategory, subCategory: "" });
-
-    // Cập nhật danh sách subCategory
     const subCats = subCategoryMap[selectedCategory] || [];
     setSubCategories(subCats);
   };
 
-  // Xử lý thay đổi các trường trong form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: name === "quantity" ? parseInt(value) || 0 : value });
     setError("");
   };
 
-  // Xử lý upload file
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -75,7 +68,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
     }
   };
 
-  // Xử lý preview hình ảnh
   useEffect(() => {
     if (imageFile) {
       const reader = new FileReader();
@@ -88,11 +80,9 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
     }
   }, [imageFile, formData.imageUrl]);
 
-  // Xử lý submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Kiểm tra các trường bắt buộc
     if (!formData.name.trim()) {
       setError("Tên sản phẩm là bắt buộc.");
       return;
@@ -117,6 +107,10 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
       setError("Mô tả là bắt buộc.");
       return;
     }
+    if (formData.quantity < 0) {
+      setError("Số lượng phải lớn hơn hoặc bằng 0.");
+      return;
+    }
 
     const dataToSend = new FormData();
     dataToSend.append("name", formData.name);
@@ -126,6 +120,7 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
     dataToSend.append("discountedPrice", formData.discountedPrice);
     dataToSend.append("discountPercentage", formData.discountPercentage);
     dataToSend.append("desc", formData.desc);
+    dataToSend.append("quantity", formData.quantity); // Thêm quantity
     if (imageFile) {
       dataToSend.append("image", imageFile);
     } else if (formData.imageUrl) {
@@ -134,7 +129,7 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
 
     try {
       await onSave(dataToSend);
-      onCancel(); // Đóng form sau khi lưu thành công
+      onCancel();
     } catch (error) {
       setError(error.message || "Không thể lưu sản phẩm.");
     }
@@ -153,7 +148,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Tên sản phẩm */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Tên sản phẩm <span className="text-red-500">*</span>
@@ -168,7 +162,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
             />
           </div>
 
-          {/* Danh mục */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Danh mục <span className="text-red-500">*</span>
@@ -189,7 +182,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
             </select>
           </div>
 
-          {/* Danh mục con */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">Danh mục con</label>
             <select
@@ -208,7 +200,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
             </select>
           </div>
 
-          {/* Hình ảnh */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">Hình ảnh</label>
             <input
@@ -228,7 +219,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
             )}
           </div>
 
-          {/* URL hình ảnh */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">URL hình ảnh (nếu không upload file)</label>
             <input
@@ -240,7 +230,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
             />
           </div>
 
-          {/* Giá gốc */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Giá gốc (VNĐ) <span className="text-red-500">*</span>
@@ -256,7 +245,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
             />
           </div>
 
-          {/* Giá đã giảm */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Giá đã giảm (VNĐ) <span className="text-red-500">*</span>
@@ -272,7 +260,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
             />
           </div>
 
-          {/* Phần trăm giảm giá */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Phần trăm giảm giá (%) <span className="text-red-500">*</span>
@@ -288,7 +275,21 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
             />
           </div>
 
-          {/* Mô tả */}
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">
+              Số lượng <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              name="quantity"
+              value={formData.quantity}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500"
+              required
+              min="0"
+            />
+          </div>
+
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Mô tả <span className="text-red-500">*</span>
@@ -303,7 +304,6 @@ const ProductForm = ({ product, onSave, onCancel, isEdit = false }) => {
             />
           </div>
 
-          {/* Nút hành động */}
           <div className="flex justify-end gap-3">
             <button
               type="button"

@@ -1,4 +1,3 @@
-// client/src/components/Order/OrderEditForm.js
 import React, { useState } from "react";
 
 const OrderEditForm = ({ order, onSave, onCancel }) => {
@@ -7,8 +6,8 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
     phone: order.phone || "",
     firstName: order.firstName || "",
     lastName: order.lastName || "",
-    address: order.address || "", // Thêm address
-    note: order.note || "", // Thêm note
+    address: order.address || "",
+    note: order.note || "",
     paymentMethod: order.paymentMethod || "",
     orderStatus: order.orderStatus || "Chờ xử lý",
   });
@@ -26,13 +25,12 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Kiểm tra các trường bắt buộc
     if (
       !formData.email.trim() ||
       !formData.phone.trim() ||
       !formData.firstName.trim() ||
       !formData.lastName.trim() ||
-      !formData.address.trim() || // Kiểm tra address
+      !formData.address.trim() ||
       !formData.paymentMethod.trim() ||
       !formData.orderStatus.trim()
     ) {
@@ -40,25 +38,22 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
       return;
     }
 
-    // Kiểm tra định dạng email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError("Email không hợp lệ.");
       return;
     }
 
-    // Kiểm tra định dạng số điện thoại (10 chữ số)
     const phoneRegex = /^[0-9]{10}$/;
     if (!phoneRegex.test(formData.phone)) {
       setError("Số điện thoại phải là 10 chữ số.");
       return;
     }
 
-    // Gửi dữ liệu chỉnh sửa
     onSave({
       ...formData,
-      products: order.products, // Giữ nguyên danh sách sản phẩm
-      orderDate: order.orderDate, // Giữ nguyên ngày đặt hàng
+      products: order.products,
+      orderDate: order.orderDate,
     });
   };
 
@@ -67,7 +62,6 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">Chỉnh sửa đơn hàng</h2>
 
-        {/* Thông báo lỗi */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex items-center gap-2 mb-4">
             <span>⚠</span>
@@ -76,7 +70,6 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Email <span className="text-red-500">*</span>
@@ -91,7 +84,6 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
             />
           </div>
 
-          {/* Số điện thoại */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Số điện thoại <span className="text-red-500">*</span>
@@ -106,7 +98,6 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
             />
           </div>
 
-          {/* Họ */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Họ <span className="text-red-500">*</span>
@@ -121,7 +112,6 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
             />
           </div>
 
-          {/* Tên */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Tên <span className="text-red-500">*</span>
@@ -136,7 +126,6 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
             />
           </div>
 
-          {/* Địa chỉ */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Địa chỉ <span className="text-red-500">*</span>
@@ -151,7 +140,6 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
             />
           </div>
 
-          {/* Thông tin bổ sung */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Thông tin bổ sung
@@ -165,7 +153,6 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
             />
           </div>
 
-          {/* Phương thức thanh toán */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Phương thức thanh toán <span className="text-red-500">*</span>
@@ -182,7 +169,6 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
             </select>
           </div>
 
-          {/* Trạng thái đơn hàng */}
           <div>
             <label className="block text-sm text-gray-700 mb-1">
               Trạng thái đơn hàng <span className="text-red-500">*</span>
@@ -197,10 +183,10 @@ const OrderEditForm = ({ order, onSave, onCancel }) => {
               <option value="Chờ xử lý">Chờ xử lý</option>
               <option value="Đang giao">Đang giao</option>
               <option value="Hoàn thành">Hoàn thành</option>
+              <option value="Đơn hàng bị hủy">Đơn hàng bị hủy</option> {/* Thêm trạng thái mới */}
             </select>
           </div>
 
-          {/* Nút hành động */}
           <div className="flex justify-end gap-3">
             <button
               type="button"

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,13 +52,35 @@ public class AdminController {
         return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
     }
 
-    // Thêm endpoint để lấy tổng số admin (hoặc người dùng nếu bạn có collection khác)
     @GetMapping("/total-users")
     public ResponseEntity<?> getTotalUsers() {
-        long totalUsers = adminService.getTotalUsers(); // Gọi hàm từ AdminService
+        long totalUsers = adminService.getTotalUsers();
         Map<String, Long> response = new HashMap<>();
         response.put("totalUsers", totalUsers);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // Thêm endpoint đăng ký
+    @PostMapping("/register")
+    public ResponseEntity<?> registerAdmin(@RequestBody Map<String, String> registerRequest) {
+        String email = registerRequest.get("email");
+        String password = registerRequest.get("password");
+
+        // Kiểm tra xem email đã tồn tại chưa
+        if (adminService.getAdminByEmail(email) != null) {
+            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
+        }
+
+        // Tạo admin mới
+        Admin admin = new Admin();
+        admin.setEmail(email);
+        admin.setPassword(password); // Mật khẩu sẽ được mã hóa trong AdminService
+        Admin createdAdmin = adminService.createAdmin(admin);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("id", createdAdmin.getId());
+        response.put("email", createdAdmin.getEmail());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     private String createJwtToken(String email) {

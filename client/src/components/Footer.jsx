@@ -10,7 +10,7 @@ const Footer = () => {
           <h3>WEBSHOPINGTEC</h3>
           <a href="/" className="logo-link">
             <img 
-              src="/src/logo.jpg" // Giả sử logo nằm trong thư mục public
+              src="/src/styles/image/logo.jpg" // Giả sử logo nằm trong thư mục public
               alt="Logo Công ty" 
               className="footer-logo" 
               style={{ maxWidth: '50px', height: 'auto' }} // Thu nhỏ logo trực tiếp

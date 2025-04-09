@@ -1,9 +1,8 @@
-// client/src/pages/AdminOrders.js
 import React, { useState, useEffect } from "react";
 import OrderTable from "../components/Order/OrderTable";
 import OrderEditForm from "../components/Order/OrderEditForm";
-import OrderSearch from "../components/Order/OrderSearch"; // Import OrderSearch
-import OrderPagination from "../components/Order/OrderPagination"; // Import OrderPagination
+import OrderSearch from "../components/Order/OrderSearch";
+import OrderPagination from "../components/Order/OrderPagination";
 import axios from "axios";
 
 const AdminOrders = () => {
@@ -11,12 +10,11 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [editingOrder, setEditingOrder] = useState(null);
-  const [currentPage, setCurrentPage] = useState(0); // Trang hiện tại
-  const [totalPages, setTotalPages] = useState(0); // Tổng số trang
-  const [searchTerm, setSearchTerm] = useState(""); // Từ khóa tìm kiếm
-  const pageSize = 10; // Số đơn hàng mỗi trang
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const pageSize = 10;
 
-  // Lấy danh sách đơn hàng từ API với phân trang và tìm kiếm
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -25,7 +23,7 @@ const AdminOrders = () => {
           params: {
             page: currentPage,
             size: pageSize,
-            search: searchTerm, // Thêm tham số tìm kiếm
+            search: searchTerm,
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -42,9 +40,8 @@ const AdminOrders = () => {
     };
 
     fetchOrders();
-  }, [currentPage, searchTerm]); // Gọi lại API khi currentPage hoặc searchTerm thay đổi
+  }, [currentPage, searchTerm]);
 
-  // Xử lý xóa đơn hàng
   const handleDelete = async (id) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa đơn hàng này?")) {
       try {
@@ -61,17 +58,65 @@ const AdminOrders = () => {
     }
   };
 
-  // Xử lý chỉnh sửa đơn hàng
   const handleEdit = (order) => {
     setEditingOrder(order);
   };
 
-  // Xử lý lưu đơn hàng sau khi chỉnh sửa
   const handleSave = async (updatedOrder) => {
     try {
+      if (
+        !updatedOrder.email ||
+        !updatedOrder.firstName ||
+        !updatedOrder.lastName ||
+        !updatedOrder.phone ||
+        !updatedOrder.address ||
+        !updatedOrder.paymentMethod ||
+        !updatedOrder.orderStatus
+      ) {
+        setError("Vui lòng điền đầy đủ các trường bắt buộc.");
+        return;
+      }
+      if (!editingOrder.products || editingOrder.products.length === 0) {
+        setError("Danh sách sản phẩm không được để trống.");
+        return;
+      }
+
+      // Kiểm tra và log nếu sản phẩm thiếu id
+      const validatedProducts = editingOrder.products.map((product) => {
+        if (!product.id) {
+          console.warn(`Sản phẩm "${product.productName}" thiếu ID, dữ liệu từ server có thể không đầy đủ.`);
+        }
+        return {
+          id: product.id || "", // Nếu thiếu id, gửi chuỗi rỗng và để backend xử lý
+          productName: product.productName,
+          category: product.category,
+          subCategory: product.subCategory || "",
+          imageUrl: product.imageUrl || "",
+          discountedPrice: product.discountedPrice,
+          discountPercentage: product.discountPercentage,
+          quantity: product.quantity,
+        };
+      });
+
+      const orderToSend = {
+        id: editingOrder.id,
+        email: updatedOrder.email,
+        firstName: updatedOrder.firstName,
+        lastName: updatedOrder.lastName,
+        phone: updatedOrder.phone,
+        address: updatedOrder.address,
+        note: updatedOrder.note || "",
+        products: validatedProducts,
+        paymentMethod: updatedOrder.paymentMethod,
+        orderStatus: updatedOrder.orderStatus,
+        orderDate: editingOrder.orderDate,
+      };
+
+      console.log("Order to send:", orderToSend);
+
       const response = await axios.put(
         `http://localhost:8080/api/orders/${editingOrder.id}`,
-        updatedOrder,
+        orderToSend,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -85,24 +130,30 @@ const AdminOrders = () => {
         )
       );
       setEditingOrder(null);
+      setError("");
     } catch (error) {
       console.error("Error updating order:", error);
-      setError("Không thể cập nhật đơn hàng.");
+      if (error.response) {
+        setError(
+          error.response.data.error || "Không thể cập nhật đơn hàng."
+        );
+      } else if (error.message) {
+        setError(error.message);
+      } else {
+        setError("Lỗi kết nối đến server.");
+      }
     }
   };
 
-  // Xử lý hủy chỉnh sửa
   const handleCancel = () => {
     setEditingOrder(null);
   };
 
-  // Xử lý tìm kiếm
   const handleSearch = (term) => {
     setSearchTerm(term);
-    setCurrentPage(0); // Reset về trang đầu tiên khi tìm kiếm
+    setCurrentPage(0);
   };
 
-  // Xử lý thay đổi trang
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
@@ -115,7 +166,6 @@ const AdminOrders = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Quản lý đơn hàng</h1>
 
-      {/* Thông báo lỗi */}
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex items-center gap-2 mb-4">
           <span>⚠</span>
@@ -123,13 +173,8 @@ const AdminOrders = () => {
         </div>
       )}
 
-      {/* Ô tìm kiếm */}
       <OrderSearch onSearch={handleSearch} />
-
-      {/* Bảng danh sách đơn hàng */}
       <OrderTable orders={orders} onDelete={handleDelete} onEdit={handleEdit} />
-
-      {/* Phân trang */}
       {totalPages > 1 && (
         <OrderPagination
           currentPage={currentPage}
@@ -137,8 +182,6 @@ const AdminOrders = () => {
           onPageChange={handlePageChange}
         />
       )}
-
-      {/* Form chỉnh sửa đơn hàng */}
       {editingOrder && (
         <OrderEditForm
           order={editingOrder}

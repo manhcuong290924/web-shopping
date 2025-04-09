@@ -1,17 +1,24 @@
-// src/main/java/com/btec/quanlykhohang_api/entities/ProductOrder.java
 package com.btec.quanlykhohang_api.entities;
 
 public class ProductOrder {
 
+    private String id;
     private String productName;
     private String category;
     private String subCategory;
     private String imageUrl;
     private double discountedPrice;
     private double discountPercentage;
-    private int quantity; // Số lượng của sản phẩm
+    private int quantity;
 
-    // Getters và Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getProductName() {
         return productName;
     }

@@ -1,11 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-// Import hình ảnh mặc định từ thư mục assets
-import noImage from "../styles/image/thoitrang.jpg"; // Đảm bảo bạn đã thêm file no-image.jpg vào thư mục src/assets
+import axios from "axios";
+import noImage from "../styles/image/thoitrang.jpg";
 
 const ProductCard = ({ product, showRightBorder }) => {
-  // Kiểm tra nếu product không tồn tại
+  const [soldQuantity, setSoldQuantity] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchSoldQuantity = async () => {
+      if (!product || !product.id) return;
+
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `http://localhost:8080/api/orders/sold-quantity/${product.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setSoldQuantity(response.data.soldQuantity || 0);
+      } catch (err) {
+        console.error(`Error fetching sold quantity for product ${product.id}:`, err);
+        setError("Không thể tải số lượng đã bán.");
+        setSoldQuantity(0); // Mặc định là 0 nếu lỗi
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSoldQuantity();
+  }, [product?.id]); // Gọi lại khi product.id thay đổi
+
   if (!product) {
     return (
       <div className="product-card p-4 border-t border-gray-200 text-gray-500">
@@ -14,17 +43,16 @@ const ProductCard = ({ product, showRightBorder }) => {
     );
   }
 
-  // Chuyển đổi tên thuộc tính từ mock data sang tên thuộc tính từ backend
   const {
     id,
     imageUrl,
     name,
-    originalPrice = 0, // Giá trị mặc định nếu không có
-    discountedPrice = 0, // Giá trị mặc định nếu không có
-    discountPercentage = 0, // Giá trị mặc định nếu không có
+    originalPrice = 0,
+    discountedPrice = 0,
+    discountPercentage = 0,
+    quantity = 0,
   } = product;
 
-  // Hàm cuộn lên trên cùng khi nhấn vào sản phẩm
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -34,11 +62,11 @@ const ProductCard = ({ product, showRightBorder }) => {
       <div
         className={`product-card p-4 border-t border-gray-200 ${
           showRightBorder ? "border-r border-gray-200 md:border-r" : ""
-        }`} // Chỉ hiển thị border trên desktop nếu showRightBorder là true
+        }`}
       >
         <div className="relative">
           <img
-            src={imageUrl || noImage} // Sử dụng hình ảnh cục bộ nếu imageUrl không tồn tại
+            src={imageUrl || noImage}
             alt={name || "Sản phẩm"}
             className="w-full h-48 object-contain"
           />
@@ -67,6 +95,13 @@ const ProductCard = ({ product, showRightBorder }) => {
                 {originalPrice.toLocaleString("vi-VN")} đ
               </span>
             )}
+          </div>
+          <div className="quantity mt-1 text-sm text-gray-600">
+            Số lượng trong kho: {quantity.toLocaleString("vi-VN")}
+          </div>
+          <div className="sold-quantity mt-1 text-sm text-gray-600">
+            Đã bán: {loading ? "Đang tải..." : soldQuantity.toLocaleString("vi-VN")}
+            {error && <span className="text-red-500 ml-2">{error}</span>}
           </div>
         </div>
       </div>

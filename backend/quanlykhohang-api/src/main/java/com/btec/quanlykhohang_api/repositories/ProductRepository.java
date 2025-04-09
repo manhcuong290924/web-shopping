@@ -1,4 +1,3 @@
-// src/main/java/com/btec/quanlykhohang_api/repositories/ProductRepository.java
 package com.btec.quanlykhohang_api.repositories;
 
 import com.btec.quanlykhohang_api.entities.Product;
@@ -17,4 +16,7 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findByCategory(String category);
 
     Page<Product> findAll(Pageable pageable);
+
+    // Tìm kiếm sản phẩm có số lượng lớn hơn hoặc bằng giá trị cho trước
+    Page<Product> findByQuantityGreaterThanEqual(int minQuantity, Pageable pageable);
 }

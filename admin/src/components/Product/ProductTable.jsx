@@ -1,4 +1,3 @@
-// src/components/Product/ProductTable.js
 import React from "react";
 
 const ProductTable = ({ products, onDelete, onEdit }) => {
@@ -21,6 +20,7 @@ const ProductTable = ({ products, onDelete, onEdit }) => {
                   <th className="p-3 text-left text-sm font-semibold text-gray-600">Original Price</th>
                   <th className="p-3 text-left text-sm font-semibold text-gray-600">Discounted Price</th>
                   <th className="p-3 text-left text-sm font-semibold text-gray-600">Discount %</th>
+                  <th className="p-3 text-left text-sm font-semibold text-gray-600">Quantity</th>
                   <th className="p-3 text-left text-sm font-semibold text-gray-600">Description</th>
                   <th className="p-3 text-left text-sm font-semibold text-gray-600">Created At</th>
                   <th className="p-3 text-left text-sm font-semibold text-gray-600">Actions</th>
@@ -29,7 +29,7 @@ const ProductTable = ({ products, onDelete, onEdit }) => {
               <tbody>
                 {products.map((product, index) => (
                   <tr key={product.id} className="border-b hover:bg-gray-50">
-                    <td className="p-3 text-sm text-gray-700">{index + 1}</td>
+                    <td className="p-3 text-sm text-gray-700">{index + 1}</ td>
                     <td className="p-3 text-sm text-gray-700">{product.name}</td>
                     <td className="p-3 text-sm text-gray-700">{product.category}</td>
                     <td className="p-3 text-sm text-gray-700">{product.subCategory || "N/A"}</td>
@@ -48,6 +48,7 @@ const ProductTable = ({ products, onDelete, onEdit }) => {
                     <td className="p-3 text-sm text-gray-700">{product.originalPrice.toLocaleString()} VNĐ</td>
                     <td className="p-3 text-sm text-gray-700">{product.discountedPrice.toLocaleString()} VNĐ</td>
                     <td className="p-3 text-sm text-gray-700">{product.discountPercentage}%</td>
+                    <td className="p-3 text-sm text-gray-700">{product.quantity.toLocaleString()}</td>
                     <td className="p-3 text-sm text-gray-700">{product.desc}</td>
                     <td className="p-3 text-sm text-gray-700">
                       {new Date(product.createdDate).toLocaleString()}

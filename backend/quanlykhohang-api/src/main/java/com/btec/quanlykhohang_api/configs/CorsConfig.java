@@ -15,8 +15,13 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        // Thêm http://localhost:3001 vào danh sách allowed origins
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001", "http://yourfrontend.com"));
+        // Thêm https://admin.webshoppingtec.io.vn vào danh sách allowed origins
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000",
+                "http://localhost:3001",
+                "http://yourfrontend.com",
+                "https://admin.webshoppingtec.io.vn" // Thêm dòng này
+        ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 
