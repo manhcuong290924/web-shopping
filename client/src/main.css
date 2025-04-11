@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Trong index.css hoặc main.css */
+df-messenger {
+    z-index: 9999 !important; /* Đảm bảo chatbot nằm trên cùng */
+    position: fixed;
+    bottom: 0;
+    right: 0;
+  }

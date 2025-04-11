@@ -14,3 +14,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Trong index.css hoặc main.css */
+df-messenger {
+  z-index: 9999 !important; /* Đảm bảo chatbot nằm trên cùng */
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}

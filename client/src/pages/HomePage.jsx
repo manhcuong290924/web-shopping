@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import Slide from "../components/Slide";
 import SideBar from "../components/SideBar";
 import Footer from "../components/Footer";
+import Chatbot from "../components/Chatbot"; // Import Chatbot component
 import "../styles/custom-layout.scss";
 
 const HomePage = () => {
@@ -37,6 +38,7 @@ const HomePage = () => {
         </div>
       </div>
       <Footer />
+      <Chatbot /> {/* Thêm Chatbot component vào HomePage */}
     </div>
   );
 };
